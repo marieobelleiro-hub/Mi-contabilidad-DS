@@ -39,5 +39,7 @@
   .sc-entry__shot iframe{position:absolute;inset:0 auto auto 0;width:1232px;height:770px;border:0;transform:scale(.75);transform-origin:0 0;pointer-events:none}
   .sc-entry__legend{margin:8px 0 0 !important;font-size:14px !important;color:#666 !important}
   /* "Under review" chip: the Chatbot and Accessibility assistant pages, still to be reviewed */
-  .review-chip{display:table;margin:0 0 16px;padding:2px 8px;border-radius:2px;background:#FDF3EC;color:#B64407;font:700 12px/16px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.088em;vertical-align:middle}
+  .review-chip{display:inline-block;margin:0 0 16px !important;padding:0 6px;border-radius:2px;background:#B64407;color:#fff !important;font-family:'IBM Plex Mono',monospace !important;font-size:10px !important;line-height:16px !important;font-weight:700 !important;text-transform:uppercase;letter-spacing:.088em;vertical-align:middle;white-space:nowrap}
+  td .review-chip{margin:0 0 0 8px !important}   /* next to the name in the cover table */
+  td:has(> .review-chip), td:has(> a + .review-chip){white-space:nowrap}   /* name and chip stay on one line */
 </style>

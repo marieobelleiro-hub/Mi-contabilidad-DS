@@ -60,7 +60,29 @@ export default {
 };
 
 /* ── Playground: one tab ── */
-export const Playground = {};
+const COLOUR = { name: 'Colour', control: { type: 'inline-radio', labels: { brand: 'Green', primary: 'Blue', attention: 'Orange' } }, options: ['brand', 'primary', 'attention'], description: 'The active tab takes the colour of its section' };
+const VIEW = { name: 'View', control: { type: 'inline-radio', labels: { desktop: 'Desktop · tab', mobile: 'Mobile · selector (with chevron)' } }, options: ['desktop', 'mobile'] };
+const boxed = (el) => { const d = document.createElement('div'); d.style.cssText = 'min-height:240px'; d.append(el); return d; };
+
+export const Playground = {
+  name: 'Page tabs',
+  render: (a) => (a.view === 'mobile'
+    ? boxed(menuSelector({ items: [a.label], current: 0, ariaLabel: 'Secciones', name: 'Sección', classes: () => `tab--${a.accent}${a.outline ? ' tab--outline' : ''}` }))
+    : (a.role === 'nav'
+      ? `<nav aria-label="Secciones" class="tab-list">${tabHTML(a)}</nav>`
+      : `<div class="tab-list" role="tablist" aria-label="Ejemplo">${tabHTML(a)}</div>`)),
+  argTypes: {
+    view: VIEW,
+    label: { name: 'Label', control: 'text' },
+    accent: COLOUR,
+    outline: { name: 'Outline', control: 'boolean', description: 'Active state as a 2px outline (IVA, IRPF)' },
+    width: { name: 'Width', control: 'inline-radio', options: ['auto', 'fixed'], description: 'auto = fits the label · fixed = 160px', if: { arg: 'view', eq: 'desktop' } },
+    active: { name: 'Active', control: 'boolean', if: { arg: 'view', eq: 'desktop' } },
+    disabled: { name: 'Disabled', control: 'boolean', if: { arg: 'view', eq: 'desktop' } },
+    role: { name: 'Role', control: 'inline-radio', options: ['tab', 'nav'], description: 'tab = switches content · nav = goes to a page', if: { arg: 'view', eq: 'desktop' } },
+  },
+  args: { view: 'desktop', label: 'Page name', accent: 'attention', outline: false, width: 'auto', active: true, disabled: false, role: 'tab' },
+};
 
 /* ── Real cases (each one has its controls) ── */
 const TYPE = { name: 'Type', control: { type: 'inline-radio', labels: { primary: 'Facturación / IRPF (blue)', attention: 'Gastos / IVA (orange)' } }, options: ['primary', 'attention'] };
@@ -69,9 +91,11 @@ const NO_TAB_ARGS = Object.fromEntries(['label', 'accent', 'outline', 'width', '
 export const PeriodTabs = {
   name: 'Period tabs',
   parameters: { layout: 'padded' },
-  render: ({ type, period }) => tabList({ labels: PERIODS, selected: PERIODS.indexOf(period), accent: type, width: 'fixed', ariaLabel: 'Período' }),
-  argTypes: { ...NO_TAB_ARGS, type: TYPE, period: { name: 'Selected', control: 'select', options: PERIODS } },
-  args: { type: 'primary', period: PERIODS[1] },
+  render: ({ view, type, period }) => (view === 'mobile'
+    ? boxed(periodSelector(PERIODS.indexOf(period)))
+    : tabList({ labels: PERIODS, selected: PERIODS.indexOf(period), accent: type, width: 'fixed', ariaLabel: 'Período' })),
+  argTypes: { ...NO_TAB_ARGS, view: { ...VIEW, control: { type: 'inline-radio', labels: { desktop: 'Desktop · tab strip', mobile: 'Mobile · selector (grey)' } } }, type: { ...TYPE, if: { arg: 'view', eq: 'desktop' } }, period: { name: 'Selected', control: 'select', options: PERIODS } },
+  args: { view: 'desktop', type: 'primary', period: PERIODS[1] },
 };
 
 const VIEWS = ['Por cat. IRPF', 'Por % IVA'];
@@ -174,6 +198,7 @@ export const YEAR_INFO = { now: NOW, years: YEARS, active: ACTIVE };
 
 export const YearStrip = {
   name: 'Year strip',
+  tags: ['!dev'],   // docs only
   parameters: { layout: 'padded' },
   render: ({ selected = NOW } = {}) => {
     const sel = ACTIVE.includes(Number(selected)) ? Number(selected) : NOW;   // always exactly one selected
@@ -242,9 +267,9 @@ export const sectionSelector = (current = 1) => menuSelector({ items: SECTIONS.m
 /** Period selector: neutral grey; the menu lists the periods. */
 export const periodSelector = (current = 0) => menuSelector({ items: PERIODS, current, ariaLabel: 'Período', name: 'Período', classes: () => 'tab--neutral' });
 
-const boxed = (el) => { const d = document.createElement('div'); d.style.cssText = 'min-height:240px'; d.append(el); return d; };
 export const Selector = {
   name: 'Section selector (mobile)',
+  tags: ['!dev'],   // docs only: the mobile view is in Page tabs
   parameters: { layout: 'padded' },
   render: ({ section }) => boxed(sectionSelector(SECTIONS.findIndex(([l]) => l === section))),
   argTypes: { ...NO_TAB_ARGS, section: { name: 'Current section', control: 'select', options: SECTIONS.map(([l]) => l) } },
@@ -253,6 +278,7 @@ export const Selector = {
 
 export const PeriodSelector = {
   name: 'Period selector (mobile)',
+  tags: ['!dev'],   // docs only: the mobile view is in Period tabs
   parameters: { layout: 'padded' },
   render: ({ period }) => boxed(periodSelector(PERIODS.indexOf(period))),
   argTypes: { ...NO_TAB_ARGS, period: { name: 'Current period', control: 'select', options: PERIODS } },

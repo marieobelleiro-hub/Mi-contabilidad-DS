@@ -30,7 +30,7 @@ const COMPONENTS = [
   ['button', 'Button', 'app-components-button--button', 'Big, ghost, icon and floating · their states'],
   ['tab', 'Tab', 'app-components-tab--tab', 'Navigation, period tabs, view toggle, year tab'],
   ['selectors', 'Selectors', 'app-components-selectors--selectors', 'Checkbox & radio, status dot, switch / toggle, chips'],
-  ['list', 'List row', 'app-components-list-row--list', 'Record, label → value, bar and result rows'],
+  ['list', 'Rows (card parts)', 'app-components-card--card', 'Record, label → value, bar and result rows, inside the cards'],
   ['card', 'Card', 'app-components-card--card', 'The white block: KPI card and container card'],
   ['input', 'Input', 'app-components-input--input', 'Fields, select, textarea'],
   ['table', 'Data table', 'app-components-data-table--table', 'Invoices, expenses and annual summaries'],

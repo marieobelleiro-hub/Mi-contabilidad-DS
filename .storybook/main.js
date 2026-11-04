@@ -2,6 +2,7 @@ import remarkGfm from 'remark-gfm';
 
 /** @type { import('@storybook/html-vite').StorybookConfig } */
 const config = {
+  staticDirs: ['./public'],   // favicon.svg: the green DS square of the browser tab
   stories: ['../foundations/**/*.mdx', '../foundations/**/*.stories.js', '../showcase/**/*.stories.js', '../components/**/*.mdx', '../components/**/*.stories.js', '../assistant/**/*.mdx', '../assistant/**/*.stories.js', '../acceso/**/*.mdx', '../acceso/**/*.stories.js'],
   addons: [
     {

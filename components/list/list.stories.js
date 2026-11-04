@@ -65,7 +65,7 @@ const live = (html) => {
 
 export default {
   title: 'App/Components/List row',
-  tags: ['!autodocs'],   // documented in List.mdx
+  tags: ['!autodocs', '!dev'],   // hidden from the sidebar: the rows are documented in Card › Parts · rows (remove '!dev' to show this page again)
   excludeStories: ['recordListHTML', 'kvListHTML', 'barListHTML', 'resultHTML'],
   ...ON_WHITE,
   parameters: { layout: 'padded' },

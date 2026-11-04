@@ -64,7 +64,7 @@ The same expenses in two lists: **Por cat. IRPF** (one table per category of the
 
 ## Taxes
 
-The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarters, read only: **IVA** (towards the Modelo 390) and **IRPF** (towards the Modelo 100). A quarter that hasn't been declared yet is grey ("—"). On mobile it becomes **one block per quarter**. The annual total under it is the <a href="./?path=/docs/app-components-list-row--list" target="_top">List row › Annual footer</a>.
+The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarters, read only: **IVA** (towards the Modelo 390) and **IRPF** (towards the Modelo 100). A quarter that hasn't been declared yet is grey ("—"). On mobile it becomes **one block per quarter**. The annual total under it is the <a href="./?path=/docs/app-components-card--card" target="_top">Card › Parts · rows</a> (annual footer).
 
 <Canvas of={TableStories.Summary} sourceState="none" />
 <Controls of={TableStories.Summary} />
@@ -94,7 +94,7 @@ The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarte
 | Rows | `record__rows` > `record__row` | label `--text-muted` · value right · `record__row--total` 500, with the status dot |
 | Totals | `table-totals table-totals--stack` | one per line, Sans 14 |
 | "303" | `records__303` | above the checkbox column |
-| Quarter blocks (summary) | `card--sectioned` + `card__section` + List row `row--kv` | quarter not declared: "Sin resultado hasta que termine el plazo de declaración" |
+| Quarter blocks (summary) | `card--sectioned` + `card__section` + row `row--kv` (Card › Parts) | quarter not declared: "Sin resultado hasta que termine el plazo de declaración" |
 
 ## Markup
 
