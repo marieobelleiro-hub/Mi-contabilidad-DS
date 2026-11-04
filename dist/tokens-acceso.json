@@ -1,0 +1,221 @@
+{
+  "$description": "Acceso fácil (sub-system) tokens. They build on dist/tokens.json: references like {color.action.primary} point there. Generated from acceso/tokens.css: do not edit by hand.",
+  "acceso": {
+    "panel": {
+      "af-canvas": {
+        "$value": "#525252",
+        "$type": "color",
+        "$description": "dark grey panel · white text 7.8:1",
+        "$extensions": {
+          "css": "var(--af-canvas)"
+        }
+      },
+      "af-panel-line": {
+        "$value": "{color.palette.neutrals.black}",
+        "$type": "color",
+        "$description": "border around the floating panel",
+        "$extensions": {
+          "css": "var(--af-panel-line)"
+        }
+      },
+      "af-panel-shadow": {
+        "$value": "0 8px 32px rgba(0,0,0,0.35)",
+        "$extensions": {
+          "css": "var(--af-panel-shadow)"
+        }
+      },
+      "af-panel-gap": {
+        "$value": "{space.space-48}",
+        "$type": "dimension",
+        "$description": "distance to the screen edges when floating",
+        "$extensions": {
+          "css": "var(--af-panel-gap)"
+        }
+      },
+      "af-sheet-h": {
+        "$value": "75vh",
+        "$description": "mobile bottom sheet height",
+        "$extensions": {
+          "css": "var(--af-sheet-h)"
+        }
+      },
+      "af-layer": {
+        "$value": "{layer.layer-dialog}",
+        "$type": "number",
+        "$extensions": {
+          "css": "var(--af-layer)"
+        }
+      },
+      "af-text": {
+        "$value": "{color.palette.neutrals.white}",
+        "$type": "color",
+        "$description": "7.8:1 on --af-canvas",
+        "$extensions": {
+          "css": "var(--af-text)"
+        }
+      },
+      "af-text-muted": {
+        "$value": "{color.palette.neutrals.gray-150}",
+        "$type": "color",
+        "$description": "hints, secondary text · 5.9:1 on --af-canvas",
+        "$extensions": {
+          "css": "var(--af-text-muted)"
+        }
+      },
+      "af-error": {
+        "$value": "#FFB894",
+        "$type": "color",
+        "$description": "error text and border on the dark panel · 4.7:1",
+        "$extensions": {
+          "css": "var(--af-error)"
+        }
+      },
+      "af-line": {
+        "$value": "rgba(255,255,255,0.25)",
+        "$type": "color",
+        "$description": "line above the footer links",
+        "$extensions": {
+          "css": "var(--af-line)"
+        }
+      }
+    },
+    "header": {
+      "af-header-bg": {
+        "$value": "{color.action.primary}",
+        "$type": "color",
+        "$description": "blue bar · white text 5.0:1",
+        "$extensions": {
+          "css": "var(--af-header-bg)"
+        }
+      },
+      "af-header-h": {
+        "$value": "48px",
+        "$type": "dimension",
+        "$extensions": {
+          "css": "var(--af-header-h)"
+        }
+      },
+      "af-header-hover": {
+        "$value": "rgba(255,255,255,0.16)",
+        "$type": "color",
+        "$extensions": {
+          "css": "var(--af-header-hover)"
+        }
+      },
+      "af-switch-track": {
+        "$value": "#002D9C",
+        "$type": "color",
+        "$description": "switch track on the blue header: the white thumb is 11.3:1",
+        "$extensions": {
+          "css": "var(--af-switch-track)"
+        }
+      }
+    },
+    "option": {
+      "af-option-bg": {
+        "$value": "{color.surface.surface}",
+        "$type": "color",
+        "$description": "an option you can choose",
+        "$extensions": {
+          "css": "var(--af-option-bg)"
+        }
+      },
+      "af-option-line": {
+        "$value": "{color.palette.neutrals.white}",
+        "$type": "color",
+        "$description": "2px border",
+        "$extensions": {
+          "css": "var(--af-option-line)"
+        }
+      },
+      "af-option-hover": {
+        "$value": "{color.surface.fill}",
+        "$type": "color",
+        "$extensions": {
+          "css": "var(--af-option-hover)"
+        }
+      },
+      "af-option-dim": {
+        "$value": "#A8A8A8",
+        "$type": "color",
+        "$description": "the other options once one is chosen · black text 8.8:1, 3.3:1 against the panel",
+        "$extensions": {
+          "css": "var(--af-option-dim)"
+        }
+      },
+      "af-option-dim-hover": {
+        "$value": "{color.surface.line-strong}",
+        "$type": "color",
+        "$extensions": {
+          "css": "var(--af-option-dim-hover)"
+        }
+      },
+      "af-option-selected": {
+        "$value": "{color.action.attention}",
+        "$type": "color",
+        "$description": "2px + 1px inner orange border on the chosen option (5.5:1 on white)",
+        "$extensions": {
+          "css": "var(--af-option-selected)"
+        }
+      },
+      "af-option-h": {
+        "$value": "28px",
+        "$type": "dimension",
+        "$description": "min height (36px on mobile)",
+        "$extensions": {
+          "css": "var(--af-option-h)"
+        }
+      }
+    },
+    "answer": {
+      "af-rule": {
+        "$value": "rgba(255,255,255,0.8)",
+        "$type": "color",
+        "$description": "dashed line after the “Respuesta” label",
+        "$extensions": {
+          "css": "var(--af-rule)"
+        }
+      },
+      "af-note-line": {
+        "$value": "{color.action.attention-light}",
+        "$type": "color",
+        "$description": "left bar of a note · 3.8:1 on the panel",
+        "$extensions": {
+          "css": "var(--af-note-line)"
+        }
+      },
+      "af-status-line": {
+        "$value": "{color.state.brand}",
+        "$type": "color",
+        "$description": "left bar of a confirmation (saved) · 6.1:1 on the panel",
+        "$extensions": {
+          "css": "var(--af-status-line)"
+        }
+      }
+    },
+    "form": {
+      "af-field-line": {
+        "$value": "{color.palette.neutrals.white}",
+        "$type": "color",
+        "$description": "2px border of the fields",
+        "$extensions": {
+          "css": "var(--af-field-line)"
+        }
+      },
+      "af-field-max-w": {
+        "$value": "360px",
+        "$type": "dimension",
+        "$extensions": {
+          "css": "var(--af-field-max-w)"
+        }
+      },
+      "af-form-max-w": {
+        "$value": "640px",
+        "$type": "dimension",
+        "$extensions": {
+          "css": "var(--af-form-max-w)"
+        }
+      }
+    }
+  }
+}

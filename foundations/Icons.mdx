@@ -1,0 +1,87 @@
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+import { ICONS, icon } from '../icons/icons.js';
+
+<Meta title="App/Foundations/Icons" />
+
+export const cell = { padding: '12px 16px 12px 0', borderBottom: '1px solid rgba(0,0,0,0.08)', verticalAlign: 'middle' };
+export const mono = { fontFamily: 'var(--font-mono)', fontSize: 12 };
+export const Svg = ({ name, size = 'sm', color }) => <span style={{ display: 'inline-flex', color }} dangerouslySetInnerHTML={{ __html: icon(name, { size }) }} />;
+
+# Icons
+
+**{Object.keys(ICONS).length} icons, one style.** Every icon is drawn on a **16 × 16 grid** with **filled 1px lines** and uses `currentColor`, so it takes the colour of its text or button.
+They all come from one file, `icons/icons.js`, and nothing else in the library draws its own.
+
+## Tokens
+
+| Token | Value | Use |
+|---|---|---|
+| `--icon-sm` | 16px | Default: inside text, buttons (solid, ghost, 24px icon buttons), list rows |
+| `--icon-md` | 24px | 40px icon buttons, panel headers |
+| `--icon-grid` | 16px | The drawing grid: 1px lines, 1px minimum gap between shapes |
+
+## The set
+
+<table style={{ width: '100%', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr>
+      {['Icon', '16px', '24px', 'On accent', 'Name', 'Use'].map((h) => (
+        <th key={h} style={{ ...cell, ...mono, fontSize: 10, textAlign: 'left', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 'var(--ls-caps)' }}>{h}</th>
+      ))}
+    </tr>
+  </thead>
+  <tbody>
+    {Object.entries(ICONS).map(([name, def]) => (
+      <tr key={name}>
+        <td style={cell}><span style={{ display: 'inline-flex', padding: 8, background: 'var(--canvas)' }}><Svg name={name} size="md" /></span></td>
+        <td style={cell}><Svg name={name} /></td>
+        <td style={cell}><Svg name={name} size="md" /></td>
+        <td style={cell}><span style={{ display: 'inline-flex', padding: 8, background: 'var(--primary)', color: 'var(--white)' }}><Svg name={name} /></span></td>
+        <td style={{ ...cell, ...mono, fontWeight: 700 }}>{name}</td>
+        <td style={{ ...cell, fontSize: 12, color: 'var(--text-muted)' }}>{def.use}<br /><span style={mono}>label: “{def.label}”</span></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Rules
+
+- **Grid & weight:** draw on 16 × 16 with 1px lines and at least 1px of space between shapes. No strokes: shapes are filled, so they stay crisp at 16px and 24px.
+- **Colour:** always `currentColor`. An icon is never coloured on its own: it follows the button or text it's in (`--text-muted` in icon buttons, white on solid buttons, accent in ghost buttons, `--error` on delete hover).
+- **Size:** only `--icon-sm` (16) or `--icon-md` (24). Don't scale icons to other sizes.
+- **Meaning:**
+  - **Decorative** (next to a visible label, e.g. "Continuar →"): `icon('arrow-right')` adds `aria-hidden`.
+  - **Alone in a button:** the button gets the `aria-label` ("Eliminar factura 411"), and the icon stays hidden.
+  - **Alone and meaningful, not in a button:** `icon('save', { label: 'Guardado' })` gives it `role="img"` and a name.
+- **New icons:** add them to `icons/icons.js` with a `label` and a `use`. They then appear here, in the Showcase, in the sprite and as their own SVG file automatically.
+
+## Usage
+
+<Source dark code={`import { icon } from './icons/icons.js';
+
+// Decorative, 16px
+\`<button class="btn btn--primary"><span class="btn__label">Continuar</span>\${icon('arrow-right', { size: 'md' })}</button>\`
+
+// Icon button: the name goes on the button
+\`<button class="btn btn--icon btn--sm btn--danger" aria-label="Eliminar factura 411">\${icon('trash')}</button>\`
+
+// 24px
+\`<button class="btn btn--icon btn--md btn--danger" aria-label="Cerrar">\${icon('close', { size: 'md' })}</button>\``} />
+
+### In plain HTML
+
+The design-system script exposes `window.MCIcon.icon(name)`. The build also produces **`dist/mi-contabilidad-ds-icons.svg`**, a sprite with one `<symbol id="ico-…">` per icon:
+
+<Source dark code={`<svg class="icon" aria-hidden="true"><use href="#ico-trash"/></svg>`} />
+
+### One file per icon
+
+For design tools and other platforms (iOS, Android), every icon is also exported as its own file: **`dist/icons/<name>.svg`** (for example `dist/icons/trash.svg`).
+
+| | |
+|---|---|
+| Size | 16 × 16, `viewBox="0 0 16 16"` |
+| Colour | `fill="currentColor"`: takes the text colour in HTML, black when opened on its own |
+| Name | The file name is the icon name shown on this page; the label is inside as `<title>` |
+
+All three outputs (inline, sprite, files) are generated from `icons/icons.js`, so they never get out of sync.

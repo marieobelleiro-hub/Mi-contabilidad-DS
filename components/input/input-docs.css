@@ -1,0 +1,15 @@
+/* Input page illustrations (documentation only, not part of the design system).
+   Every cell uses a subgrid, so captions, labels, boxes and messages sit on the same lines across columns. */
+.ifig{display:grid;grid-template-columns:repeat(var(--ifig-cols,3),minmax(0,1fr));column-gap:var(--space-32);row-gap:var(--space-8);width:100%;max-width:var(--content-max-w);font-family:var(--font-sans)}
+.ifig__cell{display:grid;grid-row:span 4;grid-template-rows:subgrid;row-gap:var(--space-8);margin:0 0 var(--space-24);min-width:0}
+.ifig__cell > .field{display:grid;grid-row:span 3;grid-template-rows:subgrid;row-gap:var(--space-8)}
+.ifig__cap{margin:0;font:var(--weight-bold) var(--text-10) var(--font-mono);text-transform:uppercase;letter-spacing:var(--ls-caps);color:var(--text-muted)}
+
+/* Anatomy: the field on the left, the name of each part on the same line on the right */
+.ianat{display:grid;grid-template-columns:minmax(0,var(--dialog-w-sm)) minmax(0,1fr);grid-template-rows:auto var(--input-h) auto;column-gap:var(--space-40);row-gap:var(--space-8);align-items:center;max-width:var(--content-max-w);font-family:var(--font-sans)}
+.ianat > .field{display:grid;grid-column:1;grid-row:1 / span 3;grid-template-rows:subgrid;row-gap:var(--space-8)}
+.ianat__note{grid-column:2;display:flex;align-items:center;gap:var(--space-12);margin:0;font-size:var(--text-14);color:var(--text)}
+.ianat__note::before{content:'';flex:0 0 var(--space-24);height:var(--border-thin);background:var(--text-muted)}
+.ianat__note code{font-family:var(--font-mono);font-size:var(--text-12);color:var(--text-muted)}
+
+@media (max-width:1023px){.ifig{--ifig-cols:1 !important}.ianat{grid-template-columns:1fr}}

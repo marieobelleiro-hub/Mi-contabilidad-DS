@@ -1,0 +1,43 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ── Docs pages in the style of Carbon, with the colours of our palette: only the documentation text (direct children of the docs content);
+        the component previews keep their own styles ── */
+  .sbdocs.sbdocs-wrapper { background: #FFFFFF; padding-top: 48px; }
+  .sbdocs-content { color: #000000; font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif !important; }
+  .sbdocs-content > h1 { font-size: 42px !important; line-height: 50px !important; font-weight: 400 !important; letter-spacing: 0 !important; margin: 0 0 32px !important; color: #000000 !important; }
+  .sbdocs-content > h2 { font-size: 32px !important; line-height: 40px !important; font-weight: 400 !important; letter-spacing: 0 !important; border: 0 !important; padding: 0 !important; margin: 64px 0 24px !important; color: #000000 !important; }
+  .sbdocs-content > h3 { font-size: 20px !important; line-height: 28px !important; font-weight: 400 !important; margin: 40px 0 16px !important; color: #000000 !important; }
+  .sbdocs-content > h4 { font-size: 16px !important; line-height: 24px !important; font-weight: 600 !important; margin: 32px 0 8px !important; }
+  .sbdocs-content > p, .sbdocs-content > ul li, .sbdocs-content > ol li { font-size: 16px !important; line-height: 24px !important; letter-spacing: 0 !important; color: #000000 !important; }
+  .sbdocs-content > p { margin: 0 0 16px !important; }
+  .sbdocs-content > p b, .sbdocs-content > p strong, .sbdocs-content > ul strong, .sbdocs-content > ol strong, .sbdocs-content > table strong { font-weight: 600 !important; }
+  .sbdocs-content > p a, .sbdocs-content > ul a, .sbdocs-content > table a, .sbdocs-content > a { color: #0F62FE !important; text-decoration: none !important; }
+  .sbdocs-content > p a:hover, .sbdocs-content > ul a:hover, .sbdocs-content > table a:hover, .sbdocs-content > a:hover { color: #0043CE !important; text-decoration: underline !important; }
+  .sbdocs-content > p code, .sbdocs-content > ul code, .sbdocs-content > ol code, .sbdocs-content > table code, .sbdocs-content > blockquote code { font-family: "IBM Plex Mono", Menlo, monospace !important; font-size: 14px !important; background: #F4F4F4 !important; border: 0 !important; border-radius: 0 !important; padding: 0 4px !important; color: #000000 !important; }
+  /* tables: Carbon data table */
+  .sbdocs-content > table { width: 100% !important; border-collapse: collapse !important; font-size: 14px !important; line-height: 20px !important; margin: 0 0 32px !important; }
+  .sbdocs-content > table th { background: #DEDEDE !important; color: #000000 !important; font-weight: 600 !important; text-align: left !important; padding: 12px 16px !important; border: 0 !important; }
+  .sbdocs-content > table td { padding: 12px 16px !important; border: 0 !important; border-bottom: 1px solid #E9E9E9 !important; text-align: left !important; vertical-align: top !important; color: #000000 !important; }
+  .sbdocs-content > table tr, .sbdocs-content > table tr:nth-of-type(2n) { background: #FFFFFF !important; border: 0 !important; }
+  .sbdocs-content > table tbody tr:hover { background: #F4F4F4 !important; }
+  .sbdocs-content > blockquote { border: 0 !important; border-left: 3px solid #0F62FE !important; background: #F4F4F4 !important; padding: 16px !important; margin: 0 0 24px !important; color: #000000 !important; }
+  .sbdocs-content > blockquote p { margin: 0 !important; font-size: 16px !important; line-height: 24px !important; }
+  /* previews, controls and code blocks: square and flat */
+  .sbdocs-content .docs-story, .sbdocs-content .docblock-source, .sbdocs-content pre, .sbdocs-content .docblock-argstable { border-radius: 0 !important; }
+  .sbdocs-content .sbdocs-preview { border-radius: 0 !important; box-shadow: none !important; border: 1px solid #E9E9E9 !important; }
+  .sbdocs-content > details summary { font-size: 16px; cursor: pointer; }
+  /* App introduction: the Showcase entry (a link on top, the live page as a picture, a legend under it) */
+  .sc-entry{margin:32px 0 12px !important}
+  .sc-entry__link{font:400 24px/32px 'IBM Plex Sans',sans-serif;text-transform:uppercase;color:#0F62FE !important;text-decoration:none !important}
+  .sc-entry__link:hover{text-decoration:underline !important}
+  .sc-entry__card{display:block;width:100%;max-width:924px;border:1px solid #C6C6C6;text-decoration:none !important;transition:box-shadow .15s}
+  .sc-entry__card:hover{box-shadow:0 4px 12px rgba(0,0,0,.16)}
+  .sc-entry__card:focus-visible{outline:2px solid #FFD600;outline-offset:2px}
+  .sc-entry__shot{position:relative;display:block;height:578px;overflow:hidden;background:#F4F4F4}
+  .sc-entry__shot iframe{position:absolute;inset:0 auto auto 0;width:1232px;height:770px;border:0;transform:scale(.75);transform-origin:0 0;pointer-events:none}
+  .sc-entry__legend{margin:8px 0 0 !important;font-size:14px !important;color:#666 !important}
+  /* "Under review" chip: the Chatbot and Accessibility assistant pages, still to be reviewed */
+  .review-chip{display:table;margin:0 0 16px;padding:2px 8px;border-radius:2px;background:#FDF3EC;color:#B64407;font:700 12px/16px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.088em;vertical-align:middle}
+</style>

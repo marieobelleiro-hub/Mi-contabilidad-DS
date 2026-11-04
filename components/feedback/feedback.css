@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Feedback  ·  .banner · .tooltip · .toast
+   Messages that inform the user without being part of the data.
+
+   Banner:   inline message in the page · --info (blue) · --warning (orange) · --error (red)
+             parts: __title · __text · __actions · optional dismiss button · --sm (12px)
+   Tooltip:  pop-up opened from an ⓘ button · --dark (chart values on hover)
+   Toast:    short message at the bottom of the screen, with an optional action (Deshacer)
+             --start: bottom left (after the sidebar on desktop) instead of centred
+
+   ========================================================================== */
+
+/* ── Banner ── */
+.banner{
+  --banner-accent:var(--primary);
+  --banner-bg:var(--primary-tint);
+  --banner-text:var(--primary);
+  display:flex;
+  align-items:flex-start;
+  gap:var(--space-12);
+  margin:0;
+  padding:var(--space-8) var(--space-16);
+  border-left:var(--border-accent) solid var(--banner-accent);
+  background:var(--banner-bg);
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  line-height:var(--leading-normal);
+  color:var(--banner-text);
+}
+.banner--info{--banner-accent:var(--primary);--banner-bg:var(--primary-tint);--banner-text:var(--primary)}
+.banner--warning{--banner-accent:var(--attention);--banner-bg:var(--attention-tint);--banner-text:var(--attention)}
+.banner--error{--banner-accent:var(--error);--banner-bg:var(--error-tint);--banner-text:var(--error-dark)}
+.banner--sm{font-size:var(--text-12)}
+.banner__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)}
+.banner__title{margin:0;font-weight:var(--weight-medium)}
+.banner__text{margin:0}
+.banner__text a,.tooltip a{color:inherit;text-decoration:underline}
+.banner__actions{display:flex;flex-wrap:wrap;gap:var(--space-8);margin-top:var(--space-4)}
+.banner .btn--ghost{--btn-accent:var(--banner-text);--btn-accent-dark:var(--banner-text)}   /* readable on the tint */
+.banner .btn--icon{flex-shrink:0;margin:0 calc(-1 * var(--space-8)) 0 0;color:inherit}
+.banner .btn--icon:hover{background:var(--banner-hover)}
+
+/* ── Tooltip (ⓘ info pop-up) ── */
+.tooltip-wrap{position:relative;display:inline-flex}
+.tooltip{
+  position:absolute;
+  top:calc(100% + var(--space-8));
+  left:0;
+  z-index:var(--layer-tooltip);
+  width:var(--tooltip-w);
+  max-width:calc(100vw - var(--space-24));
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-8);
+  padding:var(--space-8) var(--space-16);
+  border-left:var(--border-accent) solid var(--primary);
+  background:var(--primary-tint);
+  box-shadow:var(--shadow-md);
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  font-weight:var(--weight-regular);
+  line-height:var(--leading-relaxed);
+  text-align:left;
+  white-space:normal;
+  color:var(--primary);
+}
+.tooltip p{margin:0}
+.tooltip[hidden]{display:none}
+.tooltip--end{left:auto;right:0}                       /* opens to the left of the ⓘ */
+
+/* Dark: values on charts */
+.tooltip--dark{
+  display:block;
+  width:auto;
+  padding:var(--space-8) var(--space-12);
+  border-left:none;
+  border-radius:var(--radius-sm);
+  background:var(--overlay-dark);
+  box-shadow:none;
+  font-size:var(--text-12);
+  line-height:var(--leading-relaxed);
+  white-space:nowrap;
+  color:var(--white);
+  pointer-events:none;
+}
+.tooltip__swatch{display:inline-block;width:var(--dot-size);height:var(--dot-size);margin-right:var(--space-4);border-radius:var(--radius-round);vertical-align:baseline}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;
+  left:var(--space-16);
+  right:var(--space-16);
+  bottom:var(--space-24);
+  z-index:var(--layer-toast);
+  max-width:var(--toast-max-w);
+  margin-inline:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-12);
+  padding:var(--space-12) var(--space-16);
+  background:var(--black);
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  line-height:var(--leading-normal);
+  color:var(--white);
+  opacity:0;
+  transform:translateY(var(--space-8));
+  transition:opacity var(--motion-slow),transform var(--motion-slow);
+  pointer-events:none;
+}
+.toast.is-visible{opacity:1;transform:none;pointer-events:auto}
+/* Start-aligned: bottom left, sized to its content. On desktop it starts where the content starts (after the sidebar). */
+/* Mobile: the full width of the screen, 16px margins. Desktop: a fixed width, after the sidebar; long messages wrap. */
+.toast--start{left:var(--toast-start);right:var(--toast-start);max-width:none;margin-inline:0}
+@media (min-width:1024px){.toast--start{left:calc(var(--sidebar-w) + var(--space-24));right:auto;width:var(--toast-w)}}
+.toast > span{flex:1;min-width:0}
+.toast--inline{position:static;margin-inline:0;opacity:1;transform:none;pointer-events:auto}   /* for documentation */
+.toast__action{
+  flex-shrink:0;
+  height:var(--btn-h-sm);
+  margin:0 calc(-1 * var(--space-8)) 0 0;
+  padding:0 var(--space-8);
+  border:none;
+  background:none;
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  color:var(--primary-light);
+  cursor:pointer;
+}
+.toast__action:hover{background:var(--toast-hover)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}

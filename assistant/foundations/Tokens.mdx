@@ -1,0 +1,14 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './tokens.stories.js';
+
+<Meta of={Stories} />
+
+# Tokens
+
+<span className="review-chip">Under review</span>
+
+Every token of the assistant, **read live from `assistant/tokens.css`**. They all start with `--ai-` and are loaded **after** the main tokens. Most of them point to a main token (the grey chips); only a few have a value of their own.
+
+The build exports them in **`dist/tokens-assistant.json`** (W3C Design Tokens format), for Figma, AI assistants and other platforms. They are **component tokens** in the three-tier model of the main system (Primitive → Semantic → Component).
+
+<Canvas of={Stories.AllTokens} sourceState="none" />

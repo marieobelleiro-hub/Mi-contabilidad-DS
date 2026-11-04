@@ -1,0 +1,199 @@
+{
+  "$description": "Asistente inteligente (sub-system) tokens. They build on dist/tokens.json: references like {color.action.primary} point there. Generated from assistant/tokens.css: do not edit by hand.",
+  "assistant": {
+    "panel": {
+      "ai-canvas": {
+        "$value": "{color.action.primary-tint}",
+        "$type": "color",
+        "$description": "panel background",
+        "$extensions": {
+          "css": "var(--ai-canvas)"
+        }
+      },
+      "ai-panel-line": {
+        "$value": "{color.surface.line}",
+        "$type": "color",
+        "$description": "border around the floating panel",
+        "$extensions": {
+          "css": "var(--ai-panel-line)"
+        }
+      },
+      "ai-panel-shadow": {
+        "$value": "0 8px 32px rgba(0,0,0,0.25)",
+        "$description": "floating panel: the highest element of the page",
+        "$extensions": {
+          "css": "var(--ai-panel-shadow)"
+        }
+      },
+      "ai-panel-gap": {
+        "$value": "{space.space-48}",
+        "$type": "dimension",
+        "$description": "distance to the screen edges when floating (top and bottom)",
+        "$extensions": {
+          "css": "var(--ai-panel-gap)"
+        }
+      },
+      "ai-sheet-h": {
+        "$value": "80vh",
+        "$description": "mobile bottom sheet height",
+        "$extensions": {
+          "css": "var(--ai-sheet-h)"
+        }
+      },
+      "ai-log-max-h": {
+        "$value": "52vh",
+        "$description": "conversation height before it scrolls (floating)",
+        "$extensions": {
+          "css": "var(--ai-log-max-h)"
+        }
+      },
+      "ai-layer": {
+        "$value": "{layer.layer-dialog}",
+        "$type": "number",
+        "$description": "the panel sits above the page",
+        "$extensions": {
+          "css": "var(--ai-layer)"
+        }
+      }
+    },
+    "header": {
+      "ai-header-bg": {
+        "$value": "{color.action.primary}",
+        "$type": "color",
+        "$description": "blue bar",
+        "$extensions": {
+          "css": "var(--ai-header-bg)"
+        }
+      },
+      "ai-header-text": {
+        "$value": "{color.palette.neutrals.white}",
+        "$type": "color",
+        "$description": "5.0:1 on --primary",
+        "$extensions": {
+          "css": "var(--ai-header-text)"
+        }
+      },
+      "ai-header-h": {
+        "$value": "56px",
+        "$type": "dimension",
+        "$extensions": {
+          "css": "var(--ai-header-h)"
+        }
+      },
+      "ai-header-hover": {
+        "$value": "rgba(255,255,255,0.16)",
+        "$type": "color",
+        "$description": "hover on the header buttons",
+        "$extensions": {
+          "css": "var(--ai-header-hover)"
+        }
+      },
+      "ai-switch-track": {
+        "$value": "#002D9C",
+        "$type": "color",
+        "$description": "switch track on the blue header (2.3:1 against it): the white thumb is 11.3:1",
+        "$extensions": {
+          "css": "var(--ai-switch-track)"
+        }
+      }
+    },
+    "messages": {
+      "ai-msg-user-bg": {
+        "$value": "{color.surface.fill-hover}",
+        "$type": "color",
+        "$description": "your messages: grey, on the right",
+        "$extensions": {
+          "css": "var(--ai-msg-user-bg)"
+        }
+      },
+      "ai-msg-bot-bg": {
+        "$value": "{color.surface.surface}",
+        "$type": "color",
+        "$description": "assistant replies: white, on the left",
+        "$extensions": {
+          "css": "var(--ai-msg-bot-bg)"
+        }
+      },
+      "ai-msg-bot-line": {
+        "$value": "{color.surface.line}",
+        "$type": "color",
+        "$extensions": {
+          "css": "var(--ai-msg-bot-line)"
+        }
+      },
+      "ai-msg-max-w": {
+        "$value": "760px",
+        "$type": "dimension",
+        "$description": "a message never gets wider than this",
+        "$extensions": {
+          "css": "var(--ai-msg-max-w)"
+        }
+      },
+      "ai-note-line": {
+        "$value": "{color.action.attention}",
+        "$type": "color",
+        "$description": "left bar of a note inside a reply",
+        "$extensions": {
+          "css": "var(--ai-note-line)"
+        }
+      },
+      "ai-form-w": {
+        "$value": "560px",
+        "$type": "dimension",
+        "$description": "a reply holding a form card keeps this width (full width on mobile)",
+        "$extensions": {
+          "css": "var(--ai-form-w)"
+        }
+      }
+    },
+    "suggestion-chip": {
+      "ai-chip-h": {
+        "$value": "32px",
+        "$type": "dimension",
+        "$description": "min height (target 24×24 met)",
+        "$extensions": {
+          "css": "var(--ai-chip-h)"
+        }
+      },
+      "ai-chip-line": {
+        "$value": "{color.action.primary}",
+        "$type": "color",
+        "$extensions": {
+          "css": "var(--ai-chip-line)"
+        }
+      },
+      "ai-chip-hover": {
+        "$value": "{color.action.primary-tint}",
+        "$type": "color",
+        "$extensions": {
+          "css": "var(--ai-chip-hover)"
+        }
+      }
+    },
+    "composer": {
+      "ai-composer-line": {
+        "$value": "{color.surface.line-strong}",
+        "$type": "color",
+        "$extensions": {
+          "css": "var(--ai-composer-line)"
+        }
+      },
+      "ai-composer-h": {
+        "$value": "56px",
+        "$type": "dimension",
+        "$description": "box height: 40px field + 8px padding",
+        "$extensions": {
+          "css": "var(--ai-composer-h)"
+        }
+      },
+      "ai-send-size": {
+        "$value": "40px",
+        "$type": "dimension",
+        "$description": "send button",
+        "$extensions": {
+          "css": "var(--ai-send-size)"
+        }
+      }
+    }
+  }
+}

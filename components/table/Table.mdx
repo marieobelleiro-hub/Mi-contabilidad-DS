@@ -1,0 +1,162 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as TableStories from './table.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../button/button.css?raw';
+import alsoCss1 from '../card/card.css?raw';
+import alsoCss2 from '../list/list.css?raw';
+import alsoCss3 from '../result/result.css?raw';
+import alsoCss4 from '../selectors/selectors.css?raw';
+import ownCss from './table.css?raw';
+
+<Meta of={TableStories} />
+
+# Data table
+
+The three tables of the app: **Facturación**, **Gastos** and **Taxes** (the annual summaries of IVA and IRPF). A table always sits inside a **Card**, with "+ Añadir" and its totals in the card footer. Every example uses the real data of the demo (2026).
+
+| Control | Values |
+|---|---|
+| **View** | **Desktop**: the table · **Mobile**: the app doesn't show a table, it shows one block per invoice or expense (a record list, 390px frame) |
+| **State** | **Editable**: a quarter (3T): cells are inputs, the dot changes the status, the row can be deleted · **Read only**: the Resumen anual tab (the whole year): plain text, nothing to change, no "+ Añadir" · **Empty**: a quarter with nothing yet (4T) |
+
+On mobile, rows are not edited in place: a new invoice or expense is added through its form (<a href="./?path=/docs/app-components-input--input" target="_top">Input › Mobile forms</a>); in the list only the status dot, the 303 checkbox and the trash button work.
+
+## Facturación
+
+Two tables, one under the other: **Facturas nacionales** (with IVA and IRPF) and **Facturas exentas de impuestos** (foreign clients: no IVA, no IRPF; the total is the base). Under them, the legend of the status dot (Cobrada · Pendiente), except in Resumen anual.
+
+<Canvas of={TableStories.Facturacion} sourceState="none" />
+<Controls of={TableStories.Facturacion} />
+
+| Column | Nacionales | Exentas | Editable as |
+|---|---|---|---|
+| Núm. · Fecha | ✓ | ✓ | `table__input--code` (Mono) · date DD/MM/AAAA |
+| Cliente · Concepto | ✓ | ✓ | `table__input` |
+| Base € | ✓ | ✓ | `table__input--num` (Mono, right) |
+| IVA % · IVA € | ✓ | — | `table__select` (0 · 4 · 5 · 10 · 21 %) · calculated |
+| IRPF % · IRPF € | ✓ (15 % or —) | — | fixed rate `is-rate` · calculated |
+| Total € | base + IVA − IRPF | base | calculated, `is-strong` |
+| Status · Delete | ✓ | ✓ | `status-btn` · `btn--icon btn--danger` (cross on desktop, trash on mobile) |
+
+| Totals | Nacionales | Exentas |
+|---|---|---|
+| Footer | Total (neto) · IVA · IRPF | Total (neto) |
+| Empty | "Sin facturas españolas este período" | "Sin facturas extranjero este período" |
+
+## Gastos
+
+The same expenses in two lists: **Por cat. IRPF** (one table per category of the IRPF form) or **Por % IVA** (one table per rate). The columns change with the list and the category:
+
+<Canvas of={TableStories.Gastos} sourceState="none" />
+<Controls of={TableStories.Gastos} />
+
+| | Columns |
+|---|---|
+| Por cat. IRPF | Núm. · Fecha · Proveedor · Concepto · Base € · IVA % · IVA € · Total € · 303 · delete |
+| · 1. Seguridad Social / RETA | no IVA columns · the base is called **Cuota** · total only |
+| · 10. Otros desgravables | adds **Objeto** in front |
+| Por % IVA | Núm. · Fecha · Proveedor · Concepto · **Cat. IRPF** (`table__pick`: the number, the full list opens on click) · Base € · IVA € · Total € · 303 · delete |
+
+- **303** (`table__check`): include the expense in the Modelo 303. Disabled when the expense has no IVA (0 % or Seguridad Social).
+- Footer: Base · IVA · Total (Seguridad Social: Total). Empty: "Ningún gasto registrado".
+- Each category title has its ⓘ with the rules of that category.
+
+## Taxes
+
+The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarters, read only: **IVA** (towards the Modelo 390) and **IRPF** (towards the Modelo 100). A quarter that hasn't been declared yet is grey ("—"). On mobile it becomes **one block per quarter**. The annual total under it is the <a href="./?path=/docs/app-components-list-row--list" target="_top">List row › Annual footer</a>.
+
+<Canvas of={TableStories.Summary} sourceState="none" />
+<Controls of={TableStories.Summary} />
+
+## Spec
+
+| | Data table | Summary |
+|---|---|---|
+| Text | Sans 12 | Sans 14 |
+| Header | Sans 12 / 400 · `--text-muted` · left (numbers right) | Mono 12 / 700 caps · section colour · right · quarter not declared yet `--text-muted` / 400 |
+| Cells | padding `--table-cell-pad` 8px · 1px `--line` between rows | same · last row `table__total` |
+| Numbers | `is-num`: right, tabular figures | same |
+| Column group | `is-group`: `--table-group-gap` 32px before IVA and IRPF | — |
+| Widths | `col-xs` 24 · `col-sm` 56 · `col-md` 96 · `col-lg` 160px on `<col>` · no class = the rest (Concepto) | — |
+| Empty | `table__empty`: one full-width row, `--canvas`, `--text-muted`, centred | — |
+| Colour | `table--primary` (Facturación, IRPF) · `table--attention` (Gastos, IVA): selects, checkboxes, totals, headers | same |
+| Totals | `table-totals` · Sans 12 / 500 · section colour | `result--footer` |
+
+**Mobile (record list)**
+
+| Part | Class | Style |
+|---|---|---|
+| List | `records` in a card (title = the table) | — |
+| Record | `record` | Sans 14 · 1px `--line-strong` under each · actions column on the right (`record__side`: 303 checkbox, trash) |
+| Top | `record__top` | client / provider (500) · Núm. on the right |
+| Sub | `record__sub` | date — concept |
+| Rows | `record__rows` > `record__row` | label `--text-muted` · value right · `record__row--total` 500, with the status dot |
+| Totals | `table-totals table-totals--stack` | one per line, Sans 14 |
+| "303" | `records__303` | above the checkbox column |
+| Quarter blocks (summary) | `card--sectioned` + `card__section` + List row `row--kv` | quarter not declared: "Sin resultado hasta que termine el plazo de declaración" |
+
+## Markup
+
+<Source dark code={`<section class="card card--primary" aria-labelledby="t1">
+  <div class="card__header"><h2 class="card__title card__title--caps" id="t1">Facturas nacionales</h2></div>
+  <div class="table-wrap">
+    <table class="table table--primary">
+      <colgroup><col class="col-sm"><col class="col-md"><col class="col-lg"><col><col class="col-md"><col class="col-xs"><col class="col-xs"></colgroup>
+      <thead><tr>
+        <th scope="col">Núm.</th><th scope="col">Fecha</th><th scope="col">Cliente</th><th scope="col">Concepto</th>
+        <th scope="col" class="is-num">Total €</th><th scope="col"><span class="sr-only">Estado</span></th><th scope="col"><span class="sr-only">Acciones</span></th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="is-strong"><input class="table__input table__input--code" value="411" aria-label="Número, factura 411"></td>
+          <td><input class="table__input table__input--code" value="30/09/2026" aria-label="Fecha, factura 411"></td>
+          <td><input class="table__input" value="University" aria-label="Cliente, factura 411"></td>
+          <td><input class="table__input" value="Design Services" aria-label="Concepto, factura 411"></td>
+          <td class="is-num is-strong">5.115,56</td>
+          <td class="is-action"><button class="status-btn" aria-label="Factura 411: pendiente. Pulsa para marcar cobrada"><span class="status status--pending" aria-hidden="true"></span></button></td>
+          <td class="is-action"><button class="btn btn--icon btn--sm btn--danger" aria-label="Eliminar factura 411">…</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card__footer">
+    <button class="btn btn--ghost btn--primary btn--flush">…plus…<span class="btn__label">Añadir factura</span></button>
+    <p class="table-totals table-totals--primary"><span>Total (neto): 10.199,80 €</span><span>IVA: 2.020,71 €</span><span>IRPF: 1.443,37 €</span></p>
+  </div>
+</section>
+
+<!-- Mobile: the same invoice as a record -->
+<ul class="records">
+  <li class="record">
+    <div class="record__main">
+      <div class="record__top"><strong>University</strong><span>Núm. <strong>411</strong></span></div>
+      <p class="record__sub">30/09/2026 — Design Services</p>
+      <dl class="record__rows">
+        <div class="record__row"><dt>Base €</dt><dd>4.826,00 €</dd></div>
+        <div class="record__row record__row--total"><dt>Total</dt><dd><button class="status-btn" aria-label="…">…</button><strong>5.115,56 €</strong></dd></div>
+      </dl>
+    </div>
+    <div class="record__side"><button class="btn btn--icon btn--sm btn--danger" aria-label="Eliminar factura 411 de University">…trash…</button></div>
+  </li>
+</ul>`} />
+
+## Accessibility
+
+- **Every input and select in a cell has an `aria-label`** with the column and the row ("Base, factura 411"). The cells have no visible label of their own.
+- Headers use `<th scope="col">`; the status and delete columns get hidden text (`sr-only`). Summary rows use `<th scope="row">`, so each amount is read with its concept and its quarter.
+- The status dot is a `<button>` that says the status and what pressing does; in read only it's an image with the status in words. The delete and 303 controls name the row they act on.
+- On mobile each record is a list item, and its figures a `<dl>`: each value is read with its label.
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the tables shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Data table uses**, the base styles (focus ring), the icon class and the table styles, plus the other components in the examples (Button, Card, List row, Selectors).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Data table', ownCss, { also: [['Button', alsoCss0], ['Card', alsoCss1], ['List row', alsoCss2 + '\n' + alsoCss3], ['Selectors', alsoCss4]] })} />
+
+</details>

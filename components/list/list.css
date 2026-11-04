@@ -1,0 +1,94 @@
+/* ==========================================================================
+   List & Row  ·  .list  +  .row
+   Lines inside a card that are not a full data table.
+
+   Kinds:    record (default) · --kv (label → value) · --bar (label · bar · %)
+   Density:  regular 12px (default) · .list--compact 8px
+   Size:     .list--sm 12px text (dashboard) · default 14px (forms, mobile)
+   Parts:    __lead (number) · __title · __meta (date, hidden on mobile) · __value · __trail (status, button)
+             __label · __bar-cell > __bar + __value
+   Value:    __value--strong (medium) · --accent · --muted
+
+   <ul class="list list--sm">
+     <li class="row"><span class="row__lead">411</span><span class="row__title">University</span>
+       <span class="row__meta">30/09/2026</span><span class="row__value row__value--strong">4.826,00 €</span>
+       <span class="row__trail">…status…</span></li>
+   </ul>
+   <dl class="list">
+     <div class="row row--kv"><dt class="row__label">IVA repercutido</dt><dd class="row__value">2.375,05 €</dd></div>
+   </dl>
+
+   ========================================================================== */
+.list{
+  --row-pad:var(--row-pad-regular);
+  --list-accent:var(--primary);
+  margin:0;
+  padding:0;
+  list-style:none;
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  color:var(--text);
+}
+.list--sm{font-size:var(--text-12)}
+.list--compact{--row-pad:var(--row-pad-compact)}
+.list--primary{--list-accent:var(--primary)}
+.list--attention{--list-accent:var(--attention)}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:var(--space-16);
+  min-height:var(--row-min-h);
+  padding-block:var(--row-pad);
+  margin:0;
+}
+.row + .row{border-top:var(--border-thin) solid var(--line)}
+.list--flush .row:first-child{padding-top:0}     /* first row aligned with the card header */
+
+/* ── Record parts ── */
+.row__lead{flex-shrink:0;min-width:var(--row-lead-w);font-weight:var(--weight-medium)}
+.row__title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row__meta{flex-shrink:0;color:var(--text-muted);white-space:nowrap}
+.row__value{flex-shrink:0;margin:0;text-align:right;white-space:nowrap}
+.row__value--strong{font-weight:var(--weight-medium)}
+.row__value--accent{color:var(--list-accent);font-weight:var(--weight-medium)}
+.row__value--muted{color:var(--text-muted)}
+.row__trail{flex-shrink:0;display:inline-flex;align-items:center;gap:var(--space-8)}
+
+/* ── Label → value ── */
+.row--kv{justify-content:space-between}
+.row__label{
+  flex:1;
+  min-width:0;
+  margin:0;
+  display:flex;
+  align-items:center;
+  gap:var(--space-8);
+}
+.row--kv .row__label{color:inherit}
+.row--total{font-weight:var(--weight-medium)}
+.row--total .row__value{font-weight:var(--weight-medium)}
+
+/* ── Bar row (distribution) ── */
+.row--bar{gap:var(--space-8)}
+.row--bar .row__label{flex:0 0 var(--row-bar-label-w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.row__bar{
+  flex:1;
+  height:var(--row-bar-h);
+  border-radius:var(--radius-sm);
+  background:var(--canvas);
+  overflow:hidden;
+}
+.row__bar > span{display:block;height:100%;border-radius:var(--radius-sm);background:var(--list-accent);transition:width var(--motion-slow) ease}
+.row__bar-cell{flex:1;min-width:0;display:flex;align-items:center;gap:var(--space-8);margin:0}
+.row--bar .row__value{min-width:var(--row-bar-value-w);text-align:right}
+.list--bars .row + .row{border-top:none}         /* bar lists have no dividers */
+.list--bars{--row-pad:var(--space-4)}
+.list--bars .row{min-height:0}                  /* no button in bar rows: no 24px minimum */
+
+/* ── Mobile ── */
+@media (max-width:1023px){
+  .list--sm{font-size:var(--text-14)}
+  .row__meta{display:none}
+  .row{gap:var(--space-12)}
+}

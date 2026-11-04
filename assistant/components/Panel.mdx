@@ -1,0 +1,51 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './panel.stories.js';
+
+<Meta of={Stories} />
+
+# Panel
+
+<span className="review-chip">Under review</span>
+
+The window of the assistant: a **header** (title, language switch, full screen, close), the **greeting**, the **conversation** and the **composer**, with a small **footer** (engine status + Borrar conversación).
+
+<Canvas of={Stories.Playground} />
+<Controls of={Stories.Playground} />
+
+## Anatomy
+
+| Part | Class | Content |
+|---|---|---|
+| Panel | `ai-panel` | `--ai-canvas` background · 1px `--ai-panel-line` · `--ai-panel-shadow` |
+| Header | `ai-panel__head` | `--ai-header-h` 56px · `--ai-header-bg` blue · drag handle on desktop |
+| Title | `ai-panel__title` | Assistant icon 24px + H2 · 16 / 500 · cut with "…" if too long |
+| Language | **Switch / toggle** (main system) | Esp / Eng · track `--ai-switch-track` on the blue header |
+| Header buttons | `ai-head-btn` | 40px (44px on mobile) · white icon · hover `--ai-header-hover` · `maximize` / `minimize`, `close` |
+| Body | `ai-panel__body` | padding 20 / 24 (16 on mobile) · 16px between parts |
+| Greeting | `ai-panel__hello` | Display · Light, blue |
+| Conversation | `ai-panel__log` | `role="log"` · scrolls after `--ai-log-max-h` (52% of the screen) · hidden while empty |
+| Composer | see Composer | |
+| Footer | `ai-panel__foot` | engine status (Mono 12, muted) · **Ghost button** "Borrar conversación" (only when there is a conversation) |
+
+## Modes
+
+| Mode | When | Size and place |
+|---|---|---|
+| **Floating** | Desktop, default | From the sidebar (+24px) to 48px from the right edge, 48px from the bottom · drag by the header, resize from the bottom-right corner |
+| **Full screen** | Header button (`ai-panel--full`) | The whole window · no drag, no resize |
+| **Bottom sheet** | Mobile (below 1024px) | Full width, `--ai-sheet-h` 80% of the screen, from the bottom |
+
+Just opened (the conversation area appears with the first message):
+
+<Canvas of={Stories.Empty} sourceState="none" />
+
+Mobile:
+
+<Canvas of={Stories.Mobile} sourceState="none" />
+
+## Accessibility
+
+- `role="dialog" aria-modal="false"`, named by its title (`aria-labelledby`): the page stays usable behind it.
+- **Esc** closes it; the focus goes back to its floating button.
+- The full screen button says its state with `aria-pressed` and changes its name (*Pantalla completa* / *Salir de pantalla completa*).
+- The panel has its own `lang` (es / en), so screen readers switch pronunciation with the switch.

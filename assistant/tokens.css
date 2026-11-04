@@ -1,0 +1,41 @@
+/* ==========================================================================
+   Asistente inteligente — tokens
+   Sub-system of the Mi Contabilidad design system. Loaded AFTER tokens/tokens.css:
+   it only adds what the chat assistant needs. Fonts, type scale, spacing, radius,
+   icons and the focus ring come from the main system.
+   ========================================================================== */
+:root{
+  /* ── Assistant · Panel ── */
+  --ai-canvas:var(--primary-tint);       /* panel background */
+  --ai-panel-line:var(--line);           /* border around the floating panel */
+  --ai-panel-shadow:0 8px 32px rgba(0,0,0,0.25);  /* floating panel: the highest element of the page */
+  --ai-panel-gap:var(--space-48);        /* distance to the screen edges when floating (top and bottom) */
+  --ai-sheet-h:80vh;                     /* mobile bottom sheet height */
+  --ai-log-max-h:52vh;                   /* conversation height before it scrolls (floating) */
+  --ai-layer:var(--layer-dialog);        /* the panel sits above the page */
+
+  /* ── Assistant · Header ── */
+  --ai-header-bg:var(--primary);         /* blue bar */
+  --ai-header-text:var(--white);         /* 5.0:1 on --primary */
+  --ai-header-h:56px;
+  --ai-header-hover:rgba(255,255,255,0.16);  /* hover on the header buttons */
+  --ai-switch-track:#002D9C;             /* switch track on the blue header (2.3:1 against it): the white thumb is 11.3:1 */
+
+  /* ── Assistant · Messages ── */
+  --ai-msg-user-bg:var(--fill-hover);    /* your messages: grey, on the right */
+  --ai-msg-bot-bg:var(--surface);        /* assistant replies: white, on the left */
+  --ai-msg-bot-line:var(--line);
+  --ai-msg-max-w:760px;                  /* a message never gets wider than this */
+  --ai-note-line:var(--attention);       /* left bar of a note inside a reply */
+  --ai-form-w:560px;                     /* a reply holding a form card keeps this width (full width on mobile) */
+
+  /* ── Assistant · Suggestion chip ── */
+  --ai-chip-h:32px;                      /* min height (target 24×24 met) */
+  --ai-chip-line:var(--primary);
+  --ai-chip-hover:var(--primary-tint);
+
+  /* ── Assistant · Composer ── */
+  --ai-composer-line:var(--line-strong);
+  --ai-composer-h:56px;                  /* box height: 40px field + 8px padding */
+  --ai-send-size:40px;                   /* send button */
+}

@@ -1,0 +1,28 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './typography.stories.js';
+
+<Meta of={Stories} />
+
+# Typography
+
+<span className="review-chip">Under review</span>
+
+The assistant uses the **main type scale**; nothing new. What changes is **how it's used**: messages are read like a conversation, so they're one step bigger than the app's body text.
+
+<Canvas of={Stories.Styles} sourceState="none" />
+
+| Difference with the app | Why |
+|---|---|
+| **Messages at 16px** (the app's body text is 14px) | A conversation is read line by line; 16px is easier to read, and it's the same size you type in |
+| **Composer at 16px** | Same as the messages · on iPhone, 16px avoids the automatic zoom |
+| **Greeting in Display · Light, blue** | Same style as the app's big numbers, so it feels like part of the app |
+
+## Changes from the app
+
+| App today | Design system |
+|---|---|
+| Header title 18px (15px on mobile) | **16 / 500** (Title · Medium) on every screen |
+| Form title 20px | **16 / 500** |
+| Bold text 600 | **500** (Plex Sans only uses 300 · 400 · 500) |
+| Meta with its own letter spacing | Mono 12, no extra spacing |
+| Headings in a reply are `h4` (a level is skipped after the panel's `h2`) | `h3` |

@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Dialog  ·  <dialog class="dialog">
+   Uses the native <dialog> element: showModal() traps focus, Esc closes it,
+   and ::backdrop dims the page.
+
+   Sizes:    --md 640px (default: welcome, forms) · --sm 400px (alerts)
+   Parts:    __top (switch above the title) · __header (title + close or ghost button) · __title · __body · __actions
+   Mobile:   full screen, actions stuck to the bottom (except --sm, which stays centred)
+   Docs:     .dialog--static shows the panel inline, without opening it
+
+   <dialog class="dialog" aria-labelledby="d1">
+     <div class="dialog__header"><h2 class="dialog__title" id="d1">Bienvenidos</h2><button class="btn btn--icon btn--md btn--danger" aria-label="Cerrar">…</button></div>
+     <div class="dialog__body">…</div>
+     <div class="dialog__actions">…</div>
+   </dialog>
+
+   ========================================================================== */
+.dialog{
+  width:calc(100% - var(--space-48));
+  max-width:var(--dialog-w-md);
+  max-height:calc(100vh - var(--space-48));
+  margin:auto;
+  padding:var(--space-32) var(--space-40);
+  border:var(--border-thin) solid var(--line);
+  border-radius:var(--radius-none);
+  background:var(--surface);
+  color:var(--text);
+  overflow-y:auto;
+}
+.dialog::backdrop{background:var(--overlay)}
+.dialog--sm{max-width:var(--dialog-w-sm);padding:var(--space-24)}
+
+.dialog__top{display:flex;justify-content:flex-end;margin-bottom:var(--space-16)}   /* e.g. the language switch */
+.dialog__header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:var(--space-16);
+  margin-bottom:var(--space-20);
+}
+.dialog__header .btn--icon{flex-shrink:0;margin:calc(-1 * var(--space-8)) calc(-1 * var(--space-8)) 0 0}
+.dialog__header .btn--ghost{flex-shrink:0}   /* Cancelar never gets cut */
+.dialog__title{                                 /* Display · 24 / 300 */
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--text-24);
+  font-weight:var(--weight-light);
+  line-height:var(--leading-tight);
+  color:var(--text);
+}
+.dialog__body{
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-16);
+  font-family:var(--font-sans);
+  font-size:var(--text-16);
+  line-height:var(--leading-relaxed);
+}
+.dialog__body p{margin:0}
+.dialog__body a{color:var(--primary)}
+.dialog--form .dialog__body{gap:var(--space-20);line-height:normal}
+.dialog__actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:var(--space-16);
+  margin-top:var(--space-24);
+}
+.dialog__actions--split{justify-content:space-between}
+
+/* Documentation preview: the panel without the modal behaviour */
+.dialog--static{position:static;display:block;width:100%;max-height:none;margin:0}
+
+/* ── Mobile: full screen ── */
+@media (max-width:1023px){
+  .dialog:not(.dialog--sm):not(.dialog--static){
+    width:100%;
+    max-width:none;
+    height:100%;
+    max-height:none;
+    padding:max(var(--space-40),env(safe-area-inset-top)) var(--space-24) 0;
+    border:none;
+    display:flex;
+    flex-direction:column;
+  }
+  .dialog:not(.dialog--sm):not([open]):not(.dialog--static){display:none}
+  .dialog:not(.dialog--sm):not(.dialog--static) .dialog__body{flex:1;overflow-y:auto}
+  .dialog:not(.dialog--sm):not(.dialog--static) .dialog__actions{
+    position:sticky;
+    bottom:0;
+    margin-top:0;
+    padding:var(--space-16) 0 max(var(--space-24),env(safe-area-inset-bottom));
+    background:var(--surface);
+  }
+  .dialog--sm{width:calc(100% - var(--space-32))}
+}

@@ -1,0 +1,180 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as InputStories from './input.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../button/button.css?raw';
+import alsoCss1 from '../dialog/dialog.css?raw';
+import alsoCss2 from '../list/list.css?raw';
+import alsoCss3 from '../selectors/selectors.css?raw';
+import ownCss from './input.css?raw';
+
+<Meta of={InputStories} />
+
+# Input
+
+The **fields where you type or choose a value**. They all share one look: a label above, a 40px box and an optional message below.
+
+<Canvas of={InputStories.Anatomy} sourceState="none" />
+
+| Type | Use in the app |
+|---|---|
+| [Text](#text) | Proveedor · Cliente · Concepto · Número de factura · Clientes |
+| [Amount](#amount) | Base imponible en € · the two numbers you type in the tax forms (small) |
+| [Date](#date) | Fecha · 2026 |
+| [Dropdown](#dropdown) | % de IVA · Categoría IRPF |
+| [Description](#description) | Notas del trimestre · Notas de la declaración |
+| [Mobile forms](#mobile-forms) | Nueva factura (nacional · exenta) · Nuevo gasto |
+
+**Not on this page:** checkbox, radio and switch are in <a href="./?path=/docs/app-components-selectors--selectors" target="_top">Selectors</a> · cells you edit inside a table are in <a href="./?path=/docs/app-components-data-table--table" target="_top">Data table</a> · the Chatbot and Accessibility assistant forms use these fields with their own colours (see those sections).
+
+Every type has the same controls: **Tinted** (then **Colour**), **State**, **Label**, **Required / Optional**, **Text in the field** and a **Message** below (hint in grey or error in red, with its text). Every text control starts with the real text of the app: replace it to try your own. Open a story to see its **Accessibility** tab.
+
+**States**, the same for every type:
+
+<Canvas of={InputStories.States} sourceState="none" />
+
+**Colour & background.** The colour is the colour of the section: blue (Facturación, IRPF) or orange (Gastos, IVA). It's set once on the form (`form--primary` / `form--attention`) or on a wrapper, and it colours the focus border, the checkboxes and the total. The **tint** is only for the mobile forms: they fill the screen with no card around them, so the tint shows where to type. Inside a card, fields are white.
+
+<Canvas of={InputStories.Colour} sourceState="none" />
+
+## Text
+
+Anything you write in words. `<input class="input" type="text">`. With the label on the left (`field--inline`) it's used once: Clientes, in <a href="./?path=/story/app-components-card--salario" target="_top">Card › Cálculo del salario</a>.
+
+<Canvas of={InputStories.Text} />
+<Controls of={InputStories.Text} />
+
+## Amount
+
+A figure in euros. It's a text field with `inputmode="decimal"`, so phones open the keypad with a comma. Two sizes (**Size** control):
+
+- **Regular · 40px**, in forms (Base imponible en €): written like any text, **Sans, left-aligned**.
+- **Small · 24px**, the two numbers you type inside the tax forms (Modelo 303 · 130); every other amount there is calculated. **Mono, right-aligned**, 160px wide, at the end of a row: `input input--sm input--num input--w-sm`. The **label is on the left** of the row. When it's **optional**, a checkbox comes before the label instead of "(opcional)": Aplicar compensación (Modelo 303). The required one is Importe ingresado en Hacienda (303 orange · 130 blue).
+
+<Canvas of={InputStories.Amount} />
+<Controls of={InputStories.Amount} />
+
+| | |
+|---|---|
+| Format | Spanish: comma for decimals, point for thousands (1.250,50) |
+| Wrong value | "Introduce un importe válido, por ejemplo 1250,50." |
+| Small · name for screen readers | required: its `<label for>` · optional: an `aria-label` that repeats the checkbox text |
+
+<a href="./?path=/story/app-components-card--tax-form" target="_top">See the small ones in the tax form (Card) →</a>
+
+## Date
+
+**Format DD/MM/AAAA.** The label carries the year selected in the year strip ("Fecha · 2026"): a date from another year is moved to that year.
+
+<Canvas of={InputStories.Date_} />
+<Controls of={InputStories.Date_} />
+
+| | |
+|---|---|
+| Desktop | text field · placeholder DD/MM/AAAA · `inputmode="numeric"` |
+| Touch screens | the phone's own date picker (`type="date"`, limited to the selected year) |
+| Wrong date | "Fecha no válida. Escríbela como DD/MM/AAAA." · an impossible day (31/06) becomes the last day of the month |
+
+## Dropdown
+
+A list of fixed options. `<select class="input">`, with the chevron on the right.
+
+<Canvas of={InputStories.Dropdown} />
+<Controls of={InputStories.Dropdown} />
+
+| Variant | Options | Notes |
+|---|---|---|
+| % de IVA | 21 % · 10 % · 5 % · 4 % · 0 % | Locked at 0 % with the hint "La cuota de autónomos no lleva IVA." when the category is Seguridad Social |
+| Categoría IRPF | 1. Seguridad Social / RETA … 10. Otros desgravables | First option "Elige una categoría" · error "Elige una categoría." |
+
+## Description
+
+Free text over several lines, always optional: the Notas of the tax forms (Notas del trimestre · Notas de la declaración). `<textarea class="input">`, at least 88px high, resizes vertically. The empty field shows a sentence in grey ("Criterios o decisiones de este trimestre..."). In the tax forms the box is **filled** in grey (`input--filled`: `--fill` background, `--line` border), so the notes read as a separate area of the form; use **Filled background** to switch it off.
+
+<Canvas of={InputStories.Description} />
+<Controls of={InputStories.Description} />
+
+## Mobile forms
+
+Forms are lists of fields, 20px apart, in a set order. The app has them **only on mobile**, as a full-screen dialog (title, ghost Cancelar, the fields, a full-width Guardar stuck to the bottom). On desktop you type straight into the table. Choose the form in **Form**.
+
+<Canvas of={InputStories.MobileForms} sourceState="none" />
+<Controls of={InputStories.MobileForms} />
+
+| Form | Colour | Fields, in order | Checkbox |
+|---|---|---|---|
+| Facturación · **Nueva factura nacional** | blue | Número de factura · Fecha · Cliente · Concepto · Base imponible en € · % de IVA | Aplicar retención IRPF del 15 % |
+| Facturación · **Nueva factura exenta de impuestos** | blue | Número de factura · Fecha · Cliente · Concepto · Base imponible en € | — |
+| Gastos · **Nuevo gasto** | orange | Número de factura (opcional) · Fecha · Proveedor · Concepto · Base imponible en € · % de IVA · **Total gasto** · Categoría IRPF | Incluir en el 303 |
+
+**Nuevo gasto** opens from the Gastos list, which has two views: **Por cat. IRPF** (the form opens with that category chosen) and **Por % IVA** (it opens with that rate). Its rules:
+
+- Seguridad Social / RETA → % de IVA 0 %, locked, with the hint "La cuota de autónomos no lleva IVA."
+- IVA 0 % → "Incluir en el 303" off.
+- **Total gasto** (`field__total`: Sans 14 / 700 caps, in the field colour) updates as you type the base.
+
+## Spec
+
+| | Value |
+|---|---|
+| Label | `field__label` · Sans 14 (16 on mobile) · `--text` · "(opcional)" `is-optional` in `--text-muted` |
+| Box | `input` · `--input-h` 40px · padding `--input-pad-x` 12px · 1px `--line-strong` · radius 0 · `--surface` |
+| Text | Sans 14 (16 on mobile, so iPhone doesn't zoom in) · placeholder `--text-muted` |
+| Message | `field__hint` `--text-muted` · `field__error` `--error` · Sans 12 (14 on mobile) · empty → hidden |
+| Hover | border `--text-muted` |
+| Focus | border + 1px ring in the field colour **and** the yellow `--focus` ring |
+| Error | `aria-invalid="true"` · border + 1px ring `--error` |
+| Disabled | `disabled` · `--canvas` background · `--disabled` border and text |
+| Tinted | `field--tinted` / `form--tinted` · `--primary-tint` / `--attention-tint` |
+| Filled | `input--filled` · `--fill` background · `--line` border (Notas of the tax forms) |
+| Amount · small | `input--sm` 24px · padding 8px · Mono 12 (also on mobile) · label on the left |
+| Space between fields | `--space-20` |
+
+## Markup
+
+<Source dark code={`<div class="field field--attention field--tinted">
+  <label class="field__label" for="g-num">Número de factura <span class="is-optional">(opcional)</span></label>
+  <input class="input" id="g-num" type="text" autocomplete="off">
+</div>
+
+<div class="field">
+  <label class="field__label" for="g-prov">Proveedor</label>
+  <input class="input" id="g-prov" type="text" aria-required="true" aria-invalid="true" aria-describedby="g-prov-err">
+  <p class="field__error" id="g-prov-err">Este campo es obligatorio.</p>
+</div>
+
+<div class="field">
+  <label class="field__label" for="g-iva">% de IVA</label>
+  <select class="input" id="g-iva" aria-describedby="g-iva-hint" disabled><option>0 %</option></select>
+  <p class="field__hint" id="g-iva-hint">La cuota de autónomos no lleva IVA.</p>
+</div>
+
+<div class="field">
+  <label class="field__label" for="n-tri">Notas del trimestre <span class="is-optional">(opcional)</span></label>
+  <textarea class="input" id="n-tri" placeholder="Criterios o decisiones de este trimestre..."></textarea>
+</div>
+
+<!-- Small amount, at the end of a row -->
+<input class="input input--sm input--num input--w-sm" inputmode="decimal" aria-label="Importe a compensar" value="151,80">`} />
+
+## Accessibility
+
+- Every field has a visible `<label for>`; the small amount with a checkbox has an `aria-label` instead.
+- Required fields carry `aria-required="true"`; optional ones say "(opcional)" in the label, so it's read too.
+- Hints and errors are linked with `aria-describedby`, so they're read when the field gets focus. Errors also set `aria-invalid="true"` and always say what's wrong in words.
+- Focus is shown twice: the coloured border **plus** the yellow ring.
+- Dates use `inputmode="numeric"`, amounts `inputmode="decimal"`: phones open the right keypad.
+- The Total gasto is `aria-live="polite"`: screen readers read the new total.
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the fields shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Input uses**, the base styles (focus ring) and the field styles, plus the other components in the examples (Button, Dialog, List row, Selectors).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Input', ownCss, { also: [['Button', alsoCss0], ['Dialog', alsoCss1], ['List row', alsoCss2], ['Selectors', alsoCss3]] })} />
+
+</details>

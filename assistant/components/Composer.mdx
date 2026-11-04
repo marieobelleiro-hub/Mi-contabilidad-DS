@@ -1,0 +1,34 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './composer.stories.js';
+
+<Meta of={Stories} />
+
+# Composer
+
+<span className="review-chip">Under review</span>
+
+Where you type: a **text field** and the **send** button in one white box. The hint (placeholder) changes with what the assistant is waiting for.
+
+<Canvas of={Stories.Playground} />
+<Controls of={Stories.Playground} />
+
+| Hint | When |
+|---|---|
+| *Pregunta directamente lo que quieras...* | Free question (default) |
+| *Elige una opción de arriba… (o escribe «cancelar»)* | A question card is open |
+| *Rellena el formulario de arriba… (o escribe «cancelar»)* | A form card is open |
+
+## Spec
+
+| | Value |
+|---|---|
+| Box | `ai-composer` · white · 1px `--ai-composer-line` · min height `--ai-composer-h` 56px · padding 8, 20 on the left |
+| Field | `ai-composer__input` · no border of its own · Sans 16 · 300 characters max · hint in `--text-muted` |
+| Send | `ai-composer__send` · `--ai-send-size` 40px · blue, white `arrow-right` icon · hover a bit lighter |
+| Focus | the **yellow ring + black halo** goes around the **whole box** (`:focus-within`), not around the field inside it |
+
+## Accessibility
+
+- The field has a hidden label (*Escribe tu pregunta*); the send button is named *Enviar*.
+- Enter sends, like the button.
+- The app used a green border for focus (1.3:1, hard to see); the design system uses the yellow ring of the whole app.

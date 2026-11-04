@@ -1,0 +1,176 @@
+/* ==========================================================================
+   Data table  ·  .table  (inside .table-wrap)
+   Types:    data (default: invoices, expenses) · --summary (rows × quarters)
+   Accent:   --primary (blue) · --attention (orange) — totals, selects, summary headers
+   Cells:    .is-num (right, tabular) · .is-center · .is-strong · .is-muted · .is-group (column group gap)
+   Editable: .table__input (--code · --num) · .table__select · .table__check
+   Rows:     .table__empty · .table__total
+   Widths:   <col class="col-xs|col-sm|col-md|col-lg"> (or none = auto)
+   Totals:   .table-totals (under the table, in .card__footer) · --stack (mobile)
+   Pick:     .table__pick (a number shown, the full list in an invisible <select>: Cat. IRPF)
+   Mobile:   the table is replaced by a record list: .records (--attention) > .record (__main __top __sub __rows __row --total __side) · .records__303
+
+   ========================================================================== */
+.table-wrap{width:100%;overflow-x:auto}
+
+.table{
+  --table-accent:var(--primary);
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  font-family:var(--font-sans);
+  font-size:var(--text-12);
+  color:var(--text);
+}
+.table--primary{--table-accent:var(--primary)}
+.table--attention{--table-accent:var(--attention)}
+
+/* ── Header ── */
+.table th{
+  padding:0 var(--table-cell-pad) var(--table-cell-pad) 0;
+  border-bottom:var(--border-thin) solid var(--line);
+  font-weight:var(--weight-regular);
+  color:var(--text-muted);
+  text-align:left;
+  vertical-align:bottom;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* ── Body cells ── */
+.table td{
+  padding:var(--table-cell-pad) var(--table-cell-pad) var(--table-cell-pad) 0;
+  border-bottom:var(--border-thin) solid var(--line);
+  vertical-align:middle;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.table tbody tr:last-child td{border-bottom:none}
+.table :is(th,td):last-child{padding-right:0}
+
+.table .is-num{text-align:right;font-variant-numeric:tabular-nums}
+.table .is-center{text-align:center}
+.table .is-strong{font-weight:var(--weight-medium)}
+.table .is-muted{color:var(--text-muted)}
+.table .is-group{padding-left:var(--table-group-gap)}     /* gap before a column group (IVA, IRPF) */
+.table .is-rate{font-family:var(--font-mono);color:var(--table-accent)}   /* a % that is shown, not chosen (IRPF 15%) */
+.table .is-action{padding-right:0;text-align:right;overflow:visible}
+
+/* ── Column widths (<colgroup>) ── */
+.table .col-xs{width:var(--col-xs)}
+.table .col-sm{width:var(--col-sm)}
+.table .col-md{width:var(--col-md)}
+.table .col-lg{width:var(--col-lg)}
+
+/* ── Special rows ── */
+.table__empty td{
+  padding:var(--space-12) var(--table-cell-pad);
+  background:var(--canvas);
+  color:var(--text-muted);
+  text-align:center;
+}
+.table__total td{font-weight:var(--weight-medium)}
+
+/* ── Editable cells ── */
+.table__input,
+.table__select{
+  width:100%;
+  height:var(--table-input-h);
+  margin:0;
+  padding:0;
+  border:none;
+  border-radius:var(--radius-none);
+  background:transparent;
+  font:inherit;
+  color:inherit;
+}
+.table__input--code{font-family:var(--font-mono)}                     /* invoice number, date */
+.table__input--num{font-family:var(--font-mono);text-align:right;-moz-appearance:textfield;appearance:textfield}
+.table__input--num::-webkit-outer-spin-button,
+.table__input--num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.table__input::placeholder{color:var(--text-muted)}
+.table__input:hover,
+.table__select:hover{background:var(--canvas)}
+.table__input:focus-visible,
+.table__select:focus-visible{outline-offset:0;background:var(--surface)}
+.table__select{font-family:var(--font-mono);color:var(--table-accent);cursor:pointer}
+.table__input:disabled,
+.table__select:disabled{background:transparent;color:inherit;cursor:default}
+.table__check{width:var(--icon-sm);height:var(--icon-sm);margin:0;accent-color:var(--table-accent);cursor:pointer;vertical-align:middle}
+
+/* Pick: the cell shows a short value (category number), the native <select> on top opens the full list */
+.table__pick{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:var(--space-4);min-width:var(--btn-h-md);height:var(--table-input-h);padding:0 var(--space-8);font-family:var(--font-mono);color:var(--table-accent);cursor:pointer}
+.table__pick:hover{background:var(--canvas)}
+.table__pick .icon{width:var(--space-12);height:var(--space-12)}
+.table__pick select{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;font-size:var(--text-14)}
+.table__pick:focus-within{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset)}
+
+/* ── Totals under the table ── */
+.table-totals{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--space-8) var(--space-24);
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--text-12);
+  font-weight:var(--weight-medium);
+  color:var(--table-accent, var(--primary));
+}
+.table-totals--primary{color:var(--primary)}
+.table-totals--attention{color:var(--attention)}
+
+/* ── Summary table (rows × quarters) ── */
+.table--summary{font-size:var(--text-14)}
+.table--summary th{
+  padding:var(--table-cell-pad);
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  font-weight:var(--weight-bold);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  color:var(--table-accent);
+  text-align:right;
+}
+.table--summary th:first-child{text-align:left}
+.table--summary tbody th{               /* row header = the concept */
+  padding:var(--table-cell-pad) var(--space-20) var(--table-cell-pad) 0;
+  border-bottom:var(--border-thin) solid var(--line);
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  font-weight:inherit;
+  text-transform:none;
+  letter-spacing:0;
+  color:var(--text);
+  white-space:normal;
+}
+.table--summary tbody tr:last-child th{border-bottom:none}
+.table--summary th.is-empty{color:var(--text-muted);font-weight:var(--weight-regular)}
+.table--summary td{padding:var(--table-cell-pad)}
+.table--summary td:first-child{padding-left:0;padding-right:var(--space-20)}
+.table--summary td.is-empty{color:var(--text-muted)}
+
+/* ── Mobile: record list (one block per invoice / expense, replaces the table) ── */
+.records{--table-accent:var(--primary);margin:0;padding:0;list-style:none}
+.records--attention{--table-accent:var(--attention)}
+.record{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--space-8);padding:var(--space-8) 0;border-bottom:var(--border-thin) solid var(--line-strong);font-family:var(--font-sans);font-size:var(--text-14);line-height:var(--leading-normal);color:var(--text)}
+.record__main{min-width:0}
+.record__top{display:flex;justify-content:space-between;gap:var(--space-12)}
+.record__top strong{font-weight:var(--weight-medium)}
+.record__sub{margin:0 0 var(--space-2)}
+.record__rows{margin:0}
+.record__row{display:flex;justify-content:space-between;align-items:center;gap:var(--space-12)}
+.record__row dt{color:var(--text-muted)}
+.record__row dd{display:inline-flex;align-items:center;gap:var(--space-8);margin:0}
+.record__row--total dd strong{font-weight:var(--weight-medium)}
+.record__side{display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;gap:var(--space-8)}
+.records__303{margin:0;font-family:var(--font-sans);font-size:var(--text-12);color:var(--text-muted);text-align:right}
+.records__empty{margin:0;padding:var(--space-8) 0;font-family:var(--font-sans);font-size:var(--text-14);color:var(--text-muted)}
+.table-totals--stack{flex-direction:column;gap:var(--space-8);font-size:var(--text-14)}
+
+/* ── Mobile: the table keeps its width and the wrapper scrolls (fallback; the app shows .records instead) ── */
+@media (max-width:1023px){
+  .table{min-width:var(--table-min-w)}
+  .table--summary{min-width:var(--table-min-w-summary)}
+}

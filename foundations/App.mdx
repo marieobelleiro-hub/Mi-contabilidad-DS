@@ -1,0 +1,29 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="App/Introduction" />
+
+# App
+
+The design system of the **Mi Contabilidad app**: the dashboard and the Facturación, Gastos, IVA and IRPF sections, on desktop and mobile. It's the **main system**: the Chatbot and the Accessibility assistant are built on top of it.
+
+<p className="sc-entry"><a className="sc-entry__link" href="./iframe.html?id=app-showcase--overview&viewMode=story" target="_blank" rel="noopener">Showcase ↗</a></p>
+
+<a className="sc-entry__card" href="./iframe.html?id=app-showcase--overview&viewMode=story" target="_blank" rel="noopener" aria-label="Open the Showcase in a new tab">
+  <span className="sc-entry__shot"><iframe src="./iframe.html?id=app-showcase--overview&viewMode=story" title="Showcase preview" tabIndex="-1" loading="lazy" aria-hidden="true"></iframe></span>
+</a>
+
+<p className="sc-entry__legend">The whole app design system on a page.</p>
+
+## Sections
+
+| Section | What you find |
+|---|---|
+| **Foundations** | The basic choices every component is built on: **Colors**, **Typography**, **Spacing, radius & elevation**, **Layout & breakpoints**, **Icons**, and **Tokens**, the complete list of values |
+| **Components** | The building blocks of the screens: Button, Tab, Selectors, List row, Card, Input, Data table, Banner · tooltip & toast, Dialog, Chart |
+
+## Principles
+
+1. **Tokens only.** Components never contain a raw colour or pixel value, always `var(--token)`. Change a token and every component follows.
+2. **Colour has a meaning.** Blue is **primary** (the main action) and **income**. Orange is **attention** (an action you must not skip, like Guardar) and **expense**. Green is the **brand**.
+3. **Even spacing.** Ten spacing values on a 4px scale with a 2px half-step: 2 · 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48.
+4. **Accessible by default.** Text passes WCAG AA contrast, one yellow focus ring everywhere, every target at least 24 × 24px. **Don't rely on colour alone:** if a colour means something (paid, error, to pay), the words say it too.

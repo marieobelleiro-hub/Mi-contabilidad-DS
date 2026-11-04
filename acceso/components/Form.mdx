@@ -1,0 +1,29 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './form.stories.js';
+
+<Meta of={Stories} />
+
+# Form on dark
+
+<span className="review-chip">Under review</span>
+
+The forms of Acceso fácil (Nueva factura, Nuevo gasto, Registrar pago…) appear as the **answer** of the last step. They use the main **Input** and **Checkbox**, recoloured for the dark panel, and **options as radio buttons** for the yes / no questions.
+
+<Canvas of={Stories.NewInvoice} />
+<Controls of={Stories.NewInvoice} />
+
+| Part | Built with | On the dark panel |
+|---|---|---|
+| Intro note | `af-note` | "Ejemplo online: los cambios se ven en la app…" |
+| Yes / no question | `af-option-radio` in an `af-option-group` (a `<fieldset>`) | the radio is hidden; the option shows it (orange when chosen, grey for the other) |
+| Fields | **Input** (`field`, `input`) | label white Sans 16 · white field, 2px `--af-field-line` border · max width `--af-field-max-w` 360px · 44px high on mobile |
+| Checkbox | **Checkbox** (`check`) | white text, orange tick |
+| Error | **Input** error (`aria-invalid` + `field__error`) | `--af-error` border and text, Sans 16 |
+| Guardar | `af-option af-option--primary` | blue, the only blue option |
+| Width | `af-form` | max `--af-form-max-w` 640px |
+
+## Accessibility
+
+- Every field has a visible label; errors are linked to their field (`aria-describedby`).
+- After Guardar with errors, the focus moves to the first wrong field.
+- The option radios are real `<input type="radio">` in a `<fieldset>` with its question as `<legend>`: arrow keys move between them, and the focus ring shows on the option.

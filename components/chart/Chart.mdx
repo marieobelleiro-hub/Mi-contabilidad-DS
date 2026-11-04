@@ -1,0 +1,96 @@
+import { Meta, Canvas, Source } from '@storybook/addon-docs/blocks';
+import * as ChartStories from './chart.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../card/card.css?raw';
+import alsoCss1 from '../feedback/feedback.css?raw';
+import alsoCss2 from '../table/table.css?raw';
+import ownCss from './chart.css?raw';
+
+<Meta of={ChartStories} />
+
+# Chart
+
+The two dashboard charts: **Ingresos vs Gastos** (line) and **salario neto, this year vs last year** (bars).
+They're drawn in SVG by `chart.js`, using tokens for every colour and size.
+The **expense distribution** isn't a chart: it uses **List row → Bar rows**.
+
+<Canvas of={ChartStories.Dashboard} />
+
+Move the pointer over a chart, or Tab into it and use **← →**: one tooltip shows every series for that month. **Ver datos en tabla** opens the same numbers as a table.
+
+## Colours
+
+| Token | Value | Series |
+|---|---|---|
+| `--chart-1` | `--primary` #0F62FE | Ingresos · this year |
+| `--chart-2` | `--attention` #B64407 | Gastos |
+| `--chart-compare` | `--gray-600` #666 (5.7:1) | Previous year |
+| `--chart-grid` | 6% black | Gridlines |
+
+- Blue + orange **pass the colour-blind check** (ΔE 33; validated with the dataviz palette script).
+- **Previous year** uses `--chart-compare` = `--gray-600` #666, from the palette: neutral, so the blue of this year still leads.
+- **No shade scales as categories:** the distribution uses one accent colour.
+- Text never uses the series colour: labels, axis and legend are `--text-muted`; the coloured key next to the text carries the identity.
+
+## Spec
+
+| | Value |
+|---|---|
+| Plot height | `--chart-h` 192px |
+| Line | `--chart-line-w` 2px · round joins · smooth curve |
+| Area | series colour at `--chart-area-alpha` 10% |
+| Bars | max 24px wide · **2px gap** between the bars of a month · 4px rounded top, square at the baseline |
+| Gridlines | 5 hairlines (1px, solid) · ticks rounded and compact (0 · 2k · 4k) |
+| Axis labels | Mono 10 · `--text-muted` |
+| Hover (line) | vertical crosshair + 8px dots with a 2px white ring |
+| Hover (bars) | the hovered month stays solid, the others fade |
+| Tooltip | `tooltip--dark` · month in bold · one row per series with a line key · values bold |
+| Legend | always for 2+ series, none for 1 · line key 16 × 3 (lines) · 12px square (bars) · Sans 12 `--text-muted` · hairline above |
+| Table view | `<details>` "Ver datos en tabla" with a `table` |
+
+<Canvas of={ChartStories.Line} />
+<Canvas of={ChartStories.Bars} />
+
+## Mobile
+
+<Canvas of={ChartStories.Mobile} />
+
+## Usage
+
+<Source dark code={`<div id="chart-ing"></div>
+
+<script type="module">
+  import { lineChart, barChart } from './components/chart/chart.js';
+
+  lineChart(document.getElementById('chart-ing'), {
+    title: 'Comparativa Ingresos · Gastos',
+    labels: ['Ene', 'Feb', 'Mar'],
+    series: [
+      { name: 'Ingresos', color: 'var(--chart-1)', values: [3200, 4100, 3800] },
+      { name: 'Gastos',   color: 'var(--chart-2)', values: [900, 1100, 950] },
+    ],
+  });
+</script>`} />
+
+## Accessibility
+
+- The chart has a name ("Comparativa Ingresos · Gastos") and is reachable with **Tab**. The **← →** keys move month by month, and the tooltip is announced.
+- Every value is also in **Ver datos en tabla**, so nothing depends on hovering or on seeing colour.
+- With two series there's always a legend, so identity never depends on colour alone.
+- Series and month names are inserted as text, never as HTML.
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Chart uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Card, Banner, tooltip & toast, Data table).
+
+Charts are drawn by a script: add `components/chart/chart.js` (or `dist/mi-contabilidad-ds.js`) and call `lineChart(el, config)` / `barChart(el, config)`.
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Chart', ownCss, { also: [['Card', alsoCss0], ['Banner, tooltip & toast', alsoCss1], ['Data table', alsoCss2]] })} />
+
+</details>

@@ -1,0 +1,205 @@
+/* ==========================================================================
+   Asistente inteligente — components
+   Needs the main design system (tokens, base, icons, button, selectors, input) + assistant/tokens.css.
+
+   Panel      .ai-panel (role="dialog" aria-modal="false") · --full · --static (docs)
+              __head (__title + .switch + .ai-head-btn) · __body · __hello · __log (role="log") · __foot
+   Messages   .ai-msg --user / --bot · __note · __meta · .ai-typing
+   Chips      .ai-chips > .ai-chip (--primary: the main next step)
+   Composer   .ai-composer (__input + __send)
+   Form card  .ai-form (inside a bot message): __title · core .field / .input / .check · __total · __actions
+   Mobile     below 1024px the floating panel becomes a bottom sheet (--ai-sheet-h)
+
+   ========================================================================== */
+
+/* ── Panel ── */
+.ai-panel{
+  position:fixed;
+  z-index:var(--ai-layer);
+  left:calc(var(--sidebar-w) + var(--space-24));
+  right:var(--ai-panel-gap);
+  bottom:var(--space-48);
+  display:flex;
+  flex-direction:column;
+  max-height:calc(100vh - 2 * var(--ai-panel-gap));
+  background:var(--ai-canvas);
+  border:var(--border-thin) solid var(--ai-panel-line);
+  box-shadow:var(--ai-panel-shadow);
+  font-family:var(--font-sans);
+  color:var(--text);
+}
+.ai-panel[hidden]{display:none}
+.ai-panel--full{inset:0;max-height:none;border:none}
+.ai-panel--static{position:relative;inset:auto;z-index:auto;max-height:none;width:100%}   /* documentation */
+
+.ai-panel__head{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:var(--space-12);
+  height:var(--ai-header-h);
+  padding:0 var(--space-8) 0 var(--space-16);
+  background:var(--ai-header-bg);
+  color:var(--ai-header-text);
+  cursor:move;
+  user-select:none;
+  touch-action:none;
+}
+.ai-panel--full .ai-panel__head,.ai-panel--static .ai-panel__head{cursor:default}
+.ai-panel__title{display:flex;align-items:center;gap:var(--space-12);flex:1;min-width:0;margin:0}
+.ai-panel__title svg{width:var(--icon-md);height:var(--icon-md);flex-shrink:0}
+.ai-panel__title h2{
+  margin:0;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:var(--text-16);
+  font-weight:var(--weight-medium);
+}
+/* switch on the blue header */
+.ai-panel__head .switch{color:var(--ai-header-text)}
+.ai-panel__head .switch__track,.ai-panel__head .switch__control[aria-checked="true"] .switch__track{background:var(--ai-switch-track)}
+/* header buttons: full screen, close */
+.ai-head-btn{
+  flex-shrink:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:var(--btn-h-md);
+  height:var(--btn-h-md);
+  padding:0;
+  border:none;
+  background:none;
+  color:var(--ai-header-text);
+  cursor:pointer;
+}
+.ai-head-btn:is(:hover,.is-hover){background:var(--ai-header-hover)}
+
+.ai-panel__body{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-16);
+  padding:var(--space-20) var(--space-24);
+}
+.ai-panel__hello{                               /* Display · Light · blue */
+  margin:0;
+  font-size:var(--text-24);
+  font-weight:var(--weight-light);
+  line-height:var(--leading-tight);
+  color:var(--primary);
+}
+.ai-panel__log{
+  flex:1;
+  min-height:0;
+  max-height:var(--ai-log-max-h);
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-12);
+  padding:var(--space-2);
+}
+.ai-panel--full .ai-panel__log,.ai-panel--static .ai-panel__log{max-height:none}
+.ai-panel__log:empty{display:none}
+.ai-panel__foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-12)}
+.ai-panel__engine{margin:0;font-family:var(--font-mono);font-size:var(--text-12);color:var(--text-muted)}
+
+/* ── Messages ── */
+.ai-msg{
+  max-width:min(var(--ai-msg-max-w),88%);
+  padding:var(--space-12) var(--space-16);
+  font-size:var(--text-16);
+  line-height:var(--leading-normal);
+}
+.ai-msg--user{align-self:flex-end;background:var(--ai-msg-user-bg)}
+.ai-msg--bot{align-self:flex-start;background:var(--ai-msg-bot-bg);box-shadow:inset 0 0 0 var(--border-thin) var(--ai-msg-bot-line)}
+.ai-msg h3{margin:var(--space-8) 0 var(--space-4);font-size:var(--text-16);font-weight:var(--weight-medium)}
+.ai-msg h3:first-child{margin-top:0}
+.ai-msg p{margin:0 0 var(--space-8)}
+.ai-msg p:last-child{margin-bottom:0}
+.ai-msg ul{margin:0 0 var(--space-8);padding-left:var(--space-20)}
+.ai-msg li{margin:0 0 var(--space-4)}
+.ai-msg strong{font-weight:var(--weight-medium)}
+.ai-msg__note{padding:var(--space-4) 0 var(--space-4) var(--space-12);border-left:var(--border-accent) solid var(--ai-note-line)}
+.ai-msg__meta{margin-top:var(--space-8);font-family:var(--font-mono);font-size:var(--text-12);color:var(--text-muted)}
+.ai-typing{align-self:flex-start;padding:var(--space-4) var(--space-2);font-family:var(--font-mono);font-size:var(--text-12);color:var(--text-muted)}
+
+/* ── Suggestion chips ── */
+.ai-chips{display:flex;flex-wrap:wrap;gap:var(--space-8);margin-top:var(--space-12)}
+.ai-chip{
+  min-height:var(--ai-chip-h);
+  padding:var(--space-4) var(--space-12);
+  border:var(--border-thin) solid var(--ai-chip-line);
+  background:var(--surface);
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  line-height:var(--leading-tight);
+  color:var(--primary);
+  text-align:left;
+  cursor:pointer;
+}
+.ai-chip:is(:hover,.is-hover){background:var(--ai-chip-hover)}
+.ai-chip--primary{background:var(--primary);color:var(--white)}
+.ai-chip--primary:is(:hover,.is-hover){background:var(--primary);filter:var(--btn-hover)}
+.ai-chip.is-focus{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+.ai-chip:disabled{border-color:var(--disabled);color:var(--disabled);background:var(--surface);cursor:not-allowed}
+
+/* ── Composer: text field + send ── */
+.ai-composer{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:var(--space-8);
+  min-height:var(--ai-composer-h);
+  padding:var(--space-8) var(--space-8) var(--space-8) var(--space-20);
+  border:var(--border-thin) solid var(--ai-composer-line);
+  background:var(--surface);
+}
+/* the focus ring goes on the whole box, not on the field inside it */
+.ai-composer:focus-within,.ai-composer.is-focus{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+.ai-composer__input{
+  flex:1;
+  min-width:0;
+  height:var(--btn-h-md);
+  border:none;
+  background:transparent;
+  font-family:var(--font-sans);
+  font-size:var(--text-16);
+  color:var(--text);
+}
+.ai-composer__input:focus-visible{outline:none;box-shadow:none}   /* lint-ok: the ring is on .ai-composer (:focus-within) */
+.ai-composer__input::placeholder{color:var(--text-muted)}
+.ai-composer__send{
+  flex-shrink:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:var(--ai-send-size);
+  height:var(--ai-send-size);
+  border:none;
+  background:var(--primary);
+  color:var(--white);
+  cursor:pointer;
+}
+.ai-composer__send:is(:hover,.is-hover){filter:var(--btn-hover)}
+.ai-composer__send:disabled{background:var(--fill);color:var(--disabled);cursor:not-allowed}
+
+/* ── Form card: a form inside a reply (Nueva factura / Nuevo gasto) ── */
+.ai-form{display:flex;flex-direction:column;gap:var(--space-16)}
+.ai-form > p{margin:0}
+.ai-msg:has(> .ai-form){width:min(var(--ai-form-w),100%)}
+.ai-form__title{margin:0;font-size:var(--text-16);font-weight:var(--weight-medium)}
+.ai-form__total{margin:0;font-family:var(--font-mono);font-size:var(--text-12);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:var(--ls-caps);color:var(--field-accent, var(--primary))}
+.ai-form__actions{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);padding-top:var(--space-4)}
+.ai-form__actions .btn--ghost{flex-shrink:0}
+
+/* ── Mobile: bottom sheet ── */
+@media (max-width:1023px){
+  .ai-panel:not(.ai-panel--full):not(.ai-panel--static){left:0;right:0;top:auto;bottom:0;max-height:var(--ai-sheet-h)}
+  .ai-panel__head{cursor:default;gap:var(--space-4);padding-left:var(--space-12)}
+  .ai-head-btn{width:var(--btn-touch);height:var(--btn-touch)}
+  .ai-panel__body{padding:var(--space-16)}
+  .ai-msg{max-width:100%}
+}

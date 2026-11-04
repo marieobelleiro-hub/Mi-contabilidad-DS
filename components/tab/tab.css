@@ -1,0 +1,132 @@
+/* ==========================================================================
+   Tab  ·  .tab  +  .tab-list
+   One grey pill used for: sidebar navigation, period tabs, view toggle.
+   Accent (active colour): --brand (green) · --primary (blue) · --attention (orange)
+   Active styles:          filled (default) · --outline
+   Width:                  auto (default) · --fixed (160px) · fluid inside .tab-list--fluid
+
+   <div class="tab-list" role="tablist" aria-label="Período">
+     <button class="tab tab--fixed tab--primary" role="tab" aria-selected="true">Resumen anual</button>
+     <button class="tab tab--fixed tab--primary" role="tab" aria-selected="false">1T · Ene–Mar</button>
+   </div>
+
+   ========================================================================== */
+.tab{
+  --tab-accent:var(--brand);
+  --tab-accent-text:var(--brand-text);
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:var(--tab-h);
+  padding-inline:var(--space-8);
+  padding-block:0;
+  border:none;
+  border-radius:var(--radius-none);
+  background:var(--fill);
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  font-weight:var(--weight-regular);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  color:var(--text);
+  white-space:nowrap;
+  text-decoration:none;
+  cursor:pointer;
+  user-select:none;
+  transition:background-color var(--motion-fast),color var(--motion-fast);
+}
+.tab:is(:hover,.is-hover){background:var(--fill-hover)}
+.tab.is-focus{z-index:var(--layer-raised);outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+.tab:focus-visible{z-index:var(--layer-raised)}
+
+/* ── Accent ── */
+.tab--brand{--tab-accent:var(--brand);--tab-accent-text:var(--brand-text)}
+.tab--primary{--tab-accent:var(--primary);--tab-accent-text:var(--white)}
+.tab--attention{--tab-accent:var(--attention);--tab-accent-text:var(--white)}
+.tab--neutral{--tab-accent:var(--fill-selected);--tab-accent-text:var(--text)}   /* period selector */
+
+/* ── Active (selected / current page) ── */
+.tab:is([aria-selected="true"],[aria-current="page"],.is-active){
+  background:var(--tab-accent);
+  color:var(--tab-accent-text);
+  font-weight:var(--weight-bold);
+}
+/* Outline: used for the tax sections (IVA, IRPF). Inset border so the size never changes. */
+.tab--outline:is([aria-selected="true"],[aria-current="page"],.is-active){
+  background:var(--surface);
+  color:var(--tab-accent);
+  box-shadow:inset 0 0 0 var(--border-thick) var(--tab-accent);
+}
+.tab--outline.tab--brand:is([aria-selected="true"],[aria-current="page"],.is-active){color:var(--text)}
+
+/* ── Selector: a tab that opens a menu (mobile section and period selectors) ──
+   <div class="tab-menu">
+     <button class="tab tab--menu tab--primary is-active" aria-expanded="false" aria-controls="m1">Facturación <svg class="icon">…chevron-down…</svg></button>
+     <nav class="tab-menu__list" id="m1" hidden> <a class="tab tab--primary" aria-current="page">Facturación</a> … </nav>
+   </div> */
+.tab--menu{gap:var(--space-12)}
+.tab--menu .icon{transition:transform var(--motion-fast)}
+.tab--menu[aria-expanded="true"] .icon{transform:rotate(180deg)}
+.tab-menu{position:relative;display:inline-flex}
+.tab-menu__list{
+  position:absolute;
+  top:calc(100% + var(--menu-gap));
+  left:0;
+  z-index:var(--layer-tooltip);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:var(--space-16);
+  min-width:100%;
+  padding:var(--space-16) var(--space-8);
+  background:var(--surface);
+  box-shadow:var(--shadow-md);
+}
+.tab-menu__list[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.tab--menu .icon{transition:none}}
+
+/* ── Width ── */
+.tab--fixed{width:var(--tab-w)}
+
+/* ── Disabled ── */
+.tab:is(:disabled,[aria-disabled="true"]){background:var(--fill);color:var(--disabled);cursor:not-allowed}
+
+/* ── Tab list ── */
+.tab-list{display:flex;gap:var(--space-2)}
+.tab-list--vertical{flex-direction:column;align-items:flex-end;gap:var(--space-20)}
+.tab-list--fluid .tab{flex:1;width:auto}                         /* tabs share the row equally */
+
+/* ==========================================================================
+   Year tab  ·  .year-tab  +  .year-strip
+   The component is ONE year tab: number (Display · Light) with a 12px bar under it. Always green.
+   States: selected · unselected (hover: green bar, like selected) · disabled (future year) · focus
+   The year strip is a composition: up to 6 year tabs in a row, newest on the left.
+
+   <div class="year-strip" role="tablist" aria-label="Año">
+     <button class="year-tab" role="tab" aria-selected="true"><span class="year-tab__num">2026</span><span class="year-tab__bar"></span></button>
+   </div>
+
+   ========================================================================== */
+.year-strip{display:flex;gap:var(--space-16)}
+.year-tab{
+  --year-accent:var(--brand);
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:var(--space-8);
+  padding:var(--space-24) 0 0;
+  border:none;
+  background:none;
+  cursor:pointer;
+  user-select:none;
+}
+.year-tab__num{font-family:var(--font-sans);font-size:var(--text-24);font-weight:var(--weight-light);line-height:var(--leading-tight);color:var(--text);transition:color var(--motion-fast)}
+.year-tab__bar{display:block;width:100%;height:var(--year-bar-h);background:var(--disabled);transition:background-color var(--motion-fast)}
+.year-tab:is(:hover,.is-hover) .year-tab__bar,
+.year-tab[aria-selected="true"] .year-tab__bar{background:var(--year-accent)}
+.year-tab.is-focus{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+.year-tab:is(:disabled,[aria-disabled="true"]){cursor:default}
+.year-tab:is(:disabled,[aria-disabled="true"]) .year-tab__num{color:var(--disabled)}
+.year-tab:is(:disabled,[aria-disabled="true"]) .year-tab__bar{background:var(--fill)}

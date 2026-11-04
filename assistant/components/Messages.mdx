@@ -1,0 +1,45 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './messages.stories.js';
+
+<Meta of={Stories} />
+
+# Messages
+
+<span className="review-chip">Under review</span>
+
+The lines of the conversation. **Your messages** are grey, on the right. **The replies** are white, on the left, and can hold a heading, paragraphs, a list, a **note**, the **meta** line and **suggestion chips**.
+
+<Canvas of={Stories.Conversation} sourceState="none" />
+
+## Parts
+
+| Part | Class | Look |
+|---|---|---|
+| Your message | `ai-msg ai-msg--user` | `--ai-msg-user-bg` grey · aligned right |
+| Reply | `ai-msg ai-msg--bot` | `--ai-msg-bot-bg` white + 1px `--ai-msg-bot-line` · aligned left |
+| Size | | max `--ai-msg-max-w` 760px or 88% of the panel (100% on mobile) · padding 12 / 16 · Sans 16, line height 1.45 |
+| Heading | `h3` (the panel title is the `h2`) | 16 / 500 |
+| List | `ul` | the figures of the answer: **label in 500**, then the amount |
+| Note | `ai-msg__note` | 3px `--ai-note-line` orange bar on the left: a warning about the answer |
+| Meta | `ai-msg__meta` | Mono 12, muted: how the question was understood |
+| Thinking | `ai-typing` | Mono 12, muted: "Pensando…" while the answer is prepared |
+
+## Reply with a note
+
+<Canvas of={Stories.Note} sourceState="none" />
+
+## Not understood
+
+The assistant offers the closest options as chips.
+
+<Canvas of={Stories.Clarify} sourceState="none" />
+
+## Thinking
+
+<Canvas of={Stories.Typing} sourceState="none" />
+
+## Accessibility
+
+- The conversation is a `role="log"` with `aria-live="polite"`: each new reply is read out once, without moving the focus.
+- Each message starts with a hidden "Tú:" / "Asistente:" so screen readers say who is speaking; the colour and the side are not the only cue.
+- "Pensando…" is `aria-hidden`: only the real answer is announced.

@@ -1,0 +1,14 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './tokens.stories.js';
+
+<Meta of={Stories} />
+
+# Tokens
+
+<span className="review-chip">Under review</span>
+
+Every token of Acceso fácil, **read live from `acceso/tokens.css`**. They all start with `--af-` and are loaded **after** the main tokens. Most point to a main token (the grey chips); the few own values are the colours of the dark theme.
+
+The build exports them in **`dist/tokens-acceso.json`** (W3C Design Tokens format), for Figma, AI assistants and other platforms.
+
+<Canvas of={Stories.AllTokens} sourceState="none" />

@@ -1,0 +1,50 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './introduction.stories.js';
+
+<Meta of={Stories} />
+
+# Accessibility assistant
+
+<span className="review-chip">Under review</span>
+
+*In the app: **Acceso fácil**.*
+
+The **accessible assistant** of Mi Contabilidad: instead of writing a question, you **choose**, one step at a time, between a few big options (*Consultar datos → Impuestos → IVA · Modelo 303*), and the answer appears below. It's meant for people who find the app or the chat hard to use: low vision, motor or cognitive difficulties, little experience with accounting. It opens with its floating button (bottom left on desktop, in the dock on mobile).
+
+This is a **sub-system** of the Mi Contabilidad design system: a small design system of its own, with its own look (a **dark theme**), built on top of the main one.
+
+<Canvas of={Stories.Overview} sourceState="none" />
+
+## What it shares with the main system
+
+| Shared (documented in the main system) | Own (documented here) |
+|---|---|
+| Fonts, type scale, spacing, icons, the yellow focus ring | **Colours**: the dark theme (panel, text, errors, options) |
+| **Floating button** that opens it (Button page) | **Panel**: header, body, modes (floating, full screen, mobile sheet) |
+| **Switch / toggle** (Esp / Eng), **Checkbox**, **Input** (recoloured for the dark panel) | **Steps & options**, **Answer** (Respuesta, note, confirmation), **Form on dark**, **Text links** |
+
+## Principles
+
+- **One decision at a time.** Each step is one question with two to four options; the next step appears only after you choose.
+- **Big and plain.** 16px text everywhere, short sentences, no icons without words.
+- **Your path stays visible.** Answered steps shrink to their number ("1.", "2.") with the chosen option outlined in orange, so you can change your mind without starting again.
+- **Always a way back.** *Volver* (one step back) and *Empezar de nuevo* at the end of every screen.
+
+## How to use it in code
+
+Load the main design system first, then this file:
+
+```html
+<link rel="stylesheet" href="dist/mi-contabilidad-ds.css">
+<link rel="stylesheet" href="dist/mi-contabilidad-ds-acceso.css">
+```
+
+Its tokens all start with `--af-` and are exported in `dist/tokens-acceso.json` (W3C Design Tokens format). References to the main tokens stay references, so a change in the main system reaches Acceso fácil too.
+
+## Behaviour (same as the Asistente inteligente)
+
+- A **non-modal** dialog (`role="dialog" aria-modal="false"`): the page behind stays usable.
+- **Esc** closes it; the focus returns to its floating button (orange ring while open).
+- **Desktop:** floating, draggable by the header, resizable, or **full screen**. **Mobile:** a **bottom sheet** (75% of the screen) or full screen.
+- **Its own language** (Esp / Eng switch in the header).
+- When an answer appears, the focus moves to its **Respuesta** label, so screen readers read it straight away.

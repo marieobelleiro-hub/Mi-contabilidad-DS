@@ -1,0 +1,223 @@
+// Showcase: foundations, tokens and every component on one page.
+// Everything is rendered from the real design-system files, so the page can't drift from the library.
+import './showcase.css';
+import { version } from '../package.json';
+import { bigHTML, ghostHTML, iconButtonHTML, fabHTML } from '../components/button/button.stories.js';
+import { tabHTML, YearStrip } from '../components/tab/tab.stories.js';
+import { chipHTML, statusHTML, checkHTML, switchHTML } from '../components/selectors/selectors.stories.js';
+import { kpiCardHTML, Panel as CardPanel, TaxForm as CardTaxForm } from '../components/card/card.stories.js';
+import { recordListHTML, kvListHTML, barListHTML, resultHTML } from '../components/list/list.stories.js';
+import { showcaseTables } from '../components/table/table.stories.js';
+import { fieldHTML, FIELDS } from '../components/input/input.stories.js';
+import { bannerHTML } from '../components/feedback/feedback.stories.js';
+import { Alert as DialogAlert } from '../components/dialog/dialog.stories.js';
+import { lineChart, barChart } from '../components/chart/chart.js';
+import { ICONS, icon } from '../icons/icons.js';
+import { tokenList, TOKEN_COUNT } from '../foundations/token-list.js';
+import { layoutOverview } from '../foundations/layout-diagram.js';
+
+/* ── Page structure ───────────────────────────────────────────────────────── */
+const docs = (id) => `./?path=/docs/${id}`;
+const FOUNDATIONS = [
+  ['colors', 'Colors', 'app-foundations-colors--docs'],
+  ['typography', 'Typography', 'app-foundations-typography--docs'],
+  ['spacing', 'Spacing', 'app-foundations-spacing-radius-elevation--docs'],
+  ['shape', 'Radius, borders & elevation', 'app-foundations-spacing-radius-elevation--docs'],
+  ['layout', 'Layout & breakpoints', 'app-foundations-layout-breakpoints--layout'],
+  ['icons', 'Icons', 'app-foundations-icons--docs'],
+];
+const COMPONENTS = [
+  ['button', 'Button', 'app-components-button--button', 'Big, ghost, icon and floating · their states'],
+  ['tab', 'Tab', 'app-components-tab--tab', 'Navigation, period tabs, view toggle, year tab'],
+  ['selectors', 'Selectors', 'app-components-selectors--selectors', 'Checkbox & radio, status dot, switch / toggle, chips'],
+  ['list', 'List row', 'app-components-list-row--list', 'Record, label → value, bar and result rows'],
+  ['card', 'Card', 'app-components-card--card', 'The white block: KPI card and container card'],
+  ['input', 'Input', 'app-components-input--input', 'Fields, select, textarea'],
+  ['table', 'Data table', 'app-components-data-table--table', 'Invoices, expenses and annual summaries'],
+  ['feedback', 'Banner, tooltip & toast', 'app-components-banner-tooltip-toast--feedback', 'Messages and pop-ups'],
+  ['dialog', 'Dialog', 'app-components-dialog--dialog', 'Welcome, alerts and forms'],
+  ['chart', 'Chart', 'app-components-chart--chart', 'Line and bar charts'],
+];
+
+const section = (id, title, docsId, lead, body, canvas = false) => `
+  <section class="sc__section" id="sc-${id}" aria-labelledby="sc-${id}-t">
+    <div class="sc__head">
+      <div><h3 id="sc-${id}-t">${title}</h3>${lead ? `<p>${lead}</p>` : ''}</div>
+      <a class="sc__docs" href="${docs(docsId)}" target="_top">Open docs →</a>
+    </div>
+    <div class="sc__panel${canvas ? ' sc__panel--canvas' : ''}">${body}</div>
+  </section>`;
+const row = (label, items) => `<div class="sc__row"><span class="sc__label">${label}</span><div class="sc__items">${items.join('')}</div></div>`;
+const slot = (name) => `<div data-slot="${name}"></div>`;
+
+/* ── Foundations ──────────────────────────────────────────────────────────── */
+const swatch = (token, label) => `<div class="sc__swatch"><i style="background:var(${token})"></i><b>${label}</b><span>${token}</span></div>`;
+const sw = (tokens) => `<div class="sc__swatches" style="flex:1">${tokens.map(([t, l]) => swatch(t, l)).join('')}</div>`;
+const colors = `
+  ${row('Palette · blue', [sw([['--blue-dark', 'dark'], ['--blue', 'base'], ['--blue-light', 'light'], ['--blue-tint', 'tint']])])}
+  ${row('Palette · orange', [sw([['--orange-dark', 'dark'], ['--orange', 'base'], ['--orange-light', 'light'], ['--orange-tint', 'tint']])])}
+  ${row('Actions & data', [sw([['--primary', 'primary'], ['--attention', 'attention'], ['--income', 'income'], ['--expense', 'expense']])])}
+  ${row('Surfaces', [sw([['--canvas', 'canvas'], ['--surface', 'surface'], ['--fill', 'fill'], ['--disabled', 'disabled']])])}
+  ${row('Text & lines', [sw([['--text', 'text'], ['--text-muted', 'text-muted'], ['--line-strong', 'line-strong'], ['--line', 'line']])])}
+  ${row('Brand & states', [sw([['--brand', 'brand'], ['--positive-tint', 'positive-tint'], ['--error', 'error'], ['--focus', 'focus']])])}`;
+
+const TYPE = [
+  ['Display', 'font-size:var(--text-24);line-height:var(--leading-tight)', '1.778,23 €', '24 · Sans'],
+  ['Title', 'font-size:var(--text-16)', 'Últimas facturas', '16 · Sans'],
+  ['Body', 'font-size:var(--text-14)', 'Esta app ha sido concebida para organizar la contabilidad de trabajadores autónomos en España.', '14 · Sans'],
+  ['Small', 'font-size:var(--text-12)', '30/09/2026 — Design Services', '12 · Sans'],
+  ['Label', 'font-family:var(--font-mono);font-size:var(--text-12);text-transform:uppercase;letter-spacing:var(--ls-caps)', 'Facturación', '12 · Mono'],
+  ['Caption', 'font-family:var(--font-mono);font-size:var(--text-10)', 'Ene · Feb · Mar · Abr', '10 · Mono'],
+];
+const typeface = `
+  <div class="sc__face"><span style="font-family:var(--font-sans)">IBM Plex Sans</span><span style="font-family:var(--font-mono)">IBM Plex Mono</span></div>
+  ${row('Scale · Sans', [`<div class="sc__scale">${[24, 16, 14, 12].map((px) => `<span style="font-size:var(--text-${px})">Plex ${px}</span>`).join('')}</div>`])}
+  ${row('Scale · Mono', [`<div class="sc__scale" style="font-family:var(--font-mono)">${[14, 12, 10].map((px) => `<span style="font-size:var(--text-${px})">Plex ${px}</span>`).join('')}</div>`])}
+  ${row('Weights · Sans', [`<div class="sc__scale">${[['Light', 300], ['Regular', 400], ['Medium', 500]].map(([n, w]) => `<span style="font-size:var(--text-16);font-weight:${w}">${n} (${w})</span>`).join('')}</div>`])}
+  ${row('Weights · Mono', [`<div class="sc__scale" style="font-family:var(--font-mono)">${[['Regular', 400], ['Bold', 700]].map(([n, w]) => `<span style="font-size:var(--text-16);font-weight:${w}">${n} (${w})</span>`).join('')}</div>`])}`;
+const typography = typeface + `<h4 class="sc__sub">Styles</h4>` + TYPE.map(([n, st, sample, spec]) => `<div class="sc__type"><span class="sc__label">${n}</span><span style="${st}">${sample}</span><code>${spec}</code></div>`).join('');
+
+const spacing = [2, 4, 8, 12, 16, 20, 24, 32, 40, 48].map((v) => `<div class="sc__space"><b>--space-${v}</b><span>${v}px</span><i style="width:calc(var(--space-${v}) * 4)"></i></div>`).join('');
+
+const shape = `
+  ${row('Radius', [`<div class="sc__shapes">${[['0', '0', 'inputs, buttons'], ['--radius-sm', 'var(--radius-sm)', 'chips, bars'], ['--radius-md', 'var(--radius-md)', 'cards'], ['--radius-pill', 'var(--radius-pill)', 'toggle'], ['--radius-round', 'var(--radius-round)', 'dots']].map(([t, v, u]) => `<div class="sc__shape"><i style="border-radius:${v}"></i><b>${t}</b><span>${u}</span></div>`).join('')}</div>`])}
+  ${row('Borders', [`<div class="sc__shapes">${[['1px', '1px solid var(--line-strong)', 'hairlines, fields'], ['2px', 'none;box-shadow:inset 0 0 0 2px var(--primary)', 'selected'], ['3px bar', 'none;border-left:var(--border-accent) solid var(--primary);background:var(--primary-tint)', 'banners']].map(([t, b, u]) => `<div class="sc__shape"><i style="border:${b}"></i><b>${t}</b><span>${u}</span></div>`).join('')}</div>`])}
+  ${row('Elevation', [`<div class="sc__shapes">${['--shadow-sm', '--shadow-md'].map((t) => `<div class="sc__shape"><i style="border:none;box-shadow:var(${t})"></i><b>${t}</b></div>`).join('')}</div>`])}
+  ${row('Focus ring', [`<button type="button" class="btn btn--primary" style="outline:2px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 1px var(--black)">Focused</button><span class="sc__label">yellow ring + 1px black halo, everywhere</span>`])}`;
+
+const icons = `
+  <div class="sc__icons">${Object.entries(ICONS).map(([n, d]) => `
+    <div class="sc__icon" title="${d.use}">
+      <div class="sc__icon-art">${icon(n, { size: 'md' })}${icon(n)}</div>
+      <b>${n}</b><span>${d.label}</span>
+    </div>`).join('')}</div>
+  ${row('In use', [bigHTML({ label: 'Continuar' }), ghostHTML({ label: 'Añadir factura' }), iconButtonHTML({ label: 'Más información' }), iconButtonHTML({ kind: 'danger', icon: 'trash', label: 'Eliminar' }), iconButtonHTML({ kind: 'danger', icon: 'close', size: 'md', label: 'Cerrar' })])}`;
+
+/* ── Components ───────────────────────────────────────────────────────────── */
+const C = {
+  button: `
+    ${row('Big', [bigHTML({ label: 'Continuar' }), bigHTML({ colour: 'attention', label: 'Guardar', icon: 'save' }), bigHTML({ label: 'Entendido', showIcon: false }), bigHTML({ label: 'Guardar', state: 'disabled' })])}
+    ${row('Ghost', [ghostHTML({ label: 'Añadir factura' }), ghostHTML({ colour: 'attention', label: 'Añadir gasto' }), ghostHTML({ label: 'Ver todas las facturas', showIcon: false }), ghostHTML({ label: 'Cancelar', showIcon: false, state: 'disabled' })])}
+    ${row('Icon', [iconButtonHTML({ label: 'Más información' }), iconButtonHTML({ kind: 'danger', icon: 'trash', label: 'Eliminar gasto' }), iconButtonHTML({ kind: 'danger', icon: 'close-filled', label: 'Eliminar factura' }), iconButtonHTML({ kind: 'danger', icon: 'close', size: 'md', label: 'Cerrar' }), iconButtonHTML({ kind: 'danger', icon: 'trash', label: 'Eliminar', state: 'disabled' })])}
+    ${row('Floating', [fabHTML({}), fabHTML({ state: 'open' }), fabHTML({ style: 'filled', icon: 'accessibility' }), fabHTML({ style: 'filled', icon: 'accessibility', state: 'open' })])}`,
+  tab: `
+    ${row('Accents', [['brand', 'Dashboard', 'Facturación'], ['primary', 'Facturación', 'Gastos'], ['attention', 'Gastos', 'IVA']].map(([a, on, off]) => `<div class="tab-list" role="tablist" aria-label="${on}">${tabHTML({ label: on, accent: a, active: true })}${tabHTML({ label: off, accent: a })}</div>`))}
+    ${row('Outline', ['primary', 'attention'].map((a) => `<div class="tab-list" role="tablist" aria-label="${a} outline">${tabHTML({ label: a === 'primary' ? 'IRPF' : 'IVA', accent: a, outline: true, active: true })}${tabHTML({ label: a === 'primary' ? 'IVA' : 'IRPF', accent: a })}</div>`))}
+    ${row('Period tabs', [`<div class="tab-list" role="tablist" aria-label="Período">${['Resumen anual', '1T · Ene–Mar', '2T · Abr–Jun', '3T · Jul–Sep'].map((l, i) => tabHTML({ label: l, accent: 'primary', width: 'fixed', active: !i })).join('')}</div>`])}
+    ${row('Year tab', [slot('years')])}`,
+  selectors: `
+    ${row('Checkbox & radio', [checkHTML({ label: 'Aplicar retención IRPF del 15 %' }), checkHTML({ type: 'attention', label: 'Aplicar compensación', checked: false }), checkHTML({ type: 'attention', size: 'sm', label: 'Incluir en el 303' }), checkHTML({ kind: 'radio', label: 'Versión actual (con datos)', name: 'sc-r' }), checkHTML({ type: 'attention', label: 'Incluir en el 303', state: 'disabled', checked: false })])}
+    ${row('Status dot', [statusHTML({ state: 'paid', mode: 'button' }), statusHTML({ state: 'pending', mode: 'button' }), statusHTML({ state: 'paid', mode: 'label' }), statusHTML({ state: 'pending', mode: 'label' })])}
+    ${row('Switch / toggle', [switchHTML({}), switchHTML({ checked: true }), switchHTML({ showLabels: false })])}
+    ${row('Chip (static)', [chipHTML({ label: 'Contabilidad' }), chipHTML({ label: 'Demo' }), chipHTML({ variant: 'code', label: 'c.01' }), chipHTML({ variant: 'code', label: 'c.28' })])}`,
+  card: `
+    <div class="sc__grid sc__grid--4">
+      ${kpiCardHTML({ label: 'IVA a pagar', labelColor: 'attention', amount: '1.778,23 €', sub: 'Vence 20 de octubre', interactive: true })}
+      ${kpiCardHTML({ label: 'Total facturado', amount: '50.790,36 €', amountColor: 'primary', sub: 'Base imponible' })}
+      ${kpiCardHTML({ label: 'Pendiente de cobro', amount: '7.406,63 €', amountColor: 'attention', sub: '2 facturas' })}
+      ${kpiCardHTML({ label: 'IRPF acumulado (3T)', amount: '3.508,86 €', amountColor: 'primary', showSub: false, state: 'selected' })}
+    </div>
+    <div class="sc__grid sc__grid--2" style="margin-top:var(--space-16)">${CardPanel.render()}${CardTaxForm.render({ tax: 'iva' })}</div>`,
+  list: `<div class="sc__grid sc__grid--3">
+      <div>${recordListHTML({ rows: [['411', 'University', '30/09/2026', '4.826,00 €', 'pending'], ['409', 'Main client', '15/09/2026', '3.892,45 €', 'paid'], ['410', 'University', '15/09/2026', '1.950,60 €', 'paid']] })}</div>
+      <div>${kvListHTML({ rows: [['c.01', 'Base imponible', '9.622,45 €'], ['c.03', 'IVA repercutido 21%', '2.020,71 €', 'accent']] })}</div>
+      <div>${barListHTML({ rows: [['Seguridad Social', 52], ['Arrendamiento', 19], ['Servicios exteriores', 18], ['Luz/Tel', 4]] })}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-8);margin-top:var(--space-24)">
+      ${resultHTML({ state: 'pay', value: '1.778,23 €', live: false })}
+      ${resultHTML({ state: 'credit', value: '151,80 €', live: false })}
+      ${resultHTML({ state: 'none', value: '0,00 €', live: false })}
+    </div>`,
+  table: showcaseTables(),
+  input: `<div class="sc__grid sc__grid--3">
+      <div style="display:flex;flex-direction:column;gap:var(--space-16)">${fieldHTML({ ...FIELDS.cliente, value: '' })}${fieldHTML({ ...FIELDS.fecha, value: '31/09/2026', error: FIELDS.fecha.msg })}${fieldHTML({ ...FIELDS.iva, value: '0 %', disabled: true, hint: 'La cuota de autónomos no lleva IVA.' })}</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-16)">${fieldHTML({ ...FIELDS.proveedor, tinted: true, accent: 'attention' })}${fieldHTML({ ...FIELDS.base, tinted: true, accent: 'attention' })}</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-16)">${fieldHTML({ ...FIELDS.notas, accent: 'attention' })}</div>
+    </div>`,
+  feedback: `<div class="sc__grid sc__grid--2">
+      <div style="display:flex;flex-direction:column;gap:var(--space-12)">
+        ${bannerHTML({ type: 'warning', text: 'Sin facturación española → IVA soportado no deducible este trimestre.' })}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-16)">
+        <div class="tooltip" role="tooltip" style="position:static;width:auto">El salario neto es calculado con esas facturas, restando los gastos del mes anterior, independientemente de si los pagos se hayan realizado.</div>
+        <div class="tooltip tooltip--dark" role="tooltip" style="position:static;align-self:flex-start"><b>Julio</b><br><span class="tooltip__swatch" style="background:var(--income-light)"></span>Ingresos <b>8.203,35 €</b></div>
+        <div class="toast toast--inline" role="status"><span>Factura 411 eliminada.</span><button type="button" class="toast__action">Deshacer</button></div>
+      </div>
+    </div>`,
+  dialog: `<div style="max-width:400px">${DialogAlert.render().outerHTML}</div>`,
+  chart: `<div class="sc__grid sc__grid--2">
+      <section class="card"><div class="card__header"><h4 class="card__title">Comparativa Ingresos · Gastos</h4></div>${slot('line')}</section>
+      <section class="card"><div class="card__header"><h4 class="card__title">Comparativa salario neto</h4></div>${slot('bar')}</section>
+    </div>`,
+};
+const CANVAS = ['card', 'table', 'chart'];
+const M = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'];   // real data: the demo app, 2026
+
+export default {
+  title: 'App/Showcase',
+  tags: ['!autodocs', '!dev'],   // opened in its own browser tab from the Introduction
+  parameters: { layout: 'fullscreen', controls: { disable: true } },
+};
+
+export const Overview = {
+  name: 'Foundations, tokens & components',
+  render: () => {
+    const el = document.createElement('div');
+    el.className = 'sc';
+    el.innerHTML = `
+      <nav class="sc__nav" aria-label="Showcase">
+        <div class="sc__brand">${chipHTML({ label: 'Showcase' })}<small>Design system v${version}</small></div>
+        <h2>Foundations</h2><ul>${FOUNDATIONS.map(([id, t]) => `<li><a href="#sc-${id}">${t}</a></li>`).join('')}</ul>
+        <h2>Tokens</h2><ul><li><a href="#sc-tokens">All tokens</a></li></ul>
+        <h2>Components</h2><ul>${COMPONENTS.map(([id, t]) => `<li><a href="#sc-${id}">${t}</a></li>`).join('')}</ul>
+      </nav>
+      <main class="sc__main">
+        <header class="sc__intro">
+          <h1>Mi Contabilidad · Design System</h1>
+          <p>Everything the library contains, on one page. Each block is rendered from the real design-system files; open the docs of any part for its full spec, states and markup.</p>
+          <div class="sc__stats">
+            <div><b>${FOUNDATIONS.length - 1}</b><span>Foundations</span></div>
+            <div><b>${Object.keys(ICONS).length}</b><span>Icons</span></div>
+            <div><b>${TOKEN_COUNT}</b><span>Tokens</span></div>
+            <div><b>${COMPONENTS.length}</b><span>Components</span></div>
+          </div>
+        </header>
+
+        <h2 class="sc__part">Foundations</h2>
+        ${section('colors', 'Colors', FOUNDATIONS[0][2], 'Three levels: palette (the hues) → actions (primary, attention) and data (income, expense).', colors)}
+        ${section('typography', 'Typography', FOUNDATIONS[1][2], 'IBM Plex Sans and IBM Plex Mono · six styles · five sizes: 24 · 16 · 14 · 12 · 10.', typography)}
+        ${section('spacing', 'Spacing', FOUNDATIONS[2][2], 'Ten tokens, even values on a 4px scale with a 2px half-step.', spacing)}
+        ${section('shape', 'Radius, borders & elevation', FOUNDATIONS[3][2], '', shape)}
+        ${section('layout', 'Layout & breakpoints', FOUNDATIONS[4][2], 'Two layouts, one breakpoint: mobile up to 1023px (designed at 390), desktop from 1024px (designed at 1232).', slot('layout'))}
+        ${section('icons', 'Icons', FOUNDATIONS[5][2], `${Object.keys(ICONS).length} icons · 16 × 16 grid · filled 1px lines · currentColor · 16px or 24px.`, icons)}
+
+        <h2 class="sc__part">Tokens</h2>
+        ${section('tokens', 'All tokens', 'app-foundations-tokens--tokens', 'Read live from <code>tokens/tokens.css</code>: this list updates by itself when a token changes. Click a group to open it, or filter.', slot('tokens'))}
+
+        <h2 class="sc__part">Components</h2>
+        ${COMPONENTS.map(([id, t, d, lead]) => section(id, t, d, lead, C[id], CANVAS.includes(id))).join('')}
+      </main>`;
+
+    // Live slots
+    el.querySelector('[data-slot="layout"]').replaceWith(layoutOverview());
+    el.querySelector('[data-slot="tokens"]').replaceWith(tokenList({ open: 4, id: 'sc-tok' }));
+    el.querySelector('[data-slot="years"]').replaceWith(Object.assign(YearStrip.render(), { style: 'width:100%' }));
+    requestAnimationFrame(() => {
+      lineChart(el.querySelector('[data-slot="line"]'), { title: 'Comparativa Ingresos · Gastos', labels: M, series: [
+        { name: 'Ingresos', color: 'var(--chart-1)', values: [2976.52, 4166.63, 4166.63, 4731.92, 5357.5, 5357.5, 8203.35, 2580.63, 5843.05, 0, 0] },
+        { name: 'Gastos', color: 'var(--chart-2)', values: [1234.94, 1514.27, 1799.53, 1065.4, 2465.63, 1132.65, 1072.54, 1072.94, 1251.39, 0, 0] }] });
+      barChart(el.querySelector('[data-slot="bar"]'), { title: 'Comparativa salario neto', labels: M, series: [
+        { name: '2025', color: 'var(--chart-compare)', values: [0, 1827.42, 3619.47, 4247.02, 4026.62, 3592.72, 2386.66, 2519.76, 3005.29, 1822.92, 4237.16] },
+        { name: '2026', color: 'var(--chart-1)', values: [1805.1, 1741.58, 2652.36, 2367.1, 3666.52, 2891.87, 4224.85, 4284.96, 1507.69, 5221.69, 0] }] });
+    });
+
+    // Table of contents: smooth scroll + highlight the section in view
+    const links = [...el.querySelectorAll('.sc__nav a')];
+    links.forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); el.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); }));
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (en.isIntersecting) links.forEach((a) => a.classList.toggle('is-current', a.getAttribute('href') === `#${en.target.id}`));
+    }), { rootMargin: '-20% 0px -70% 0px' });
+    requestAnimationFrame(() => el.querySelectorAll('.sc__section').forEach((s) => io.observe(s)));
+    return el;
+  },
+};

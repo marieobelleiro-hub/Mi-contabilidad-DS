@@ -1,0 +1,67 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# Mi Contabilidad · Design System
+
+**Version 0.1 · first version, in progress.** The design system of the Mi Contabilidad app (accounting for freelancers in Spain) and of its two assistants.
+
+## Three design systems
+
+The **App** is the main one. The **Chatbot** and the **Accessibility assistant** are **sub-systems** built on top of it: they reuse its fonts, type scale, spacing, icons, focus ring and several of its components, and only add what makes them different. The three follow the same pattern: **Introduction · Foundations · Components**.
+
+| System | What it covers | In the app |
+|---|---|---|
+| <a href="./?path=/docs/app-introduction--docs" target="_top"><b>App</b></a> | Dashboard, Facturación, Gastos, IVA, IRPF | the app itself |
+| <a href="./?path=/docs/chatbot-introduction--introduction" target="_top"><b>Chatbot</b></a> <span className="review-chip">Under review</span> | You ask in your own words, it answers with your figures and can add an invoice or an expense | *Asistente inteligente* |
+| <a href="./?path=/docs/accessibility-assistant-introduction--introduction" target="_top"><b>Accessibility assistant</b></a> <span className="review-chip">Under review</span> | Step by step, few big choices at a time, on a dark theme | *Acceso fácil* |
+
+Every component page starts with the component **as it is in the app** (real cases only), then its properties, states, spec, code and accessibility notes.
+
+## AI ready
+
+This design system is built to be used **by people and by AI assistants** (Claude, Copilot, Figma's AI…), so that a screen generated with AI uses exactly the same tokens, components and rules as one made by hand.
+
+| | What it gives an AI | File |
+|---|---|---|
+| **Machine-readable tokens** | Every value with its type, description and references, in the W3C Design Tokens format | `tokens.json` (+ one file per assistant) |
+| **One instructions file** | Rules, type styles, every component's classes and required accessibility attributes, on one page, with a section per assistant | `AGENTS.md` |
+| **A guardrail** | An automatic check that rejects raw colours and sizes, so mistakes are caught right away | `npm run lint` |
+| **Clear names** | Tokens named by role (`--attention`, `--text-muted`) and one class pattern for every component, so an AI can pick the right one from the name | — |
+
+**Next:**
+
+- A **component manifest** (variants, states and one example per component) once the components are reviewed.
+- The **Figma library**, built from `tokens.json`: the same tokens become Figma variables, and each Figma component matches its Storybook page, so design and code stay in sync.
+
+## How to use it in the app
+
+The design system is published as these files, all with a **version number**:
+
+| File | Content |
+|---|---|
+| `mi-contabilidad-ds.css` | Tokens + every component |
+| `mi-contabilidad-ds.js` | Charts and icons |
+| `mi-contabilidad-ds-icons.svg` | The icon sprite |
+| `icons/<name>.svg` | One file per icon, for design tools and other platforms |
+| `tokens.json` | Every token in the W3C Design Tokens format (Figma, AI, other platforms) |
+| `mi-contabilidad-ds-assistant.css` · `tokens-assistant.json` | Chatbot (*Asistente inteligente*): load after the main CSS |
+| `mi-contabilidad-ds-acceso.css` · `tokens-acceso.json` | Accessibility assistant (*Acceso fácil*): load after the main CSS |
+| `AGENTS.md` | Instructions for AI assistants |
+
+The app loads them with one line each:
+
+```html
+<link rel="stylesheet" href="…/marie-ds@v1.0.0/dist/mi-contabilidad-ds.css">
+<script src="…/marie-ds@v1.0.0/dist/mi-contabilidad-ds.js"></script>
+```
+
+**To update the app:**
+
+1. Change the design system and check it here in Storybook.
+2. Commit to GitHub and give it a new version (e.g. `v1.1.0`).
+3. In the app, change `v1.0.0` → `v1.1.0` and commit. The hosting (e.g. Vercel) publishes the app again.
+
+Because of the version number, a change here never reaches the live app by surprise: the app only updates when you change its version.
+
+> **Today** the demo app is a single local file, so the design system is still pasted into it with `npm run inline -- ../app_DEMO.html`. This step disappears once the app is hosted.

@@ -1,0 +1,148 @@
+/* ==========================================================================
+   Card  ·  .card
+   The white block. One padding for all cards; inner parts are optional.
+
+   Two uses of the same white block:
+   1. KPI card (.card--kpi): label · amount · optional sub.
+        Label colour:  black (default) · .card__label--primary (blue) · .card__label--attention (orange)
+        Amount colour: black (default) · .card__amount--primary (blue) · .card__amount--attention (orange)
+        Dashboard: coloured label, black amount · Sections: black label, amount in the section colour,
+        pending amounts always orange.
+   2. Container card: __header (title + actions or __due deadline) · __title · __body · __footer ·
+        --sectioned = tax form (Modelo 303 / 130): __section + H3 __section-title, separated by lines;
+        rows are .list .row--kv, totals are .result bars at full width
+
+   Options:  --interactive (the whole card is a link: hover shadow) · --primary / --attention
+             (accent: selected outline, H3 and __title--accent)
+   States:   hover (interactive) · focus · selected ([aria-current] / .is-selected: 2px outline)
+             · disabled (.is-disabled + aria-disabled="true": a period that isn't selected)
+   Layout:   .card-grid (--2 / --4 columns)
+
+   ========================================================================== */
+.card{
+  --card-accent:var(--text);
+  display:flex;
+  flex-direction:column;
+  padding:var(--card-pad-y) var(--card-pad-x);
+  border-radius:var(--card-radius);
+  background:var(--surface);
+  color:var(--text);
+}
+.card--primary{--card-accent:var(--primary)}
+.card--attention{--card-accent:var(--attention)}
+
+/* ── Header: title on the left, actions (ghost button, ⓘ) on the right ── */
+.card__header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-8);
+  margin-bottom:var(--space-16);
+}
+.card__title{                                   /* H2 · 16 / 400 */
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--text-16);
+  font-weight:var(--weight-regular);
+  color:var(--text);
+}
+.card__title--caps{text-transform:uppercase}
+.card__due{margin:0;font-family:var(--font-sans);font-size:var(--text-14);color:var(--attention);white-space:nowrap}   /* deadline in the header: always orange */
+.card__title--accent{color:var(--card-accent)}
+
+.card__body{flex:1;min-width:0}
+.card__text{margin:0 0 var(--space-12);font-family:var(--font-sans);font-size:var(--text-12);line-height:var(--leading-normal);color:var(--text)}   /* a short explanation under the header (Cálculo del salario) */
+.card__body--scroll{overflow-x:auto}           /* wide tables on mobile */
+
+/* ── Footer: totals on the left, action on the right ── */
+.card__footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:var(--space-8) var(--space-16);
+  margin-top:var(--space-12);
+}
+
+/* ── KPI card: label · amount · sub ── */
+.card__label{                                   /* H2 · 16 / 400 · black by default */
+  margin:0 0 var(--space-8);
+  font-family:var(--font-sans);
+  font-size:var(--text-16);
+  font-weight:var(--weight-regular);
+  color:var(--text);
+}
+.card__label--primary{color:var(--primary)}
+.card__label--attention{color:var(--attention)}
+.card__amount{                                  /* Display · Emphasis */
+  margin:0 0 var(--space-8);
+  font-family:var(--font-sans);
+  font-size:var(--text-24);
+  font-weight:var(--weight-medium);
+  line-height:var(--leading-tight);
+  color:var(--text);
+}
+.card__amount--primary{color:var(--primary)}
+.card__amount--attention{color:var(--attention)}
+.card__sub{                                     /* Sub · mono 12 */
+  margin:0;
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  color:var(--text);
+}
+.card--kpi .card__header{margin-bottom:var(--space-8)}
+.card--kpi .card__header .card__label{margin:0}
+
+/* ── Sectioned (IVA / IRPF forms): header + blocks separated by hairlines ── */
+.card--sectioned{padding:0;overflow:hidden}
+.card--sectioned > .card__header{
+  margin:0;
+  padding:var(--space-16) var(--card-pad-x);
+  border-bottom:var(--border-thin) solid var(--line);
+}
+.card__section{
+  padding:0 var(--card-pad-x) var(--space-8);
+  border-bottom:var(--border-thin) solid var(--line);
+}
+.card__section:last-child{border-bottom:none}
+.card__section > textarea.input{margin-bottom:var(--space-8)}   /* notes: 16px to the card edge */
+.card__section-title{                           /* H3 · Label style: mono 12 caps, accent */
+  margin:0;
+  padding:var(--space-16) 0 var(--space-4);
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  font-weight:var(--weight-regular);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  color:var(--card-accent);
+}
+.card__section-title--muted{color:var(--text-muted);font-weight:var(--weight-regular)}   /* a quarter not declared yet */
+
+/* ── Interactive: the whole card is a link or button ── */
+.card--interactive{
+  text-align:left;
+  text-decoration:none;
+  border:none;
+  font:inherit;
+  cursor:pointer;
+  transition:box-shadow var(--motion-fast);
+}
+.card--interactive:is(:hover,.is-hover){box-shadow:var(--shadow-md)}
+.card--interactive.is-focus{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+
+/* ── States ── */
+.card:is([aria-current="true"],[aria-current="step"],.is-selected){box-shadow:inset 0 0 0 var(--border-thick) var(--card-accent)}
+.card--interactive:is([aria-current="true"],[aria-current="step"],.is-selected):is(:hover,.is-hover){box-shadow:inset 0 0 0 var(--border-thick) var(--card-accent),var(--shadow-md)}
+.card.is-disabled :is(.card__label,.card__amount,.card__sub){color:var(--disabled)}
+.card--interactive.is-disabled{pointer-events:none;box-shadow:none}
+
+/* ── Grid ── */
+.card-grid{display:grid;gap:var(--card-gap)}
+.card-grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card-grid--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+/* ── Mobile ── */
+@media (max-width:1023px){
+  .card{--card-pad-x:var(--space-20)}
+  .card-grid--2,.card-grid--4{grid-template-columns:1fr;gap:var(--space-12)}
+}

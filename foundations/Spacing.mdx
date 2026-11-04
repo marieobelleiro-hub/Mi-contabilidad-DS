@@ -1,0 +1,111 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="App/Foundations/Spacing, radius & elevation" />
+
+export const SPACES = [
+  [2, 'Gap between tabs, switch thumb inset'],
+  [4, 'Tight gaps, chip padding, small negative margins'],
+  [8, 'Compact table rows, ghost button padding, small gaps'],
+  [12, 'Regular list rows, gaps between label and value'],
+  [16, 'Gaps between cards, page gutter on mobile'],
+  [20, 'Card padding top and bottom'],
+  [24, 'Card padding sides, primary button padding'],
+  [32, 'Space before IVA / IRPF table columns, dialog padding top'],
+  [40, 'Dialog padding sides (desktop), room for the select arrow'],
+  [48, 'Space around dialogs'],
+];
+export const cell = { padding: '10px 16px 10px 0', borderBottom: '1px solid var(--line)', verticalAlign: 'middle' };
+export const code = { fontFamily: 'var(--font-mono)', fontSize: 12 };
+export const muted = { fontSize: 12, color: 'var(--text-muted)' };
+
+# Spacing, radius & elevation
+
+## Spacing
+
+Every `padding`, `margin` and `gap` uses one of these **10 tokens**: even values on a 4px scale with a 2px half-step.
+
+<table style={{ width: '100%', borderCollapse: 'collapse' }}>
+  <tbody>
+    {SPACES.map(([v, use]) => (
+      <tr key={v}>
+        <td style={{ ...cell, ...code, whiteSpace: 'nowrap' }}>--space-{v}</td>
+        <td style={{ ...cell, ...code, color: 'var(--text-muted)' }}>{v}px</td>
+        <td style={{ ...cell, width: '40%' }}><div style={{ width: v * 4, height: 16, background: 'var(--primary)' }} /></td>
+        <td style={{ ...cell, ...muted }}>{use}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+- Negative margins: `calc(-1 * var(--space-8))`.
+- Row densities: **compact** `--space-8` (tables) · **regular** `--space-12` (lists).
+- No other values.
+
+## Radius
+
+<div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', margin: '16px 0 8px' }}>
+  {[['--radius-none', '0', 'Inputs, buttons, tabs, dialogs'], ['--radius-sm', '2px', 'Chips, bars'], ['--radius-md', '8px', 'Cards'], ['--radius-pill', '999px', 'Switch track'], ['--radius-round', '50%', 'Dots, switch thumb']].map(([t, v, u]) => (
+    <div key={t} style={{ width: 120 }}>
+      <div style={{ width: 64, height: 64, background: 'var(--fill)', border: '1px solid var(--line-strong)', borderRadius: v }} />
+      <div style={{ ...code, marginTop: 8, fontWeight: 700 }}>{t}</div>
+      <div style={muted}>{v} · {u}</div>
+    </div>
+  ))}
+</div>
+
+Square corners are the default: only cards, chips, bars and the switch are rounded.
+
+## Borders
+
+<div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', margin: '16px 0 8px' }}>
+  {[['--border-thin', '1px', 'Lines, form fields', { border: '1px solid var(--line-strong)' }], ['--border-thick', '2px', 'Selected, outline, focus ring', { boxShadow: 'inset 0 0 0 2px var(--primary)' }], ['--border-accent', '3px', 'Left bar on banners and tooltips', { borderLeft: '3px solid var(--primary)', background: 'var(--primary-tint)' }]].map(([t, v, u, st]) => (
+    <div key={t} style={{ width: 160 }}>
+      <div style={{ width: 64, height: 64, background: 'var(--surface)', ...st }} />
+      <div style={{ ...code, marginTop: 8, fontWeight: 700 }}>{t}</div>
+      <div style={muted}>{v} · {u}</div>
+    </div>
+  ))}
+</div>
+
+## Elevation
+
+<div style={{ display: 'flex', gap: 32, margin: '16px 0', padding: 24, background: 'var(--canvas)' }}>
+  {[['--shadow-sm', 'Switch thumb'], ['--shadow-md', 'Tooltip · card on hover']].map(([t, u]) => (
+    <div key={t} style={{ width: 160, height: 80, background: 'var(--surface)', boxShadow: `var(${t})`, padding: 12 }}>
+      <div style={{ ...code, fontWeight: 700 }}>{t}</div>
+      <div style={muted}>{u}</div>
+    </div>
+  ))}
+</div>
+
+Cards sit flat on the canvas. Shadows only mark something that floats (a tooltip) or reacts to the pointer (a clickable card).
+
+## Layers
+
+What sits on top of what, from bottom to top:
+
+| Token | Value | Use |
+|---|---|---|
+| `--layer-raised` | 1 | A focused tab above its neighbours, so the focus ring isn't hidden |
+| `--layer-tooltip` | 50 | Tooltips |
+| `--layer-toast` | 990 | Toasts |
+| `--layer-dialog` | 1000 | Overlays that aren't a native `<dialog>` (native dialogs always sit on top by themselves) |
+
+## Motion
+
+| Token | Value | Use |
+|---|---|---|
+| `--motion-fast` | 0.1s | Hover, focus, small state changes |
+| `--motion-slow` | 0.2s | Toast appearing, switch, bars growing |
+
+When the user's system asks for **reduced motion**, transitions are switched off.
+
+## Focus ring
+
+One style everywhere: `outline: var(--border-thick) solid var(--focus)` with `outline-offset: var(--focus-offset)` (2px), plus a 1px black halo so it's visible on any background.
+
+<button type="button" className="btn btn--primary" style={{ outline: '2px solid var(--focus)', outlineOffset: 2, boxShadow: '0 0 0 1px var(--black)', margin: '8px 0' }}>Focused button</button>
+
+## Breakpoint
+
+**Desktop from 1024px.** Below that, the mobile layout applies (cards with 20px padding, 12px gaps, 16px text in form fields). CSS can't use tokens inside media queries, so this value is written as `@media (max-width:1023px)` in each component.

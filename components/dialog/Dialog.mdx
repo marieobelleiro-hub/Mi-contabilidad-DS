@@ -1,0 +1,133 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as DialogStories from './dialog.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../button/button.css?raw';
+import alsoCss1 from '../input/input.css?raw';
+import alsoCss2 from '../selectors/selectors.css?raw';
+import ownCss from './dialog.css?raw';
+
+<Meta of={DialogStories} />
+
+# Dialog
+
+A window over the page that needs an answer before you go on. It's built on the browser's native `<dialog>` element, which keeps focus inside, closes with **Esc**, and dims the page behind it.
+
+## Playground
+
+The four kinds of dialog, with placeholder text (Title · Message text). Choose the **Type**; the **Button** list changes with it, and the size follows the type.
+
+<Canvas of={DialogStories.Playground} sourceState="none" />
+<Controls of={DialogStories.Playground} />
+
+| Type | Colour | Size | Buttons | `role` |
+|---|---|---|---|---|
+| **Informative** | blue | `dialog--md` 640px | Continuar → · Entendido · Descargar ↓ · Guardar | `dialog` |
+| **Attention** | orange | `dialog--sm` 400px | Entendido · Guardar | `alertdialog` |
+| **Error** | red (`btn--danger`) | `dialog--sm` 400px | Confirmar · Entendido | `alertdialog` |
+| **Multi-option** | blue | `dialog--md` 640px | Descargar ↓ · Guardar · Continuar → | `dialog` |
+
+- **Cancelar** (optional) is a ghost button on the left, in the dialog colour (`dialog__actions--split`). Never two solid buttons.
+- **Language toggle** (optional): the Esp / Eng switch above the title (`dialog__top`); in the app it changes the text of the dialog.
+- **Multi-option**: the options are radios as cards (`choice` in a `choice-group`, see <a href="./?path=/docs/app-components-selectors--selectors" target="_top">Selectors</a>), the first one chosen.
+- **Error** is not in the app yet: it's ready for actions that can't be undone (Eliminar año, a browser box today).
+
+## App dialogs
+
+The real dialogs of the **Demo** (online) and the **Local** version (the one you edit and save on your computer). Press a button to open one.
+
+<Canvas of={DialogStories.AppDialogs} />
+
+| Dialog | App | Type | Actions | Status |
+|---|---|---|---|---|
+| **Bienvenida** (welcome) | Demo · Local (different text) | Informative + language toggle | Continuar | ✓ |
+| **Atención!** (date check) | Demo · Local | Attention | Entendido | ✓ |
+| **Instrucciones para la app local** | Local | Informative | Cancelar · Continuar | ✓ |
+| **Guardar copia .html** | Local | Multi-option | Cancelar · Descargar | ✓ |
+| **Nueva factura** (nacional · exenta) · **Nuevo gasto** | Demo · Local, mobile | Form, full screen | Cancelar · Guardar | ✓ in <a href="./?path=/docs/app-components-input--input" target="_top">Input › Mobile forms</a> |
+| Eliminar año (confirm) | Demo · Local | Error | Cancelar · Confirmar | Browser box today: to design |
+| ¿Con qué año quieres empezar? · Año no válido · Añadir un % de IVA | Demo · Local | Informative / Attention | — | Browser boxes today: to design |
+| Datos importados · Formato no reconocido · Error al abrir / guardar · Navegador no compatible · Primero abre el archivo | Local | Informative / Error | — | Browser boxes today: to design |
+| Tienes cambios sin guardar (leaving the page) | Local | — | — | Browser's own warning: can't be styled |
+
+**Bienvenida** (Demo; the switch changes the text) and **Atención!** (shown after saving an invoice or an expense when the date looks wrong; it never blocks the save):
+
+<Canvas of={DialogStories.Welcome} sourceState="none" />
+<Canvas of={DialogStories.Alert} sourceState="none" />
+
+**Instrucciones para la app local** (opens with Autorizar edición) and **Guardar copia .html** (opens with the button of the same name):
+
+<Canvas of={DialogStories.Auth} sourceState="none" />
+<Canvas of={DialogStories.SaveCopy} sourceState="none" />
+
+## Sizes
+
+| | `dialog--md` (default) | `dialog--sm` |
+|---|---|---|
+| Use | Informative, multi-option, forms | Attention and error alerts |
+| Width | `--dialog-w-md` 640px | `--dialog-w-sm` 400px |
+| Padding | 32 top/bottom · 40 sides | 24 all round |
+| Mobile | **Full screen**, actions stuck to the bottom (try **View → Mobile** in the Playground) | Stays centred, 16px from the edges |
+
+## Spec
+
+| | Value |
+|---|---|
+| Panel | `--surface` · 1px `--line` · radius 0 |
+| Backdrop | `--overlay` 45% black |
+| Top (`dialog__top`) | Optional, above the title, right-aligned: the language switch · 16px below |
+| Header | Title on the left · optional action on the right (Cancelar ghost button on mobile forms) · 20px below |
+| Title | `dialog__title` · Display · Light (24 / 300) |
+| Body | `dialog__body` · Sans 16 · line height 1.6 · 16px between paragraphs (forms: 20px between fields) |
+| Actions | `dialog__actions` · right-aligned · 16px gap · 24px above · `--split`: Cancelar on the left, the main action on the right |
+| Max height | screen height − 48px, then the content scrolls |
+
+## Markup
+
+<Source dark code={`<dialog class="dialog dialog--md" id="welcome" aria-labelledby="w-title" lang="es">
+  <div class="dialog__top">
+    <div class="switch">
+      <span class="switch__off" aria-hidden="true">Esp</span>
+      <button class="switch__control" role="switch" aria-checked="false" aria-label="English">…</button>
+      <span class="switch__on" aria-hidden="true">Eng</span>
+    </div>
+  </div>
+  <div class="dialog__header"><h2 class="dialog__title" id="w-title">Bienvenidos a Contabilidad Demo</h2></div>
+  <div class="dialog__body"><p>…</p></div>
+  <div class="dialog__actions">
+    <button class="btn btn--primary"><span class="btn__label">Continuar</span>…</button>
+  </div>
+</dialog>
+
+<!-- Two actions: Cancelar on the left -->
+<div class="dialog__actions dialog__actions--split">
+  <button class="btn btn--ghost btn--primary">Cancelar</button>
+  <button class="btn btn--primary"><span class="btn__label">Descargar</span>…</button>
+</div>
+
+<script>
+  document.getElementById('welcome').showModal();   // open
+  // dialog.close()  — close
+</script>`} />
+
+## Accessibility
+
+- `showModal()` makes the rest of the page **inert**: Tab stays inside the dialog and screen readers only read the dialog.
+- **Esc** closes it, and focus returns to the button that opened it.
+- The dialog is named by its title (`aria-labelledby`); alerts use `role="alertdialog"`.
+- When the language switch changes the text, the dialog's `lang` changes too, so screen readers use the right pronunciation.
+- The two choices of Guardar copia .html are real radio buttons in a `<fieldset>`: arrow keys move between them.
+- **The focus ring is never removed.**
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Dialog uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Button, Input, Selectors).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Dialog', ownCss, { also: [['Button', alsoCss0], ['Input', alsoCss1], ['Selectors', alsoCss2]] })} />
+
+</details>

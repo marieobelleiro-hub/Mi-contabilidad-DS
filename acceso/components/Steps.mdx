@@ -1,0 +1,50 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './steps.stories.js';
+
+<Meta of={Stories} />
+
+# Steps & options
+
+<span className="review-chip">Under review</span>
+
+Acceso fácil is a path of **steps**. Each step is one question with its **options**; choosing one adds the next step underneath. At the end of every screen, two **text links** let you go back.
+
+## Option
+
+<Canvas of={Stories.Playground} />
+<Controls of={Stories.Playground} />
+
+<Canvas of={Stories.States} sourceState="none" />
+
+| | Look |
+|---|---|
+| **Nothing chosen yet** | white, 2px white border, black Mono 12 caps |
+| **Hover** | `--af-option-hover` light grey |
+| **Chosen** (`aria-pressed="true"`) | white + 2px and 1px inner **orange** border (`--af-option-selected`) |
+| **Not chosen** (another one is) | `--af-option-dim` grey: they step back, but stay clickable to change your mind |
+| **Focus** | the yellow focus ring + black halo |
+| **Main action** (`af-option--primary`) | filled blue, white text: *Guardar* |
+
+Options are **toggle buttons** (`<button aria-pressed>`): the chosen one stays pressed. Min height `--af-option-h` 28px (**44px on mobile**), padding 2 / 12, 24px between options (12px on mobile).
+
+## Steps
+
+A step (`af-step`, `role="group"` named by its question) shows its question until you answer it. Then it shrinks to its **number** ("1.", "2.") and keeps the question for screen readers only (`is-done`): your path stays visible and short.
+
+<Canvas of={Stories.Path} sourceState="none" />
+
+Long lists wrap on several lines (Consultar definiciones):
+
+<Canvas of={Stories.Many} sourceState="none" />
+
+## Text links
+
+| | |
+|---|---|
+| **Volver** · **Empezar de nuevo** | `af-link` · Mono 12 caps, underlined, white · hover `--line-strong` · in `af-foot`, under a thin line (`--af-line`), 24px above |
+
+## Accessibility
+
+- Each step is a `role="group"` named by its question, so screen readers say "¿Qué impuesto?, group" before the options.
+- The chosen option says *pressed*; the number of a done step is `aria-hidden`, and the question stays as hidden text.
+- The orange outline is not the only cue: the chosen option is also announced as pressed, and the other options turn grey.

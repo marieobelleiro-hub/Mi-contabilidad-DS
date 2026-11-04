@@ -1,0 +1,138 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './button.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../card/card.css?raw';
+import ownCss from './button.css?raw';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Four types: **Big** for the main action of a screen or dialog, **Ghost** for actions next to content, **Icon** for compact actions, and **Floating** for the round buttons that float over the page. They all share the same states: default, hover, pressed, focus and disabled (floating buttons add **open**).
+
+Each type below has a Playground: change its properties and the button and its code update.
+
+## Big button
+
+The main action. One per view.
+
+<Canvas of={ButtonStories.Big} />
+<Controls of={ButtonStories.Big} />
+
+## Ghost button
+
+Actions next to content: add, view all, cancel. Always with text.
+
+<Canvas of={ButtonStories.Ghost} />
+<Controls of={ButtonStories.Ghost} />
+
+## Icon button
+
+Compact actions where the icon is understood on its own: information, delete, close.
+
+<Canvas of={ButtonStories.Icon} />
+<Controls of={ButtonStories.Icon} />
+
+## Floating button
+
+Round buttons that float over the page and open a panel: the **assistant** and the **accessibility** assistant.
+
+<Canvas of={ButtonStories.Floating} />
+<Controls of={ButtonStories.Floating} />
+
+## Properties
+
+The same properties will be used in the Figma library.
+
+| Type | Property | Kind | Values | Default |
+|---|---|---|---|---|
+| **Big** | Type | Variant | Primary (blue) · Attention (orange) | Primary |
+| | Icon | Boolean | Visible (right) · Hidden (text centred) | Visible |
+| | Icon choice | Icon swap | `arrow-right` · `save` | `arrow-right` |
+| | Label | Text | short, one line | "Continuar" |
+| | State | Variant | Default · Hover · Pressed · Focus · Disabled | Default |
+| **Ghost** | Type | Variant | Primary (blue) · Attention (orange) | Primary |
+| | Icon | Boolean | Visible (`plus`, left) · Hidden | Visible |
+| | Label | Text | always present, one line | "Añadir factura" |
+| | State | Variant | Default · Hover · Pressed · Focus · Disabled | Default |
+| **Icon** | Style | Variant | Info (blue) · Danger (grey → red) | Info |
+| | Icon choice | Icon swap | Info: `info` · Danger: `trash` · `close` · `close-filled` | `info` |
+| | Size | Variant | sm 24 · md 40 | sm |
+| | Label | Text · invisible | read by screen readers only (`aria-label`) | "Más información" |
+| | State | Variant | Default · Hover · Pressed · Focus · Disabled | Default |
+| **Floating** | Type | Variant | Outline (white, blue ring) · Filled (blue) | Outline |
+| | Icon choice | Icon swap | `assistant` · `accessibility` | `assistant` |
+| | Label | Text · invisible | read by screen readers only (`aria-label`) | "Asistente inteligente" |
+| | State | Variant | Default · Hover · Pressed · Focus · Open · Disabled | Default |
+
+Icon and floating buttons have no visible text, but they always have a **Label for screen readers**: invisible on screen, read aloud as the button's name (`aria-label`). Write what the button does, as precisely as possible ("Eliminar factura 411", not just "Eliminar"). Left empty, it falls back to the default for the icon ("Más información", "Eliminar", "Cerrar").
+
+## States
+
+<Canvas of={ButtonStories.States} sourceState="none" />
+
+| | Default | Hover | Pressed | Focus | Disabled |
+|---|---|---|---|---|---|
+| **Big** | colour fill, white text | a bit lighter (`--btn-hover`) | `-dark` fill | yellow ring + black halo | `--fill` + `--text-muted` |
+| **Ghost** | coloured text | colour fill, white text | `-dark` fill, white text | yellow ring + black halo | `--disabled` text |
+| **Icon · info** | `--primary` icon | `--primary-tint` background | tint + `--primary-dark` icon | yellow ring + black halo | `--disabled` icon |
+| **Icon · danger** | `--text-muted` icon | `--error-tint` background | tint + `--error` icon | yellow ring + black halo | `--disabled` icon |
+
+<Canvas of={ButtonStories.FloatingStates} sourceState="none" />
+
+| | Default | Hover | Pressed | Focus | Open | Disabled |
+|---|---|---|---|---|---|---|
+| **Floating · outline** | white, 3px `--primary` ring, blue icon | `--primary-tint` | tint + `--primary-dark` ring and icon | yellow ring | 2px white gap + 3px `--attention` ring | `--fill` + `--disabled` icon |
+| **Floating · filled** | `--primary`, white icon | `--primary-dark` | dark + inner blue ring | yellow ring | 2px white gap + 3px `--attention` ring | `--fill` + `--disabled` icon |
+
+Hover lightens the colour on purpose, so the change of state is clearly visible. The default state is the one that meets WCAG AA (white on `--primary` 5.0 : 1, on `--attention` 4.5 : 1).
+
+## Spec
+
+| | Big | Ghost | Icon |
+|---|---|---|---|
+| Height | `--btn-h-lg` 48px | `--btn-h-sm` 24px everywhere | sm 24 · md 40 (square) |
+| Width | `--btn-min-w` 160 – `--btn-max-w` 296px · full width on mobile | fits the text | = height |
+| Padding (sides) | `--btn-pad-lg` 24px | `--btn-pad-sm` 8px | 0, icon centred |
+| Type | Sans 16 / regular | Mono 12 / regular · uppercase · `--ls-caps` | — |
+| Icon | 24px, right · text left, icon right | `plus` 16px, left · 8px gap | sm 16px · md 24px |
+| Long label | one line, cut with "…" | one line, cut with "…" | — |
+| Touch area on mobile | 48px | 24px (meets the 24px minimum) | `--btn-touch` 44px, invisible |
+| Radius | 0 | 0 | 0 |
+
+**Floating:** `--fab-size` 40px circle (`--radius-round`) · ring `--fab-ring` 3px · on mobile they sit in a **dock** (`fab-dock`): translucent white panel, 12px padding, 24px gap, `--shadow-sm` on each button.
+
+<Canvas of={ButtonStories.LongLabel} sourceState="none" />
+
+## In the app
+
+<Canvas of={ButtonStories.InContext} sourceState="none" />
+<Canvas of={ButtonStories.Mobile} sourceState="none" />
+
+Floating buttons, desktop (left edge of the page) and mobile dock:
+
+<Canvas of={ButtonStories.FloatingInContext} sourceState="none" />
+
+## Accessibility
+
+- Use a real `<button>` (or `<a>` for navigation), never a `<div>`.
+- Icon buttons **must** have an `aria-label` that says what they do ("Eliminar factura 411"); the icon gets `aria-hidden="true"`.
+- Minimum target 24 × 24px (WCAG 2.2 AA). On mobile, icon buttons get a 44px touch area.
+- Disabled buttons use `disabled`; if they must stay focusable, `aria-disabled="true"`.
+- A label cut with "…" keeps its full text for screen readers; keep labels short anyway.
+- **Ghost attention** (orange text) only on white, inside a card: on the grey canvas it reaches 4.1 : 1, below AA.
+- **Floating buttons** say what they open (`aria-label`), and carry `aria-haspopup="dialog"` and `aria-expanded` (true while the panel is open).
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Button uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Card).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Button', ownCss, { also: [['Card', alsoCss0]] })} />
+
+</details>

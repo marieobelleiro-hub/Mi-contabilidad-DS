@@ -1,0 +1,38 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './colors.stories.js';
+
+<Meta of={Stories} />
+
+# Colors
+
+<span className="review-chip">Under review</span>
+
+The assistant uses the **main palette**. It only gives some colours a role of its own: the light blue panel, the blue header, the grey and white message bubbles. **One value is new**: the dark blue track of the switch on the header.
+
+<Canvas of={Stories.Palette} sourceState="none" />
+
+## Contrast
+
+| Pair | Ratio | WCAG AA |
+|---|---|---|
+| White title and icons on the header (`--ai-header-bg`) | 5.0 : 1 | ✓ |
+| Yellow focus ring on the header | 3.5 : 1 | ✓ (3:1 for focus indicators) |
+| White switch thumb on `--ai-switch-track` | 11.3 : 1 | ✓ |
+| Text on your message (`--ai-msg-user-bg`) | 15.6 : 1 | ✓ |
+| Greeting "Hola ¿en qué puedo ayudarte?" (`--primary`, 24px) on `--ai-canvas` | 4.5 : 1 | ✓ (large text) |
+| Engine status and meta (`--text-muted`) on `--ai-canvas` | 5.2 : 1 | ✓ |
+
+## Changes from the app
+
+The app used values of its own; the design system maps them to the main tokens. The difference is barely visible:
+
+| App today | Design system |
+|---|---|
+| Panel `#F2F5FD` | `--primary-tint` `#EEF4FF` |
+| Text `#161616` | `--text` `#000` |
+| Your message `#E0E0E0` | `--fill-hover` `#DEDEDE` |
+| Placeholder `#8D8D8D` (2.9:1, too light) | `--text-muted` `#666` (5.7:1) |
+| Chip hover `#E5EDFF` | `--primary-tint` |
+| **Composer focus: green border** (1.3:1, not visible enough) | **The yellow focus ring** of the whole app |
+
+<Canvas of={Stories.ColorTokens} sourceState="none" />

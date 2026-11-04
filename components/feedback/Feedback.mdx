@@ -1,0 +1,155 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as FeedbackStories from './feedback.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../button/button.css?raw';
+import alsoCss1 from '../card/card.css?raw';
+import alsoCss2 from '../list/list.css?raw';
+import alsoCss3 from '../result/result.css?raw';
+import alsoCss4 from '../selectors/selectors.css?raw';
+import ownCss from './feedback.css?raw';
+
+<Meta of={FeedbackStories} />
+
+# Banner, tooltip & toast
+
+Messages that **inform** the user without being part of the data.
+
+| | Use | Where it lives |
+|---|---|---|
+| **Banner** | Something to know about this section: a tip, a warning, an error | Inline, inside the page or a card |
+| **Tooltip** | An explanation behind an ⓘ button · the values under the pointer on a chart | Pops up next to its trigger |
+| **Toast** | Confirmation after an action ("Factura 411 eliminada."), with an optional action | Bottom left of the screen, disappears after a few seconds |
+
+## Banner
+
+<Canvas of={FeedbackStories.Banner} sourceState="none" />
+<Controls of={FeedbackStories.Banner} />
+
+The app has **one banner** today: the **warning** of the Modelo 303 when the quarter has no Spanish invoices. It sits inside the tax form:
+
+<Canvas of={FeedbackStories.BannerInContext} sourceState="none" />
+
+**Not in the app yet:** the other types are ready for when a message needs them (the text is a placeholder: Title · Message text · Action).
+
+<Canvas of={FeedbackStories.BannersFuture} sourceState="none" />
+
+| Type | Background | Bar & text | Contrast | Read as |
+|---|---|---|---|---|
+| `banner--info` | `--primary-tint` | `--primary` | 4.5:1 ✅ | `role="status"` (polite) |
+| `banner--warning` | `--attention-tint` | `--attention` | 5.0:1 ✅ | `role="alert"` |
+| `banner--error` | `--error-tint` | bar `--error` · text `--error-dark` | 7.1:1 ✅ | `role="alert"` |
+
+| | Value |
+|---|---|
+| Padding | 8px top/bottom · 16px sides |
+| Left bar | `--border-accent` 3px in the accent colour |
+| Text | Sans 14 · line height 1.45 · `banner--sm` 12px |
+| Parts | `banner__title` (optional) · `banner__text` · `banner__actions` (ghost button, in the banner's text colour so it stays readable on the tint) · close button (optional) |
+| Mobile | Same banner, full width of its container: one component for both layouts |
+| Radius | 0 |
+
+## Tooltip
+
+The explanation behind an ⓘ button. Choose a real one in **Tooltip**, or **New tooltip** to write your own text. It opens on hover, click, Enter or Space; Esc or clicking outside closes it.
+
+<Canvas of={FeedbackStories.Tooltip} sourceState="none" />
+<Controls of={FeedbackStories.Tooltip} />
+
+| | Value |
+|---|---|
+| Width | `--tooltip-w` 480px max (never wider than the screen) |
+| Padding | 8 / 16 |
+| Background | `--primary-tint` + `--shadow-md` · 3px `--primary` bar on the left |
+| Text | Sans 14 · `--primary` · line height 1.55 · one `<p>` per paragraph · links underlined |
+| Position | under the ⓘ, opening to the right · `tooltip--end`: opening to the left, for an ⓘ near the right edge |
+
+## Chart tooltip
+
+The values under the pointer on a chart (see <a href="./?path=/docs/app-components-chart--chart" target="_top">Chart</a>): the month, then one row per series.
+
+<Canvas of={FeedbackStories.ChartTooltip} />
+
+| | Value |
+|---|---|
+| Class | `tooltip tooltip--dark` |
+| Width · padding | fits the content · 8 / 12 |
+| Background | `--overlay-dark` (88% black) · radius 2px |
+| Text | Sans 12 · white · line height 1.7 · month and values bold |
+| Series colours | `--income-light` / `--expense-light` (readable on dark) |
+| Position | follows the pointer |
+
+## Toast
+
+A short confirmation at the bottom of the screen. Write the **Text**, choose the **Action** and the **View**: each one shows the whole screen (desktop scaled down, with the sidebar strip; mobile at 390px), so you see where the toast sits.
+
+<Canvas of={FeedbackStories.Toast} sourceState="none" />
+<Controls of={FeedbackStories.Toast} />
+
+| Action | Use |
+|---|---|
+| **Deshacer** | After deleting: "Factura 411 eliminada." · "Gasto de Jazztel eliminado." (the two toasts of the app) |
+| **Entendido** | Future: a message you only need to acknowledge |
+| None | A plain confirmation |
+
+| | Value |
+|---|---|
+| Background / text | `--black` / `--white` · Sans 14 |
+| Padding | 12 / 16 |
+| Position | `toast--start`, 24px from the bottom |
+| Width · desktop | **fixed** `--toast-w` 400px, starting after the sidebar (`--sidebar-w` + 24px), so it never covers the assistant buttons · longer messages wrap onto several lines |
+| Width · mobile | the **full width** of the screen, 16px margins left and right |
+| Action | `toast__action`: Mono 12 caps · `--primary-light` (8.9:1 on black) · 24px tall |
+| Timing | stays 6s with an action, 3s without · fades in 0.2s (no animation if the user prefers reduced motion) |
+| Focus | when the deleted row had the focus, it moves to the action, so keyboard users can undo |
+
+## Markup
+
+<Source dark code={`<!-- Banner (the real one, Modelo 303) -->
+<div class="banner banner--warning" role="alert">
+  <div class="banner__body">
+    <p class="banner__text">Sin facturación española → IVA soportado no deducible este trimestre.</p>
+  </div>
+</div>
+
+<!-- Banner with title, action and close (future, generic) -->
+<div class="banner banner--warning" role="alert">
+  <div class="banner__body">
+    <p class="banner__title">Title</p>
+    <p class="banner__text">Message text.</p>
+    <div class="banner__actions"><button class="btn btn--ghost btn--attention btn--flush">Action</button></div>
+  </div>
+  <button class="btn btn--icon btn--sm btn--danger" aria-label="Cerrar aviso">…</button>
+</div>
+
+<!-- Tooltip -->
+<span class="tooltip-wrap">
+  <button class="btn btn--icon btn--sm btn--info" aria-label="Más información" aria-expanded="false" aria-controls="tt1">ⓘ</button>
+  <div class="tooltip" id="tt1" role="tooltip" hidden><p>…</p></div>
+</span>
+
+<!-- Toast -->
+<div class="toast is-visible" role="status" aria-live="polite">
+  <span>Factura 411 eliminada.</span>
+  <button class="toast__action">Deshacer</button>
+</div>`} />
+
+## Accessibility
+
+- **Banners:** info is `role="status"` (read when convenient); warnings and errors are `role="alert"` (read straight away).
+- **Tooltips** open on click and keyboard, not only on hover, so they work on phones and without a mouse. The ⓘ button says what it explains ("Más información: Salario neto del mes") and reports `aria-expanded`. Esc closes the tooltip and returns focus to the button.
+- **Toasts** are announced with `aria-live="polite"` without moving focus. The Deshacer button is reachable with the keyboard while the toast is visible.
+- Colour is never the only cue: warnings and errors always say what's wrong in words.
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Banner, tooltip & toast uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Button, Card, List row, Result bar, Selectors).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Banner, tooltip & toast', ownCss, { also: [['Button', alsoCss0], ['Card', alsoCss1], ['List row', alsoCss2], ['Result bar', alsoCss3], ['Selectors', alsoCss4]] })} />
+
+</details>

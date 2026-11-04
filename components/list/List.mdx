@@ -1,0 +1,157 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as ListStories from './list.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../selectors/selectors.css?raw';
+import listCss from './list.css?raw';
+import resultCss from '../result/result.css?raw';
+
+<Meta of={ListStories} />
+
+# List row
+
+The **lines** inside a card that aren't a full data table: one item, one line. Four kinds. Here they are shown **on their own**; each **Card view** link opens the same rows inside their card.
+
+<Canvas of={ListStories.Playground} />
+<Controls of={ListStories.Playground} />
+
+## Kinds
+
+| Kind | Use in the app | Parts |
+|---|---|---|
+| **Record** (`row`) | Últimas facturas (dashboard) | `__lead` number · `__title` name · `__meta` date · `__value` amount · `__trail` status dot |
+| **Label → value** (`row row--kv`) | The box lines of the tax forms (c.01, c.03…) | `__label` (code chip + text) · `__value` |
+| **Bar** (`row row--bar`) | Distribución del gasto (dashboard) | `__label` · `__bar-cell` (decorative `__bar` + `__value` %) |
+| **Result** (`result`) | The end of the tax forms and the annual summaries | `__label` · `__value` · the colour comes from the result |
+
+## Record
+
+<Canvas of={ListStories.Records} sourceState="none" />
+
+<a href="./?path=/story/app-components-card--panel" target="_top">Card view →</a>
+
+## Label → value
+
+IVA (orange) and IRPF (blue). The highlighted amount takes the section colour (`row__value--accent`); amounts that are only subtracted are grey (`row__value--muted`).
+
+<Canvas of={ListStories.KeyValue} sourceState="none" />
+
+<a href="./?path=/story/app-components-card--tax-form" target="_top">Card view →</a>
+
+## Bar
+
+<Canvas of={ListStories.Bars} sourceState="none" />
+
+All the bars take **one colour**, the section colour (orange in Gastos). Each bar already has its name and its %, so the colour doesn't need to tell them apart; a scale of orange shades would suggest an order that isn't there, and the lightest shades would disappear on the grey track.
+
+## Result
+
+The line that says **what you have to pay**. Full width (no side margin when it sits in a tax form), tinted background, big amount. The colour comes from **the result, not from the section**.
+
+<Canvas of={ListStories.Results} sourceState="none" />
+
+<a href="./?path=/story/app-components-card--tax-form" target="_top">Card view →</a>
+
+| State | Class | When | Background | Text |
+|---|---|---|---|---|
+| **A ingresar** | `result--pay` | Result > 0: you pay | `--attention-tint` | `--attention` (5.0:1) |
+| **A compensar** | `result--credit` | Result < 0: carried to the next quarter | `--positive-tint` | label `--text-muted` · amount `--text` |
+| **Sin actividad** | `result--none` | Result = 0 | `--canvas` | `--text-muted` |
+| **Subtotal** | `result--sm` | An intermediate difference (IVA repercutido − IVA soportado) | `--surface` | `--text-muted`, smaller |
+
+The label always says the state in words ("A ingresar…", "A compensar…"), so colour is never the only cue.
+
+### Annual footer
+
+The total under the annual summary tables (IVA → Mod. 390, IRPF → Mod. 100), in the section colour.
+
+<Canvas of={ListStories.Footers} sourceState="none" />
+
+## Spec
+
+| | Value |
+|---|---|
+| Row padding | regular `--row-pad-regular` 12px (forms) · `list--compact` `--row-pad-compact` 8px (dashboard) |
+| Min height | `--row-min-h` 24px (fits a 24px status dot or icon button) |
+| Divider | 1px `--line` between rows, none after the last |
+| Text | default 14px (forms) · `list--sm` 12px (dashboard) · 14px on mobile |
+| Gap between parts | `--space-16` (12px on mobile) |
+| Number (`__lead`) | 500 · min-width 32px |
+| Date (`__meta`) | `--text-muted` · **hidden on mobile** |
+| Value | right-aligned · `--strong` 500 · `--accent` section colour + 500 · `--muted` `--text-muted` |
+| Colour | `list--primary` (blue) · `list--attention` (orange) |
+| Bar | height `--row-bar-h` 12px · track `--canvas` · fill section colour · 2px radius · label width 136px |
+| Result | label Sans 16 · amount Sans 24 / 500 · padding 8px, sides `--card-pad-x` · min height `--result-min-h` 56px |
+| Subtotal (`result--sm`) | label Sans 12 · amount Sans 16 |
+| Annual footer (`result--footer`) | Mono 12 / 700 caps in the section colour · no background |
+
+## Mobile
+
+Text goes up to 14px, the date is hidden, and the gap shrinks to 12px.
+
+<Canvas of={ListStories.Mobile} sourceState="none" />
+
+## Markup
+
+<Source dark code={`<!-- Record rows (dashboard) -->
+<ul class="list list--sm list--compact">
+  <li class="row">
+    <span class="row__lead">411</span>
+    <span class="row__title">University</span>
+    <span class="row__meta">30/09/2026</span>
+    <span class="row__value row__value--strong">4.826,00 €</span>
+    <span class="row__trail"><button class="status-btn" aria-label="Pendiente — pulsa para cambiar">…</button></span>
+  </li>
+</ul>
+
+<!-- Label → value (tax form) -->
+<dl class="list list--attention">
+  <div class="row row--kv">
+    <dt class="row__label"><span class="chip chip--code">c.03</span>IVA repercutido 21%</dt>
+    <dd class="row__value row__value--accent">2.020,71 €</dd>
+  </div>
+</dl>
+
+<!-- Bar row -->
+<dl class="list list--sm list--bars list--attention">
+  <div class="row row--bar">
+    <dt class="row__label">Seguridad Social</dt>
+    <dd class="row__bar-cell">
+      <span class="row__bar" aria-hidden="true"><span style="width:52%"></span></span>
+      <span class="row__value">52%</span>
+    </dd>
+  </div>
+</dl>
+
+<!-- Result -->
+<div class="result result--pay" role="status">
+  <p class="result__label">A ingresar este trimestre</p>
+  <p class="result__value">1.778,23 €</p>
+</div>
+
+<!-- Annual footer -->
+<div class="result result--footer result--attention">
+  <p class="result__label">Resultado anual → Mod. 390</p>
+  <p class="result__value">1.930,03 €</p>
+</div>`} />
+
+## Accessibility
+
+- Record lists are `<ul>` / `<li>`, so screen readers say "list, 6 items".
+- Label → value lists are `<dl>` with `<dt>` / `<dd>`, so each value is read together with its label.
+- In bar rows the bar is decorative (`aria-hidden`); the percentage is what gets read.
+- The status dot inside a row is a 24×24 `<button>` with an `aria-label` (see Selectors).
+- The result has `role="status"`: when the amount changes, screen readers announce the new label and amount without moving the focus. Its orange text is `--attention` on the tint (5.0:1).
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the rows shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens the rows use**, the base styles (focus ring), the icon class, the rows and the result, plus Selectors (status dot and code chip).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('List row', listCss + '\n' + resultCss, { also: [['Selectors', alsoCss0]] })} />
+
+</details>

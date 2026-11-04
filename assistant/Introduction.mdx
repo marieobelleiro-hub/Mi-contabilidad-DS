@@ -1,0 +1,48 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './introduction.stories.js';
+
+<Meta of={Stories} />
+
+# Chatbot
+
+<span className="review-chip">Under review</span>
+
+*In the app: **Asistente inteligente**.*
+
+The **chat assistant** of Mi Contabilidad: you ask in your own words (*"¿Cuánto IVA pago este trimestre?"*) and it answers with your figures, suggests the next step, and can add an invoice or an expense for you. It opens with its floating button (bottom left on desktop, in the dock on mobile).
+
+This is a **sub-system** of the Mi Contabilidad design system: a small design system of its own, with its own look, built on top of the main one.
+
+<Canvas of={Stories.Overview} sourceState="none" />
+
+## What it shares with the main system
+
+| Shared (documented in the main system) | Own (documented here) |
+|---|---|
+| Fonts, type scale, spacing, radius, icons, the yellow focus ring | **Colours**: panel background, header, message bubbles, chips |
+| **Floating button** that opens it (Button page) | **Panel**: header, body, modes (floating, full screen, mobile sheet) |
+| **Switch / toggle** (Esp / Eng), **Ghost** and **Big** buttons, **Checkbox & radio**, **Input** | **Messages**: your message, the reply, note, meta, "Pensando…" |
+| | **Suggestion chips**, **Composer** (text field + send), **Question & form cards** |
+
+## Pages
+
+- **Foundations:** Colors · Typography · Tokens: only what differs from the main system.
+- **Components:** Panel · Messages · Suggestion chips · Composer · Question & form cards.
+
+## How to use it in code
+
+Load the main design system first, then the assistant's file:
+
+```html
+<link rel="stylesheet" href="dist/mi-contabilidad-ds.css">
+<link rel="stylesheet" href="dist/mi-contabilidad-ds-assistant.css">
+```
+
+Its tokens all start with `--ai-` and are exported in `dist/tokens-assistant.json` (W3C Design Tokens format). References to the main tokens stay references (`{color.action.primary}`), so a change in the main system reaches the assistant too.
+
+## Behaviour (same as Acceso fácil)
+
+- It's a **non-modal** dialog (`role="dialog" aria-modal="false"`): the page behind stays usable.
+- **Esc** closes it and the focus returns to its floating button, which shows the **open** state (orange ring) while the panel is open.
+- **Desktop:** it floats above the page; drag it by the header, resize it from the corner, or open it **full screen**. **Mobile:** it opens as a **bottom sheet** (80% of the screen) or full screen.
+- It has **its own language** (Esp / Eng switch in the header), independent from the rest of the app.

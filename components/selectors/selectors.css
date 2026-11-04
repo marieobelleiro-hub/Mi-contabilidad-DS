@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Selectors  ·  small controls that show or change a state
+   Interactive:  .check (checkbox · radio, --sm 16px in tables / 20px in forms)
+                 .status-btn (status dot you can click) · .switch (on / off toggle)
+   Static:       .chip (--brand · --code) · .status (dot) · .status-label (dot + text)
+   States shown in the docs with .is-hover / .is-focus; in use they come from the pointer and keyboard.
+   ========================================================================== */
+
+/* ── Checkbox & radio ── */
+.check{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--space-8);
+  min-height:var(--btn-h-sm);
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  color:var(--text);
+  cursor:pointer;
+}
+.check input{width:var(--check-size);height:var(--check-size);margin:0;flex-shrink:0;accent-color:var(--field-accent, var(--primary));cursor:pointer}
+.check:has(input:disabled){color:var(--disabled);cursor:not-allowed}
+.check-group{display:flex;flex-direction:column;gap:var(--space-8);margin:0;padding:0;border:none}
+.check-group legend{margin-bottom:var(--space-8);padding:0;font-family:var(--font-sans);font-size:var(--text-14)}
+
+/* ── Switch / toggle ──
+   The words sit OUTSIDE the button, so the button's name (aria-label) never has to match visible text
+   (WCAG 2.5.3 label in name). Clicking a word sets that side: .switch__off → off, .switch__on → on (a few lines of JS).
+
+   <div class="switch">
+     <span class="switch__off" aria-hidden="true">Esp</span>
+     <button type="button" class="switch__control" role="switch" aria-checked="false" aria-label="English">
+       <span class="switch__track"><span class="switch__thumb"></span></span>
+     </button>
+     <span class="switch__on" aria-hidden="true">Eng</span>
+   </div>
+   Disabled: `disabled` on the button + aria-disabled="true" on .switch (the words are part of an inactive control).
+*/
+.switch{
+  --switch-accent:var(--primary);
+  display:inline-flex;
+  align-items:center;
+  gap:var(--space-12);
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  color:var(--text);
+}
+.switch__off,.switch__on{font-weight:var(--weight-regular);cursor:pointer;user-select:none}
+.switch__control{
+  display:block;
+  flex-shrink:0;
+  padding:0;
+  border:none;
+  border-radius:var(--radius-pill);
+  background:none;
+  cursor:pointer;
+}
+.switch__track{
+  position:relative;
+  display:block;
+  width:var(--switch-w);
+  height:var(--switch-h);
+  border-radius:var(--radius-pill);
+  background:var(--text-muted);
+  transition:background-color var(--motion-fast);
+}
+.switch__thumb{
+  position:absolute;
+  top:var(--space-2);
+  left:var(--space-2);
+  width:calc(var(--switch-h) - var(--space-4));
+  height:calc(var(--switch-h) - var(--space-4));
+  border-radius:var(--radius-round);
+  background:var(--surface);
+  box-shadow:var(--shadow-sm);
+  transition:transform var(--motion-fast);
+}
+.switch__control[aria-checked="true"] .switch__track{background:var(--switch-accent)}
+.switch__control[aria-checked="true"] .switch__thumb{transform:translateX(calc(var(--switch-w) - var(--switch-h)))}
+.switch:has(.switch__control[aria-checked="false"]) .switch__off,
+.switch:has(.switch__control[aria-checked="true"]) .switch__on{font-weight:var(--weight-bold)}
+@media (prefers-reduced-motion:reduce){.switch__track,.switch__thumb{transition:none}}
+.check--sm input{width:var(--check-size-sm);height:var(--check-size-sm)}   /* table rows */
+.check--sm{font-size:var(--text-12)}
+@media (max-width:1023px){.check:not(.check--sm){font-size:var(--text-16)}}   /* mobile: 16px, as in forms */
+.check.is-focus input{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+.switch.is-focus .switch__control,.status-btn.is-focus{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+.switch:has(.switch__control:disabled){color:var(--disabled)}
+.switch:has(.switch__control:disabled) :is(.switch__off,.switch__on,.switch__control){cursor:not-allowed}
+.switch__control:disabled .switch__track{background:var(--disabled)}
+
+/* ── Choice: a radio option as a card (Guardar copia .html) ──
+   <label class="choice"><input type="radio" name="v" checked>
+     <span class="choice__text"><b class="choice__title">Versión actual (con datos)</b><span class="choice__desc">Guarda la contabilidad registrada actual.</span></span></label>
+*/
+.choice{display:flex;align-items:flex-start;gap:var(--space-12);padding:var(--space-12) var(--space-16);border:var(--border-thin) solid var(--line-strong);background:var(--surface);cursor:pointer;font-family:var(--font-sans);color:var(--text)}
+.choice input{width:var(--check-size);height:var(--check-size);margin:var(--space-2) 0 0;flex-shrink:0;accent-color:var(--field-accent, var(--primary));cursor:pointer}
+.choice:has(input:checked){border-color:var(--field-accent, var(--primary));box-shadow:inset 0 0 0 var(--border-thin) var(--field-accent, var(--primary));background:var(--field-tint, var(--primary-tint))}
+.choice__text{display:flex;flex-direction:column;gap:var(--space-4)}
+.choice__title{font-size:var(--text-16);font-weight:var(--weight-medium)}
+.choice__desc{font-size:var(--text-14);color:var(--text-muted)}
+.choice-group{display:flex;flex-direction:column;gap:var(--space-8);margin:0;padding:0;border:none}
+
+/* ── Chip (static) ── */
+.chip{
+  display:inline-flex;
+  align-items:center;
+  flex-shrink:0;
+  white-space:nowrap;
+  line-height:var(--leading-tight);
+  font-family:var(--font-mono);
+}
+.chip--brand{
+  height:var(--chip-h);
+  padding-inline:var(--space-8);
+  background:var(--surface);
+  box-shadow:inset 0 0 0 var(--border-thick) var(--brand);   /* inset: the outline never changes the size */
+  color:var(--text);
+  font-size:var(--text-12);
+  font-weight:var(--weight-bold);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+}
+.chip--code{
+  height:var(--chip-h-sm);
+  padding-inline:var(--space-4);
+  border-radius:var(--radius-sm);
+  background:var(--fill);
+  color:var(--text-muted);
+  font-size:var(--text-10);
+  font-weight:var(--weight-regular);
+}
+
+/* ==========================================================================
+   Status dot  ·  .status
+   Shows whether an invoice is paid. Colour is never the only cue:
+   always pair it with a visible label or an aria-label / title.
+   States: --paid (green) · --pending (orange) · --none (grey)
+   Every dot has a 1px ring, so the light green dot reaches 3:1 contrast
+
+   <span class="status status--paid" role="img" aria-label="Cobrada"></span>
+   <span class="status-label"><span class="status status--pending" aria-hidden="true"></span>Pendiente</span>
+   <button class="status-btn" aria-label="Cobrada — pulsa para marcar pendiente"><span class="status status--paid"></span></button>
+
+   ========================================================================== */
+.status{
+  display:inline-block;
+  flex-shrink:0;
+  width:var(--dot-size);
+  height:var(--dot-size);
+  border-radius:var(--radius-round);
+  background:var(--disabled);
+  box-shadow:0 0 0 var(--border-thin) var(--text-muted);   /* ring: every dot stays visible (3:1) whatever its colour */
+}
+.status--paid{background:var(--brand)}
+.status--pending{background:var(--attention)}
+.status--none{background:var(--disabled)}
+
+/* Dot + text (legends, mobile rows) */
+.status-label{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--space-8);
+  font-family:var(--font-sans);
+  font-size:var(--text-12);
+  color:var(--text-muted);
+}
+
+/* Clickable dot: 24×24 target around an 8px dot */
+.status-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:var(--btn-h-sm);
+  height:var(--btn-h-sm);
+  padding:0;
+  border:none;
+  border-radius:var(--radius-round);
+  background:none;
+  cursor:pointer;
+}
+.status-btn:is(:hover,.is-hover){background:var(--fill)}
+.status-btn:is(:disabled,[aria-disabled="true"]){cursor:default;background:none}
+.status-btn:is(:disabled,[aria-disabled="true"]) .status{opacity:var(--disabled-opacity)}

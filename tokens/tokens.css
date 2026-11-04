@@ -1,0 +1,255 @@
+/* ==========================================================================
+   Mi Contabilidad — Design tokens
+   Single source of truth. The app and Storybook both import this file.
+   Never write raw values in components: always reference a token.
+   ========================================================================== */
+:root{
+  /* ══ COLOUR ══════════════════════════════════════════════════════════
+     The palette holds the raw values, grouped by role. Components use the
+     role tokens below it, never the palette directly (except white / black
+     for text on a coloured background).
+     ════════════════════════════════════════════════════════════════════ */
+
+  /* ── Palette · Green · Brand ── */
+  --green:#84FF00;                /* brand green · a fill, never text or icons on white (1.3:1) */
+  --green-tint:#F0FFE0;           /* soft green background */
+
+  /* ── Palette · Blue · Primary ── */
+  --blue-dark:#0043CE;       /* 7.8:1 on white */
+  --blue:#0F62FE;            /* 5.0:1 on white */
+  --blue-light:#78A9FF;      /* on dark backgrounds only — 8.9:1 on black */
+  --blue-tint:#EEF4FF;            /* soft blue background */
+
+  /* ── Palette · Orange · Attention ── */
+  --orange-dark:#8F3505;     /* 7.8:1 on white · pressed state */
+  --orange:#B64407;          /* 5.5:1 on white · 5.0:1 on the orange tint and on --canvas: text everywhere */
+  --orange-light:#F5A06A;    /* on dark backgrounds only — 10.1:1 on black */
+  --orange-tint:#FDF3EC;          /* soft orange background */
+  --orange-line:#F3D2BE;     /* lines on --orange-tint */
+
+  /* ── Palette · Red · Error ── */
+  --red-dark:#A2191F;             /* 7.8:1 on white · error text on the red tint */
+  --red:#DA1E28;                  /* 5.0:1 on white */
+  --red-tint:#FFF1F1;             /* soft red background */
+
+  /* ── Palette · Yellow · Focus ── */
+  --yellow:#FFD600;          /* keyboard navigation only */
+
+  /* ── Palette · Neutrals ── */
+  --white:#fff;
+  --gray-50:#F4F4F4;              /* page background */
+  --gray-100:#E9E9E9;             /* fills and dividers */
+  --gray-150:#DEDEDE;             /* hover on a fill */
+  --gray-200:#D0D0D0;             /* selected neutral, disabled */
+  --gray-250:#C6C6C6;             /* form-field borders */
+  --gray-600:#666;           /* 5.7:1 on white */
+  --black:#000;
+
+  /* ── Actions ── */
+  --primary-dark:var(--blue-dark); /* text on --primary-tint · pressed state */
+  --primary:var(--blue);              /* the main action of the screen */
+  --primary-light:var(--blue-light); /* on dark backgrounds only */
+  --primary-tint:var(--blue-tint); /* soft background: hover of icon and floating buttons, info banner */
+  --attention-dark:var(--orange-dark); /* pressed state */
+  --attention:var(--orange);          /* must not be skipped (Guardar) · pending · Gastos / IVA */
+  --attention-light:var(--orange-light); /* on dark backgrounds only */
+  --attention-tint:var(--orange-tint); /* soft background: warning banner, pending */
+  --attention-line:var(--orange-line); /* lines on --attention-tint */
+
+  /* ── Data ── */
+  --income:var(--blue);              /* Ingresos, facturación */
+  --income-light:var(--blue-light);  /* on dark (chart tooltip) */
+  --expense:var(--orange);           /* Gastos, IVA, costs */
+  --expense-light:var(--orange-light); /* on dark (chart tooltip) */
+
+  /* ── Surfaces, text & lines ── */
+  --canvas:var(--gray-50);       /* page background, empty rows, bar tracks */
+  --surface:var(--white);        /* cards, dialogs, inputs */
+  --fill:var(--gray-100);        /* tabs, chips, textareas */
+  --fill-hover:var(--gray-150);  /* hover on --fill */
+  --fill-selected:var(--gray-200); /* selected neutral tab (period selector) */
+  --disabled:var(--gray-200);    /* disabled only — never readable text */
+  --line-strong:var(--gray-250); /* form-field borders */
+  --line:var(--gray-100);        /* dividers between rows */
+  --text:var(--black);            /* all main text */
+  --text-muted:var(--gray-600);  /* secondary text: dates, legends, captions */
+
+  /* ── Brand & states ── */
+  --brand:var(--green);          /* identity: active year, page title band, brand chip */
+  --brand-text:var(--black);     /* text on --brand */
+  --positive-tint:var(--green-tint);  /* result in your favour (a compensar) */
+  --error-dark:var(--red-dark);  /* error text on --error-tint */
+  --error:var(--red);             /* error icons and borders */
+  --error-tint:var(--red-tint);   /* soft background: error banner, hover of danger icon buttons */
+  --focus:var(--yellow);         /* focus ring */
+
+  /* ── Typography · family ── */
+  --font-sans:'IBM Plex Sans',-apple-system,sans-serif; /* IBM Plex Sans · text, amounts, titles */
+  --font-mono:'IBM Plex Mono','Courier New',monospace; /* IBM Plex Mono · labels, tabs, ghost buttons, captions */
+
+  /* ── Typography · size ── */
+  --text-24:24px;         /* Display */
+  --text-16:16px;         /* Title */
+  --text-14:14px;         /* Body */
+  --text-12:12px;         /* Small · Label */
+  --text-10:10px;         /* Caption */
+
+  /* ── Typography · weight ── */
+  --weight-light:300;     /* sans · big dates and years only */
+  --weight-regular:400;           /* default for both families */
+  --weight-medium:500;    /* sans · amounts, totals, emphasis */
+  --weight-bold:700;      /* mono · brand chip, selected tab, totals */
+
+  /* ── Typography · line height & spacing ── */
+  --leading-tight:1.2;    /* big numbers, titles */
+  --leading-normal:1.45;  /* body */
+  --leading-relaxed:1.6;  /* tooltips, dialog text */
+  --ls-caps:0.088em;      /* letter spacing for uppercase */
+
+  /* ── Spacing · even 4px scale with a 2px half-step ── */
+  --space-2:2px;                  /* gap between tabs, switch thumb inset */
+  --space-4:4px;                  /* tight gaps: dot and text, chip padding */
+  --space-8:8px;                  /* ghost button padding, icon to text, table cells */
+  --space-12:12px;                /* input padding, list rows */
+  --space-16:16px;                /* gap between cards */
+  --space-20:20px;                /* card padding (top/bottom), vertical nav gap */
+  --space-24:24px;                /* card padding (sides), big button padding */
+  --space-32:32px;                /* dialog padding (top/bottom) */
+  --space-40:40px;                /* dialog padding (sides) */
+  --space-48:48px;                /* dialog margin to the screen edge */
+
+  /* ── Radius ── */
+  --radius-none:0;           /* inputs, buttons, tabs, dialogs */
+  --radius-sm:2px;                /* chips, bars, legend swatches */
+  --radius-md:8px;                /* cards */
+  --radius-pill:999px;            /* the switch */
+  --radius-round:50%;             /* circles: floating buttons, status dots, switch thumb */
+
+  /* ── Icon ── */
+  --icon-sm:16px;                 /* default: text, buttons, rows */
+  --icon-md:24px;                 /* 40px icon buttons, headers */
+  --icon-grid:16px;               /* every icon is drawn on a 16 × 16 grid, 1px lines */
+
+  /* ── Elevation ── */
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.25); /* small raised elements: floating buttons, switch thumb */
+  --shadow-md:0 2px 6px rgba(0,0,0,0.25); /* menus, tooltips, hovered cards */
+
+  /* ── Border ── */
+  --border-thin:1px;         /* lines, form fields */
+  --border-thick:2px;        /* selected, outline, focus ring */
+  --border-accent:3px;       /* left bar on banners and tooltips */
+  --focus-offset:2px;        /* gap between an element and its focus ring */
+
+  /* ── Layer (z-index) — what sits on top of what ── */
+  --layer-raised:1;          /* a focused tab above its neighbours */
+  --layer-tooltip:50;             /* tooltips and open menus */
+  --layer-toast:990;              /* toasts, above everything but dialogs */
+  --layer-dialog:1000;       /* overlays that aren't a native <dialog> */
+
+  /* ── Motion ── */
+  --motion-fast:.1s;         /* hover, focus, small state changes */
+  --motion-slow:.2s;         /* toast, switch, bars (off when the user prefers reduced motion) */
+
+  /* ── Button ── */
+  --btn-h-lg:48px;        /* solid buttons */
+  --btn-h-md:40px;        /* icon button md */
+  --btn-h-sm:24px;        /* ghost, icon button sm */
+  --btn-pad-lg:var(--space-24);   /* big button, sides */
+  --btn-pad-sm:var(--space-8);    /* ghost button, sides */
+  --btn-min-w:160px;      /* big button, desktop */
+  --btn-max-w:296px;      /* big button, desktop — longer labels are cut with … */
+  --btn-touch:44px;       /* touch area of icon buttons on mobile */
+  --fab-size:40px;        /* floating button */
+  --fab-ring:3px;         /* ring of the outline floating button and of the open state */
+  --fab-dock-bg:rgba(255,255,255,0.5);  /* mobile dock behind the floating buttons */
+  --btn-hover:brightness(1.12);   /* hover on solid buttons: a bit lighter */
+
+  /* ── Tab ── */
+  --tab-h:24px;           /* min target 24×24 (WCAG 2.2 AA) */
+  --tab-w:160px;          /* fixed-width period / view tabs */
+  --menu-gap:var(--space-4);  /* space between a selector and its menu */
+  --year-bar-h:12px;      /* bar under each year */
+
+  /* ── Chip & status ── */
+  --chip-h:24px;          /* brand chip (2px outline inside) */
+  --chip-h-sm:16px;       /* code chip */
+  --dot-size:8px;         /* status dot */
+
+  /* ── Card ── */
+  --card-pad-y:var(--space-20);   /* card padding, top/bottom */
+  --card-pad-x:var(--space-24);   /* 20px on mobile */
+  --card-radius:var(--radius-md); /* card corners */
+  --card-gap:var(--space-16);     /* 12px on mobile */
+
+  /* ── List row ── */
+  --row-pad-regular:var(--space-12); /* list row, top/bottom */
+  --row-pad-compact:var(--space-8); /* compact list row, top/bottom */
+  --row-min-h:24px;               /* room for a 24px status / icon button */
+  --row-bar-h:12px;               /* distribution bar */
+  --row-bar-label-w:136px;        /* label column of a bar row */
+  --row-lead-w:32px;              /* invoice number column */
+  --row-bar-value-w:40px;         /* percentage next to a bar */
+
+  /* ── Data table ── */
+  --table-cell-pad:var(--space-8); /* table cell, sides */
+  --table-group-gap:var(--space-32);  /* space before IVA / IRPF column groups */
+  --table-input-h:24px;           /* inputs inside table cells */
+  --col-xs:24px;                  /* actions, checkbox, status */
+  --col-sm:56px;                  /* number, % */
+  --col-md:96px;                  /* date, amounts */
+  --col-lg:160px;                 /* client, provider */
+  --table-min-w:760px;            /* mobile: scroll sideways below this */
+  --table-min-w-summary:600px;    /* summary tables, mobile: scroll sideways below this */
+
+  /* ── Input ── */
+  --input-h:40px;                 /* text field height */
+  --input-h-sm:24px;              /* inline numbers in forms */
+  --input-pad-x:var(--space-12);  /* text field, sides */
+  --input-w-sm:160px;             /* inline number width */
+  --input-inline-max-w:520px;     /* field with the label on the left (Clientes) */
+  --textarea-min-h:88px;          /* textarea, about 4 lines */
+  --check-size:20px;              /* checkbox / radio in forms */
+  --check-size-sm:16px;           /* checkbox in table rows */
+  --disabled-opacity:0.4;         /* a disabled status dot */
+  --switch-w:48px;                /* switch track width */
+  --switch-h:24px;                /* switch track height */
+
+  /* ── Result bar ── */
+  --result-min-h:56px;            /* result bar height */
+
+  /* ── Feedback ── */
+  --tooltip-w:480px;              /* tooltip max width */
+  --overlay-dark:rgba(0,0,0,0.88);/* chart tooltip */
+  --banner-hover:rgba(0,0,0,0.06);       /* hover on a button inside a banner */
+  --toast-hover:rgba(255,255,255,0.12);  /* hover on the toast action (dark background) */
+  --toast-w:400px;                /* toast--start width on desktop (longer messages wrap) */
+  --toast-max-w:640px;            /* toast max width */
+  --toast-start:var(--space-16);  /* left edge of toast--start (desktop: after the sidebar) */
+
+  /* ── Dialog ── */
+  --dialog-w-md:640px;            /* welcome, forms */
+  --dialog-w-sm:400px;            /* alerts */
+  --overlay:rgba(0,0,0,0.45);     /* backdrop behind dialogs */
+
+  /* ── Chart ── */
+  --chart-1:var(--income);        /* Ingresos · this year */
+  --chart-2:var(--expense);       /* Gastos */
+  --chart-compare:var(--gray-600); /* previous year — 5.7:1 on white */
+  --chart-grid:rgba(0,0,0,0.06);  /* chart grid lines */
+  --chart-h:192px;                /* chart height */
+  --chart-line-w:2px;             /* chart line thickness */
+  --chart-area-alpha:0.1;         /* opacity of the area under a line */
+  --legend-swatch:12px;           /* bar swatch in the legend */
+  --legend-line-w:16px;           /* line swatch in the legend */
+
+  /* ── Layout ── */
+  --bp-desktop:1024px;            /* desktop layout from this width · mobile below (media queries can't read tokens: write 1023px / 1024px) */
+  --page-w:1232px;                /* desktop design width: sidebar + content */
+  --content-max-w:1108px;         /* desktop content column */
+  --mobile-max-w:768px;           /* mobile column, centred on tablets */
+  --mobile-w:390px;               /* mobile design width */
+  --sidebar-w:124px;              /* desktop navigation width */
+  --topbar-h:64px;                /* top bar height */
+  --section-accent:var(--brand);           /* colour of the current section (the app sets it per section) */
+  --section-accent-text:var(--brand-text); /* text on --section-accent */
+}

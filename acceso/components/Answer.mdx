@@ -1,0 +1,42 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './answer.stories.js';
+
+<Meta of={Stories} />
+
+# Answer
+
+<span className="review-chip">Under review</span>
+
+What appears under the last step: an orange **Respuesta** label followed by a dashed line, then the content: your **figures**, a **definition**, a **form**, or the **confirmation** that something was saved.
+
+<Canvas of={Stories.Figures} sourceState="none" />
+
+## Parts
+
+| Part | Class | Look |
+|---|---|---|
+| Label | `af-answer__label` (H3) | "Respuesta" · Mono 12 caps, white on `--attention` · 4 / 12 padding · **the focus lands here** when the answer appears |
+| Line | `af-answer__rule` | 1px dashed `--af-rule` up to the right edge |
+| Heading | `h4` | Sans 16 / 500 |
+| Text and list | `p` · `ul` | Sans 16 · **label in 500**, then the amount |
+| Note | `af-note` | 3px `--af-note-line` bar: a warning about the answer |
+| Confirmation | `af-status` | 3px `--af-status-line` green bar · `role="status"`: something was saved |
+| Secondary text | `af-muted` | `--af-text-muted` |
+
+## With a note
+
+<Canvas of={Stories.Note} sourceState="none" />
+
+## Definition
+
+<Canvas of={Stories.Definition} sourceState="none" />
+
+## Confirmation
+
+<Canvas of={Stories.Saved} sourceState="none" />
+
+## Accessibility
+
+- When the answer appears, the focus moves to **Respuesta** (`tabindex="-1"`), so screen readers start reading it straight away, and keyboard users continue from there.
+- The confirmation has `role="status"`: it's announced even if the focus is elsewhere.
+- The bars are decorative: the text says what kind of message it is.

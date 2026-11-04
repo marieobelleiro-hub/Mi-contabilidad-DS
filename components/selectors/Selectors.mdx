@@ -1,0 +1,125 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SelectorStories from './selectors.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../card/card.css?raw';
+import alsoCss1 from '../input/input.css?raw';
+import alsoCss2 from '../list/list.css?raw';
+import ownCss from './selectors.css?raw';
+
+<Meta of={SelectorStories} />
+
+# Selectors
+
+Small controls that **show or change a state**:
+
+- **Interactive:** checkbox and radio, the clickable status dot, the switch (toggle).
+- **Static:** the status dot on its own, and the chips (labels you can't click).
+
+## Checkbox & radio
+
+<Canvas of={SelectorStories.Checkbox} />
+<Controls of={SelectorStories.Checkbox} />
+
+## Status dot
+
+Shows whether an invoice is **cobrada** (paid) or **pendiente** (pending). Clickable in the invoice lists, static in legends.
+
+<Canvas of={SelectorStories.Status} />
+<Controls of={SelectorStories.Status} />
+
+<Canvas of={SelectorStories.StatusOverview} sourceState="none" />
+
+## Switch / toggle
+
+Turns one option on or off. The two labels say what each side means: in the app it switches the language (Esp / Eng), but it works for any pair of options.
+
+<Canvas of={SelectorStories.Switch} />
+<Controls of={SelectorStories.Switch} />
+
+## Choice (radio card)
+
+A radio option shown as a card, when each option needs a title and a short explanation. Real case: **Guardar copia .html** (Local app), *Versión actual (con datos)* / *Versión vacía (sin datos)*. The selected card gets the accent border and tint.
+
+<a href="./?path=/story/app-components-dialog--save-copy" target="_top">Dialog view →</a>
+
+```html
+<fieldset class="choice-group"><legend class="sr-only">Versión</legend>
+  <label class="choice"><input type="radio" name="v" checked>
+    <span class="choice__text"><b class="choice__title">Versión actual (con datos)</b>
+    <span class="choice__desc">Guarda la contabilidad registrada actual.</span></span></label>
+  …
+</fieldset>
+```
+
+## Chip (static)
+
+A label you can't click: the app name in the header, and the tax-form box codes (casillas).
+
+<Canvas of={SelectorStories.Chip} />
+<Controls of={SelectorStories.Chip} />
+
+## Properties
+
+| Selector | Property | Kind | Values | Default |
+|---|---|---|---|---|
+| **Checkbox & radio** | Colour | Variant | Blue · Orange | Blue |
+| | Kind | Variant | Checkbox · Radio | Checkbox |
+| | Size | Variant | md 20 (forms) · sm 16 (table rows) | md |
+| | Checked | Boolean | selected · deselected | selected |
+| | State | Variant | Default · Focus · Disabled | Default |
+| | Label | Boolean | Visible · Hidden (kept for screen readers) | Visible |
+| | Label text | Text | | "Incluir en el 303" |
+| **Status dot** | Status | Variant | Cobrada (green) · Pendiente (orange) | Cobrada |
+| | Clickable | Boolean | 24px button around the dot | on |
+| | Label | Boolean | Dot + text (static only) | off |
+| | State | Variant | Default · Hover · Focus (clickable only) | Default |
+| **Switch / toggle** | State | Variant | Default · Focus · Disabled | Default |
+| | On | Boolean | | off |
+| | Labels | Boolean | Visible · Hidden | Visible |
+| | Off / On text | Text | | "Esp" / "Eng" |
+| | Accessible name | Text | screen readers | "English" |
+| **Chip** | Type | Variant | Brand (green outline) · Code (grey) | Brand |
+| | Text | Text | | "Contabilidad" |
+
+## States
+
+<Canvas of={SelectorStories.States} sourceState="none" />
+
+Checkbox, radio and switch: **selected / deselected** (on / off), **focus** and **disabled**; no hover change, the pointer over them is enough. The clickable status dot: **Cobrada / Pendiente**, **hover** (grey circle) and **focus**. All use the yellow focus ring.
+
+## Spec
+
+| | Value |
+|---|---|
+| Checkbox / radio | native control, `--check-size` 20px (forms) · `--check-size-sm` 16px (table rows) · colour from `field--primary` / `field--attention` (`accent-color`) · label Sans 14 (12 for sm), 8px gap |
+| Status dot | `--dot-size` 8px round · Cobrada `--brand` · Pendiente `--attention` · 1px `--text-muted` ring on every dot · clickable: 24px round button, `--fill` on hover |
+| Switch | track `--switch-w` 48 × `--switch-h` 24, pill · thumb 20px white with `--shadow-sm` · off track `--text-muted`, on track `--primary` · labels Mono 12 caps, the active one bold, **outside the button**, 12px gap · clicking a label sets that side |
+| Chip · brand | `--chip-h` 24px · `--surface` with a 2px `--brand` outline · Mono 12 bold caps · 8px padding |
+| Chip · code | `--chip-h-sm` 16px · `--fill` + `--text-muted` · Mono 10 · `--radius-sm` · 4px padding |
+
+## In the app
+
+<Canvas of={SelectorStories.InContext} sourceState="none" />
+
+## Accessibility
+
+- **Checkbox & radio** are native `<input>`s inside a `<label>`, so clicking the text works too. A hidden label stays as `aria-label`.
+- **Status dot.** A dot that carries meaning needs 3:1 contrast with its background (WCAG 1.4.11). Orange passes (5.5:1) but green on white is only 1.3:1, so **every dot has a 1px `--text-muted` ring** (5.7:1): clickable, static and in legends: the dot is always visible, whatever its colour. Colour still tells paid from pending, so the words are always there too: the `aria-label` ("Cobrada. Pulsa para cambiar") and the legend above the list.
+- **Switch / toggle** is a `<button role="switch" aria-checked>` (`switch__control`), read as "English, switch, off". The accessible name says what turning it on does.
+- The two labels (Esp / Eng) sit **outside the button**, hidden from screen readers. If they were inside, the visible text ("Esp Eng") and the name ("English") wouldn't match, and voice-control users saying "click Eng" couldn't reach it (WCAG 2.5.3, *label in name*). Clicking a label still works: it sets that side.
+- Hiding the visible labels keeps the accessible name.
+- **Chips** are plain text: not focusable, not clickable. If it needs to be clicked, use a Tab or a Button.
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Selectors uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Card, Input, List row).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Selectors', ownCss, { also: [['Card', alsoCss0], ['Input', alsoCss1], ['List row', alsoCss2]] })} />
+
+</details>

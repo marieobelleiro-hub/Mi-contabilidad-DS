@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Acceso fácil — tokens
+   Sub-system of the Mi Contabilidad design system. Loaded AFTER tokens/tokens.css:
+   it only adds what the accessible assistant needs (a dark theme). Fonts, type scale,
+   spacing, icons and the focus ring come from the main system.
+   ========================================================================== */
+:root{
+  /* ── Acceso · Panel ── */
+  --af-canvas:#525252;                   /* dark grey panel · white text 7.8:1 */
+  --af-panel-line:var(--black);          /* border around the floating panel */
+  --af-panel-shadow:0 8px 32px rgba(0,0,0,0.35);
+  --af-panel-gap:var(--space-48);        /* distance to the screen edges when floating */
+  --af-sheet-h:75vh;                     /* mobile bottom sheet height */
+  --af-layer:var(--layer-dialog);
+  --af-text:var(--white);                /* 7.8:1 on --af-canvas */
+  --af-text-muted:var(--gray-150);       /* hints, secondary text · 5.9:1 on --af-canvas */
+  --af-error:#FFB894;                    /* error text and border on the dark panel · 4.7:1 */
+  --af-line:rgba(255,255,255,0.25);      /* line above the footer links */
+
+  /* ── Acceso · Header ── */
+  --af-header-bg:var(--primary);         /* blue bar · white text 5.0:1 */
+  --af-header-h:48px;
+  --af-header-hover:rgba(255,255,255,0.16);
+  --af-switch-track:#002D9C;             /* switch track on the blue header: the white thumb is 11.3:1 */
+
+  /* ── Acceso · Option ── */
+  --af-option-bg:var(--surface);         /* an option you can choose */
+  --af-option-line:var(--white);         /* 2px border */
+  --af-option-hover:var(--fill);
+  --af-option-dim:#A8A8A8;               /* the other options once one is chosen · black text 8.8:1, 3.3:1 against the panel */
+  --af-option-dim-hover:var(--line-strong);
+  --af-option-selected:var(--attention); /* 2px + 1px inner orange border on the chosen option (5.5:1 on white) */
+  --af-option-h:28px;                    /* min height (36px on mobile) */
+
+  /* ── Acceso · Answer ── */
+  --af-rule:rgba(255,255,255,0.8);       /* dashed line after the “Respuesta” label */
+  --af-note-line:var(--attention-light); /* left bar of a note · 3.8:1 on the panel */
+  --af-status-line:var(--brand);         /* left bar of a confirmation (saved) · 6.1:1 on the panel */
+
+  /* ── Acceso · Form ── */
+  --af-field-line:var(--white);          /* 2px border of the fields */
+  --af-field-max-w:360px;
+  --af-form-max-w:640px;
+}

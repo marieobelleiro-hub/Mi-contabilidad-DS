@@ -1,0 +1,22 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as Stories from './typography.stories.js';
+
+<Meta of={Stories} />
+
+# Typography
+
+<span className="review-chip">Under review</span>
+
+The **main type scale**, nothing new. The difference is that **everything you read or type is 16px**, on desktop and on mobile; options and links use the Label style (Mono 12 caps) so they read as buttons.
+
+<Canvas of={Stories.Styles} sourceState="none" />
+
+## Changes from the app
+
+| App today | Design system |
+|---|---|
+| Header title Mono 14 bold | **Mono 12 bold** (Label style: 14 isn't a Mono size) |
+| Fields Mono 14 (16 on mobile) | **Sans 16** everywhere, like the rest of the text |
+| Answers and errors 15px on mobile | **16px** on every screen |
+| Bold text 600 | **500** (Plex Sans only uses 300 · 400 · 500) |
+| Answer line height 1.5 | 1.45 (`--leading-normal`) |

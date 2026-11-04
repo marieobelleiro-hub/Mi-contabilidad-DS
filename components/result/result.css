@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Result bar  ·  .result
+   The line that says what you have to pay. Label on the left, amount on the right.
+   States:   --pay (a ingresar) · --credit (a compensar / a devolver) · --none (sin actividad)
+   Sizes:    default (16 / 24) · --sm (subtotal: 12 / 16)
+   Variant:  --footer (annual total: mono caps, accent, no background)
+   Accent:   --primary / --attention (footer only)
+   Place it inside .card--sectioned (full width) or anywhere on its own.
+
+   <div class="result result--pay" role="status">
+     <p class="result__label">A ingresar este trimestre</p>
+     <p class="result__value">1.859,39 €</p>
+   </div>
+
+   ========================================================================== */
+.result{
+  --result-bg:var(--canvas);
+  --result-label:var(--text-muted);
+  --result-value:var(--text-muted);
+  --result-line:var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:var(--space-4) var(--space-16);
+  min-height:var(--result-min-h);
+  padding:var(--space-8) var(--card-pad-x);
+  border-bottom:var(--border-thin) solid var(--result-line);
+  background:var(--result-bg);
+}
+.result__label{
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--text-16);
+  font-weight:var(--weight-regular);
+  color:var(--result-label);
+}
+.result__value{
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--text-24);
+  font-weight:var(--weight-medium);
+  line-height:var(--leading-tight);
+  font-variant-numeric:tabular-nums;
+  color:var(--result-value);
+}
+
+/* ── States ── */
+.result--pay{
+  --result-bg:var(--attention-tint);
+  --result-label:var(--attention);
+  --result-value:var(--attention);
+  --result-line:var(--attention-line);
+}
+.result--credit{
+  --result-bg:var(--positive-tint);
+  --result-label:var(--text-muted);
+  --result-value:var(--text);
+}
+.result--none{
+  --result-bg:var(--canvas);
+  --result-label:var(--text-muted);
+  --result-value:var(--text-muted);
+}
+
+/* ── Subtotal ── */
+.result--sm{min-height:0;background:var(--surface)}
+.result--sm .result__label{font-size:var(--text-12)}
+.result--sm .result__value{font-size:var(--text-16);font-weight:var(--weight-regular)}
+
+/* ── Annual footer ── */
+.result--footer{
+  --result-accent:var(--primary);
+  min-height:0;
+  padding:var(--space-12) 0 0;        /* the card's own padding closes it */
+  border-bottom:none;
+  background:none;
+}
+.result--footer.result--attention{--result-accent:var(--attention)}
+.result--footer .result__label,
+.result--footer .result__value{
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  font-weight:var(--weight-bold);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  line-height:inherit;
+  color:var(--result-accent);
+}
+
+/* Last block of a sectioned card: no double line */
+.card--sectioned > .result:last-child{border-bottom:none}
+
+@media (max-width:1023px){
+  .result{padding-inline:var(--space-20)}
+  .result--footer{padding-inline:0}
+}

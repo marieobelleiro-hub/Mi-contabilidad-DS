@@ -1,0 +1,135 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="App/Foundations/Typography" />
+
+export const sans = 'var(--font-sans)';
+export const mono = 'var(--font-mono)';
+export const caps = { textTransform: 'uppercase', letterSpacing: 'var(--ls-caps)' };
+export const cell = { padding: '16px 16px 16px 0', borderBottom: '1px solid var(--line)', verticalAlign: 'baseline' };
+export const panel = { background: 'var(--canvas)', padding: '32px', margin: '16px 0 24px' };
+export const SCALE = {
+  sans: [[24, 1.5, 'Display: amounts, dates, years'], [16, 1, 'Title: card titles, primary buttons'], [14, 0.875, 'Body: text, forms, dialogs'], [12, 0.75, 'Small: table cells, list rows, legends']],
+  mono: [[14, 0.875, 'Number fields in forms (same size as the field)'], [12, 0.75, 'Label: navigation, tabs, ghost buttons, headers, number fields in tables'], [10, 0.625, 'Caption: chart axes, code chips']],
+};
+export const WEIGHT = {
+  sans: [['Light', 300, 'light', 'Big dates, years, dialog titles'], ['Regular', 400, 'regular', 'Default'], ['Medium', 500, 'medium', 'Amounts, totals, invoice numbers, emphasis']],
+  mono: [['Regular', 400, 'regular', 'Default'], ['Bold', 700, 'bold', 'Brand chip, selected tab, totals, summary headers']],
+};
+export const fam = { sans: 'IBM Plex Sans', mono: 'IBM Plex Mono' };
+export const head = { fontFamily: mono, fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 'var(--ls-caps)', margin: '0 0 16px' };
+export const grid = { display: 'grid', gridTemplateColumns: '56px 40px 104px minmax(0,1fr)', gap: '0 24px', alignItems: 'baseline', padding: '6px 0' };
+export const meta = { fontFamily: mono, fontSize: 12, color: 'var(--text-muted)' };
+export const ScalePanel = ({ f }) => (
+  <div style={panel}>
+    <p style={head}>{fam[f]}</p>
+    <div style={{ ...grid, paddingBottom: 8 }}><span style={meta}>rem</span><span style={meta}>px</span><span style={meta}>Token</span><span /></div>
+    {SCALE[f].map(([px, rem, use]) => (
+      <div key={px} style={grid}>
+        <span style={meta}>{rem}</span><span style={meta}>{px}</span><span style={{ ...meta, color: 'var(--text)' }}>--text-{px}</span>
+        <span style={{ fontFamily: f === 'sans' ? sans : mono, fontSize: px, lineHeight: 1.2 }}>Plex {px} <span style={{ fontFamily: sans, fontSize: 12, color: 'var(--text-muted)' }}>· {use}</span></span>
+      </div>
+    ))}
+  </div>
+);
+export const WeightPanel = ({ f }) => (
+  <div style={panel}>
+    <p style={head}>{fam[f]}</p>
+    {WEIGHT[f].map(([name, w, tok, use]) => (
+      <div key={tok} style={{ display: 'flex', alignItems: 'baseline', gap: 24, padding: '4px 0', flexWrap: 'wrap' }}>
+        <span style={{ fontFamily: f === 'sans' ? sans : mono, fontSize: 32, fontWeight: w, minWidth: 320 }}>{name} ({w})</span>
+        <span style={{ fontFamily: mono, fontSize: 12 }}>--weight-{tok}</span>
+        <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{use}</span>
+      </div>
+    ))}
+  </div>
+);
+export const Row = ({ name, spec, use, style, children }) => (
+  <tr>
+    <td style={{ ...cell, fontFamily: mono, fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap' }}>{name}</td>
+    <td style={{ ...cell, ...style }}>{children}</td>
+    <td style={{ ...cell, fontFamily: mono, fontSize: 12, whiteSpace: 'nowrap' }}>{spec}</td>
+    <td style={{ ...cell, paddingRight: 0, fontSize: 14, color: 'var(--text-muted)' }}>{use}</td>
+  </tr>
+);
+
+# Typography
+
+Two families: **IBM Plex Sans** for content and **IBM Plex Mono** for labels and navigation. Five sizes: **24 · 16 · 14 · 12 · 10**.
+
+## Typeface: IBM Plex
+
+The app uses **IBM Plex**, an open-source type family (SIL Open Font License) designed by IBM. Its sans and mono share the same proportions, so they sit well together on one line: Sans for what you read, Mono for what you scan (labels, navigation, codes). IBM Plex can be downloaded from the [Plex GitHub repository](https://github.com/IBM/plex) or loaded from Google Fonts.
+
+<div style={panel}>
+  <div style={{ fontFamily: sans, fontSize: 56, fontWeight: 400, lineHeight: 1.25 }}>IBM Plex Sans</div>
+  <div style={{ fontFamily: mono, fontSize: 56, fontWeight: 400, lineHeight: 1.25 }}>IBM Plex Mono</div>
+</div>
+
+| Family | Token | Weights loaded |
+|---|---|---|
+| IBM Plex Sans | `--font-sans` | 300 · 400 · 500 |
+| IBM Plex Mono | `--font-mono` | 400 · 700 |
+
+If the font can't load, the app falls back to the system sans (`-apple-system`) and Courier New.
+
+## Scale
+
+Only the sizes in use for each family. rem values assume the browser default of 16px.
+
+<ScalePanel f="sans" />
+<ScalePanel f="mono" />
+
+## Weights
+
+Only the weights in use for each family.
+
+<WeightPanel f="sans" />
+<WeightPanel f="mono" />
+
+## Styles
+
+Six styles. Each one is a **size + a family**, nothing else.
+
+<table style={{ width: '100%', borderCollapse: 'collapse' }}>
+  <tbody>
+    <Row name="Display" spec="24 · Sans" use="Big numbers: amounts, dates, years" style={{ fontFamily: sans, fontSize: 24, lineHeight: 1.2 }}>12.450,00 €</Row>
+    <Row name="Title" spec="16 · Sans" use="Card and panel titles" style={{ fontFamily: sans, fontSize: 16 }}>Últimas facturas</Row>
+    <Row name="Body" spec="14 · Sans" use="Text, forms, dialogs" style={{ fontFamily: sans, fontSize: 14 }}>Diseñada para autónomos en España.</Row>
+    <Row name="Small" spec="12 · Sans" use="Table cells, list rows, legends" style={{ fontFamily: sans, fontSize: 12 }}>Diseño web — identidad corporativa</Row>
+    <Row name="Label" spec="12 · Mono" use="Navigation, tabs, ghost buttons, column headers, section headings (uppercase) · card subtitles (normal case)" style={{ fontFamily: mono, fontSize: 12, ...caps }}>Facturación</Row>
+    <Row name="Caption" spec="10 · Mono" use="Chart axes, code chips" style={{ fontFamily: mono, fontSize: 10 }}>Ene · Feb · Mar · Abr</Row>
+  </tbody>
+</table>
+
+## Modifiers
+
+Weight, colour and case are **added on top** of any style. They never make a new style: grey text in a table is still **Small**, a blue title is still **Title**.
+
+| Modifier | Values | Example |
+|---|---|---|
+| **Weight** | See **Weights** above | <span style={{ fontFamily: sans, fontSize: 14, fontWeight: 500 }}>4.500,00 €</span> · <span style={{ fontFamily: mono, fontSize: 12, fontWeight: 700, ...caps }}>1T · Ene–Mar</span> |
+| **Colour** | Any text colour token: `--text` · `--text-muted` · `--primary` · `--attention` · `--error-dark` | <span style={{ fontFamily: sans, fontSize: 12, color: 'var(--text-muted)' }}>30/09/2026</span> · <span style={{ fontFamily: sans, fontSize: 16, color: 'var(--primary)' }}>Salario neto</span> |
+| **Uppercase** | `text-transform:uppercase` + `--ls-caps` letter spacing, always together | <span style={{ fontFamily: mono, fontSize: 12, ...caps }}>Ver todas</span> |
+
+## Line height & letter spacing
+
+| Token | Value | Use |
+|---|---|---|
+| `--leading-tight` | 1.2 | Big numbers, titles |
+| `--leading-normal` | 1.45 | Body text |
+| `--leading-relaxed` | 1.6 | Tooltips, dialog text |
+| `--ls-caps` | 0.088em | Uppercase text only |
+
+## Headings
+
+| Level | Element | Style |
+|---|---|---|
+| H1 | `<h1 class="sr-only">` | Hidden — one per section, for screen readers |
+| H2 | `<h2>` | **Title** |
+| H3 | `<h3>` | **Label**, uppercase, in the section colour |
+
+## Rules
+
+- Only the five sizes and the weights above.
+- Uppercase only with `text-transform`, never typed in capitals.
+- **Don't rely on colour alone.** If a colour or bold text means something (paid, error, total), say it in words too, so it's clear to people who can't see the difference.

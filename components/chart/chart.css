@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Chart  ·  .chart  (SVG, drawn by chart.js)
+   Line/area chart (Ingresos · Gastos) and grouped bar chart (this year vs last).
+   Distribution bars are List rows (row--bar), not a chart.
+
+   Parts:    __plot (svg) · __legend · __key (--line / --bar) · __table (data as a table)
+   SVG:      .chart__grid · .chart__tick · .chart__line · .chart__area · .chart__bar
+             .chart__cross · .chart__dot
+   Colours:  --chart-1 (income) · --chart-2 (expense) · --chart-compare (previous year)
+
+   ========================================================================== */
+.chart{position:relative;display:flex;flex-direction:column;gap:var(--space-16);min-width:0}
+.chart__plot{display:block;width:100%;height:var(--chart-h);overflow:visible;outline:none}
+.chart__plot:focus-visible{outline:var(--border-thick) solid var(--focus);outline-offset:var(--space-4)}
+
+/* Axes & grid: recessive */
+.chart__grid{stroke:var(--chart-grid);stroke-width:1;shape-rendering:crispEdges}
+.chart__tick{fill:var(--text-muted);font-family:var(--font-mono);font-size:var(--text-10)}
+
+/* Marks */
+.chart__line{fill:none;stroke-width:var(--chart-line-w);stroke-linejoin:round;stroke-linecap:round}
+.chart__area{stroke:none;opacity:var(--chart-area-alpha)}
+.chart__bar{transition:opacity var(--motion-fast)}
+.chart__plot.is-hovering .chart__bar:not(.is-active){opacity:.55}
+.chart__cross{stroke:var(--text-muted);stroke-width:1;opacity:.4;shape-rendering:crispEdges}
+.chart__dot{stroke:var(--white);stroke-width:2}
+
+/* Legend: mirrors the marks (line key for lines, square for bars) */
+.chart__legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--space-8) var(--space-16);
+  margin:0;
+  padding:var(--space-8) 0 0;
+  border-top:var(--border-thin) solid var(--line);
+  list-style:none;
+  font-family:var(--font-sans);
+  font-size:var(--text-12);
+  color:var(--text-muted);
+}
+.chart__legend li{display:inline-flex;align-items:center;gap:var(--space-8)}
+.chart__key{display:inline-block;flex-shrink:0;border-radius:var(--radius-sm)}
+.chart__key--line{width:var(--legend-line-w);height:var(--border-accent)}
+.chart__key--bar{width:var(--legend-swatch);height:var(--legend-swatch)}
+
+/* Data table (always available, collapsed by default) */
+.chart__table summary{
+  display:inline-flex;
+  align-items:center;
+  height:var(--btn-h-sm);
+  padding-inline:var(--space-8);
+  margin-left:calc(-1 * var(--space-8));
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  color:var(--primary);
+  cursor:pointer;
+}
+.chart__table summary:hover{background:var(--primary);color:var(--white)}
+.chart__table[open] summary{margin-bottom:var(--space-8)}
+
+/* Tooltip uses .tooltip.tooltip--dark from feedback.css */
+.chart .tooltip--dark{top:0;left:0;transition:transform var(--motion-fast)}
+.chart .tooltip--dark .tooltip__key{display:inline-block;width:var(--legend-swatch);height:var(--border-accent);margin-right:var(--space-8);border-radius:var(--radius-sm);vertical-align:middle}
+
+@media (max-width:1023px){.chart__legend{font-size:var(--text-14)}}

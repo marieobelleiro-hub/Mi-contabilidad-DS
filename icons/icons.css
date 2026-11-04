@@ -1,0 +1,15 @@
+/* ==========================================================================
+   Icon  ·  .icon
+   16 × 16 grid · filled 1px lines · currentColor
+   Sizes: --sm 16px (default, inside text, buttons, rows) · --md 24px (40px icon buttons, headers)
+   ========================================================================== */
+.icon{
+  display:inline-block;
+  flex-shrink:0;
+  width:var(--icon-sm);
+  height:var(--icon-sm);
+  fill:currentColor;
+  stroke:none;
+  vertical-align:middle;
+}
+.icon--md{width:var(--icon-md);height:var(--icon-md)}

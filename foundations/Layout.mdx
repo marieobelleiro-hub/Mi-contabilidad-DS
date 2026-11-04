@@ -1,0 +1,75 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as LayoutStories from './layout.stories.js';
+
+<Meta of={LayoutStories} />
+
+# Layout & breakpoints
+
+The app has **two layouts**, desktop and mobile, and **one breakpoint**: **1024px**. Below it, the mobile layout; from it, the desktop layout. There is no separate tablet layout: a tablet gets the mobile layout, centred.
+
+<Canvas of={LayoutStories.Ruler} sourceState="none" />
+
+## Breakpoints
+
+| Layout | Screen width | Structure | Design width |
+|---|---|---|---|
+| **Mobile** | 0 – 1023px | No sidebar · section and period **selectors** on top · one column · floating buttons in a **dock** | **390** |
+| **Desktop** | 1024px and up | **Sidebar** 124px on the left · top bar · content 1108px | **1232** (124 + 1108) |
+
+Inside each layout the content adapts by itself, without another breakpoint:
+
+- **Mobile, 768 – 1023px** (tablets): the column stops at 768px and stays centred.
+- **Desktop, 1024 – 1231px**: the content is narrower than 1108px, so it shrinks; tabs share the width and wide tables scroll sideways.
+- **Desktop, 1232px and up**: the content keeps 1108px and is centred next to the sidebar.
+
+## The two layouts
+
+<Canvas of={LayoutStories.Layouts} sourceState="none" />
+
+## Layout tokens
+
+| Token | Value | What it is |
+|---|---|---|
+| `--bp-desktop` | 1024px | Where the desktop layout starts |
+| `--page-w` | 1232px | Desktop design width |
+| `--content-max-w` | 1108px | Desktop content column |
+| `--sidebar-w` | 124px | Desktop navigation |
+| `--topbar-h` | 64px | Top bar |
+| `--mobile-max-w` | 768px | Mobile column, centred on tablets |
+| `--mobile-w` | 390px | Mobile design width |
+
+They are also on the **Tokens** page and in `dist/tokens.json`.
+
+**Media queries can't read a token.** `@media (max-width: var(--bp-desktop))` doesn't work in CSS, so the breakpoint is written as a number, always the same two:
+
+```css
+@media (max-width:1023px) { /* mobile */ }
+@media (min-width:1024px) { /* desktop */ }
+```
+
+`npm run lint` fails on any other breakpoint, so nobody adds a third one by mistake.
+
+## What changes on mobile
+
+| Component | Desktop | Mobile |
+|---|---|---|
+| **Navigation** | Sidebar with the sections | **Section selector** on top (in the section's colour) |
+| **Period tabs** | Resumen anual · 1T · 2T · 3T · 4T in a row | **Period selector** (grey) that opens a menu |
+| **View toggle** | Fixed-width tabs (160px) | Tabs share the row equally |
+| **Big button** | 160 – 296px | **Full width** |
+| **Icon button** | 24 or 40px | Same look, **44px touch area** (invisible) |
+| **Floating buttons** | Left edge of the page | In a **dock**, bottom right |
+| **Card** | Padding 24px · grids of 2 or 4 | Padding 20px · **one column**, 12px gap |
+| **Text fields & checkboxes** | 14px | **16px** (no zoom on iPhone, easier to read) |
+| **List row** | With the meta column (date) | Meta column hidden |
+| **Data table** | Fits the content | Keeps a minimum width (760 · 600 summary) and **scrolls sideways** |
+| **Dialog** | Centred, 640px (`dialog--md`) | **Full screen**, the buttons stay at the bottom · alerts (`dialog--sm`) stay centred |
+| **Toast** | Bottom, centred · `toast--start`: bottom left, after the sidebar | Bottom, at least 16px from the edges · `toast--start`: 16px from the left |
+| **Chart legend** | 12px | 14px |
+
+## Rules
+
+- **Design at two widths:** desktop at **1232**, mobile at **390**. Check the in-between widths (1024 and 800) in Storybook with the **viewport** button of the toolbar: Mobile · 390, Mobile layout · 800, Desktop · 1024 (min), Desktop · 1232.
+- **One breakpoint only:** `max-width:1023px` / `min-width:1024px`. Never a new one.
+- **Mobile is not a smaller desktop:** the navigation changes (sidebar → selectors), the rest of the components keep their look and only adapt their size.
+- **Touch:** every target is at least 24 × 24px; on mobile, icon buttons get an invisible 44px touch area and text you type is 16px.

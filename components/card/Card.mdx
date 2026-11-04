@@ -1,0 +1,216 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as CardStories from './card.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../button/button.css?raw';
+import alsoCss1 from '../selectors/selectors.css?raw';
+import alsoCss2 from '../list/list.css?raw';
+import alsoCss3 from '../result/result.css?raw';
+import alsoCss4 from '../input/input.css?raw';
+import ownCss from './card.css?raw';
+
+<Meta of={CardStories} />
+
+# Card
+
+The **white block** that holds everything in the app, always on the grey page canvas (`--canvas`). One padding, one radius. It's used in two ways:
+
+- **KPI card:** one figure with its label, for the dashboard and the top of each section.
+- **Container card:** holds a list, a table, a chart or a tax form (Modelo 303 / 130).
+
+## KPI card
+
+**One component** for every figure card in the app: a **label**, an **amount** and an optional **subtitle**. Only the colours and the state change.
+
+<Canvas of={CardStories.KpiCard} />
+<Controls of={CardStories.KpiCard} />
+
+### Properties
+
+| Property | Kind | Values | Default |
+|---|---|---|---|
+| Label | Text | always present | "Total facturado" |
+| Label colour | Variant | Black · Blue · Orange | Black |
+| Amount | Text | calculated by the app | "50.790,36 €" |
+| Amount colour | Variant | Black · Blue · Orange | Black |
+| Subtitle | Boolean + text | optional, always black | on |
+| Info button (ⓘ) | Boolean | next to the label · not on interactive cards | off |
+| Interactive | Boolean | the whole card is a link to its page | off |
+| State | Variant | Default · Hover · Focus · Selected · Disabled | Default |
+
+### Colour rules
+
+The app picks the colours automatically with these rules:
+
+| Where | Label | Amount | Example |
+|---|---|---|---|
+| Dashboard · income | **Blue** | Black | Salario neto del mes, Previsión de ahorro |
+| Dashboard · payments | **Orange** | Black | IVA a pagar, IRPF a pagar |
+| Facturación | Black | **Blue** | Total facturado, Cobrado, IRPF retenido |
+| Gastos | Black | **Orange** | Total gastos, IVA soportado, Total gastado |
+| Pending, in any section | Black | **Orange** | Pendiente de cobro (still to be solved) |
+| IRPF periods | Black | **Blue** | IRPF acumulado (3T) |
+
+The subtitle is always black. Never colour both the label and the amount.
+
+### States
+
+<Canvas of={CardStories.KpiStates} sourceState="none" />
+
+| State | When | Look |
+|---|---|---|
+| **Default** | | White card |
+| **Hover** | Interactive cards (dashboard): they open their page | `--shadow-md` |
+| **Focus** | Interactive cards, keyboard | Yellow ring + black halo |
+| **Selected** | The period shown (IRPF) | 2px outline in the amount colour · `aria-current="true"` |
+| **Disabled** | The other periods (IRPF) | Label, amount and subtitle in `--disabled` · `aria-disabled="true"` |
+
+### In the app
+
+**Dashboard:** coloured label, black amount. **IVA a pagar** and **IRPF a pagar** open their section: hover to see the shadow.
+
+<Canvas of={CardStories.Dashboard} sourceState="none" />
+
+**Facturación:** amounts in blue, except what is still pending (orange).
+
+<Canvas of={CardStories.Facturacion} sourceState="none" />
+<Controls of={CardStories.Facturacion} />
+
+**Gastos:** amounts in orange.
+
+<Canvas of={CardStories.Gastos} sourceState="none" />
+<Controls of={CardStories.Gastos} />
+
+**IRPF:** one card per period. The selected period has the outline; the others are disabled.
+
+<Canvas of={CardStories.IrpfPeriods} sourceState="none" />
+<Controls of={CardStories.IrpfPeriods} />
+
+**Mobile:** use the **View** control on Facturación, Gastos or IRPF. The cards are fully responsive: the same component on both layouts, one column with a 12px gap and 20px side padding below 1024px.
+
+### Spec
+
+| | Value |
+|---|---|
+| Background · radius | `--surface` on `--canvas` · `--card-radius` 8px |
+| Padding | `--card-pad-y` 20px · `--card-pad-x` 24px (20px on mobile) |
+| Label | Title · Sans 16 / 400 · `--text`, `card__label--primary` (blue) or `--attention` (orange) |
+| Amount | Display · Emphasis · Sans 24 / 500 · `--text`, `card__amount--primary` or `--attention` |
+| Subtitle | Mono 12 · `--text` |
+| Label → amount → subtitle | `--space-8` |
+| Grid | `card-grid--2` / `--4` · gap `--card-gap` 16px (12px on mobile, 1 column) |
+| Selected outline colour | `card--primary` (blue) / `card--attention` (orange): follows the amount |
+
+## Container card
+
+For lists, tables, charts and tax forms: a **header** (title + actions), a **body** and an optional **footer**. Containers are **fully responsive**: one component for desktop and mobile; on mobile the padding goes down to 20px and wide content (tables) scrolls sideways.
+
+<Canvas of={CardStories.Panel} sourceState="none" />
+
+### Tax form
+
+The **Modelo 303** (IVA) and **Modelo 130** (IRPF) quarter forms. Same structure for both; only the colour changes: **orange** for IVA, **blue** for IRPF. The deadline is always orange.
+
+<Canvas of={CardStories.TaxForm} />
+<Controls of={CardStories.TaxForm} />
+
+**Anatomy:** the card has no outer padding (`card--sectioned`). The header and each block pad themselves and are separated by hairlines. Everything inside comes from other components:
+
+| Part | Example | Built with |
+|---|---|---|
+| Header | MODELO 303 · 3T · JUL–SEP 2026 | `card__header` + `card__title card__title--caps` |
+| Deadline | Plazo: 20 de octubre | `card__due` (Sans 14, always orange) |
+| Block | Ingresos con IVA · España | `card__section` + `card__section-title` (Mono 12 caps, section colour) |
+| Box row | `c.01` Base imponible · 9.622,45 € | **List row** `row--kv` + **Chip** `chip--code` |
+| Highlighted amount | IVA repercutido 2.020,71 € | `row__value--accent` (section colour, 500) |
+| Secondary amount | Retenciones acumuladas 1.443,37 € | `row__value--muted` |
+| Subtotal | IVA repercutido − IVA soportado | **List row** · result `result--sm` |
+| Compensation | ☑ Aplicar compensación · 151,80 | **Checkbox** `check` + **Input** `input--sm input--num` |
+| Result | A ingresar este trimestre · 1.778,23 € | **List row** · result `result--pay` (full width) |
+| Payment | Importe ingresado en Hacienda | `row--kv` + **Input** `input--sm input--num` |
+| Notes | Notas del trimestre | **Input** `textarea.input` |
+
+The colour is set once on the card: `card--attention field--attention` (IVA) or `card--primary field--primary` (IRPF), plus `list--attention` / `list--primary` on the rows. Section titles, highlighted amounts and the focus colour of the fields follow it.
+
+| Part | Class | Content |
+|---|---|---|
+| Header | `card__header` | Title on the left · actions (ⓘ, ghost button) on the right · 16px under it |
+| Title | `card__title` (`--caps`, `--accent`) | Title · Sans 16 / 400 |
+| Body | `card__body` (`--scroll` for wide tables) | List, table, chart… |
+| Footer | `card__footer` | Totals on the left · action on the right |
+| Section | `card__section` + `card__section-title` | Form block with an H3 (Label style: Mono 12 caps, accent colour) |
+
+### Cálculo del salario
+
+The setting of Facturación that decides which invoices count for the monthly salary on the dashboard. A short explanation under the header (`card__text`: Sans 12, `--text`) and one **Input** with its label on the left (`field--inline`): Clientes. Responsive like every container: try the **View** control.
+
+<Canvas of={CardStories.Salario} />
+<Controls of={CardStories.Salario} />
+
+| Part | Class | Style |
+|---|---|---|
+| Explanation | `card__text` | Sans 12 · `--text` · linked to the field with `aria-describedby` |
+| Field | `field field--primary field--inline` | label and box on one line, 12px apart · the box grows up to `--input-inline-max-w` 520px · they wrap on narrow screens |
+
+## Markup
+
+<Source dark code={`<!-- KPI card · section (black label, amount in the section colour) -->
+<div class="card card--kpi">
+  <h2 class="card__label">Total facturado</h2>
+  <p class="card__amount card__amount--primary">50.790,36 €</p>
+  <p class="card__sub">Base imponible</p>
+</div>
+
+<!-- KPI card · dashboard, opens its page -->
+<a class="card card--kpi card--interactive" href="#iva">
+  <h2 class="card__label card__label--attention">IVA a pagar</h2>
+  <p class="card__amount">1.778,23 €</p>
+  <p class="card__sub">3T · Jul–Sep · vence 20 de octubre</p>
+</a>
+
+<!-- KPI card · IRPF periods -->
+<div class="card card--kpi card--primary is-selected" aria-current="true">…</div>
+<div class="card card--kpi card--primary is-disabled" aria-disabled="true">…</div>
+
+<!-- Tax form (IVA): no outer padding, blocks separated by lines -->
+<section class="card card--sectioned card--attention field--attention" aria-labelledby="f303">
+  <div class="card__header">
+    <h2 class="card__title card__title--caps" id="f303">Modelo 303 · 3T · Jul–Sep 2026</h2>
+    <p class="card__due">Plazo: 20 de octubre</p>
+  </div>
+  <div class="card__section">
+    <h3 class="card__section-title">Ingresos con IVA · España</h3>
+    <dl class="list list--attention">
+      <div class="row row--kv"><dt class="row__label"><span class="chip chip--code">c.01</span>Base imponible</dt><dd class="row__value">9.622,45 €</dd></div>
+    </dl>
+  </div>
+  <div class="result result--pay" role="status"><p class="result__label">A ingresar este trimestre</p><p class="result__value">1.778,23 €</p></div>
+</section>
+
+<!-- Container card -->
+<section class="card" aria-labelledby="t1">
+  <div class="card__header"><h2 class="card__title" id="t1">Últimas facturas</h2>…</div>
+  <div class="card__body">…</div>
+  <div class="card__footer">…</div>
+</section>`} />
+
+## Accessibility
+
+- A card that opens something is a real `<a>` or `<button>` (`card--interactive`), not a `<div>` with `onclick`.
+- Panels are `<section>` with `aria-labelledby` pointing to their title, so screen readers can jump between them.
+- Titles use heading elements: `<h2>` for card titles and KPI labels, `<h3>` for sections.
+- The selected period uses `aria-current="true"` as well as the outline, so the state isn't shown by colour alone. The other periods carry `aria-disabled="true"`.
+- An interactive card is one link: don't put a button (ⓘ) inside it.
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Card uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Button, Selectors, List row and result, Input).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Card', ownCss, { also: [['Button', alsoCss0], ['Selectors', alsoCss1], ['List row', alsoCss2], ['Result', alsoCss3], ['Input', alsoCss4]] })} />
+
+</details>

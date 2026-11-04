@@ -1,0 +1,46 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './cards.stories.js';
+
+<Meta of={Stories} />
+
+# Question & form cards
+
+<span className="review-chip">Under review</span>
+
+When you ask the assistant to **add** something, the reply becomes interactive: first a **question** (if it's not clear what you want to add), then a **form** to fill in. They are built with components of the **main system** (Checkbox & radio, Input, Ghost and Big buttons) inside a reply.
+
+## Question card
+
+A reply with radio buttons: choosing one opens the right form underneath.
+
+<Canvas of={Stories.Question} sourceState="none" />
+
+## Form card
+
+The same fields as the app's Nueva factura / Nuevo gasto. The colour follows the section: **blue** for an invoice (Facturación), **orange** for an expense (Gastos): the fields' tint and focus, the total, the checkboxes and the buttons.
+
+<Canvas of={Stories.Form} />
+<Controls of={Stories.Form} />
+
+| Part | Built with |
+|---|---|
+| Width | the reply keeps `--ai-form-w` 560px (full width on mobile) |
+| Intro "Rellena los datos y pulsa Guardar:" + title | reply text · `ai-form__title` 16 / 500 |
+| Type of invoice (nacional / exenta) | **Checkbox & radio** in a `check-group` |
+| Fields | **Input** · `form--primary` / `form--attention` + `form--tinted` (the tint of the section) |
+| Error | **Input** error (`aria-invalid` + `field__error`) |
+| Total gasto | `ai-form__total` · Mono 12 bold caps, section colour · updates while you type (`aria-live`) |
+| Incluir en el 303 · Retención IRPF | **Checkbox** |
+| Cancelar · Guardar | **Ghost button** · **Big button** with the `save` icon · `ai-form__actions` (Cancelar left, Guardar right) |
+
+## After the form
+
+Once saved (or cancelled), the form is replaced by a summary, so the conversation keeps a record of what happened.
+
+<Canvas of={Stories.Done} sourceState="none" />
+
+## Accessibility
+
+- The form is named by its title (`aria-labelledby`); every field has a visible label.
+- Errors are linked to their field (`aria-describedby`) and announced; the total is announced as it changes.
+- Typing *cancelar* in the composer closes the form, like the Cancelar button.

@@ -1,0 +1,149 @@
+/* ==========================================================================
+   Button  ·  .btn
+   Three types, each with the same five states: default · hover · pressed · focus · disabled.
+
+   Big (default type)   48px · Primary / Attention · optional icon on the right (24px)
+                        width 160–296px on desktop, full width on mobile · label cut with "…"
+   Ghost  .btn--ghost   24px · Primary / Attention · optional plus icon on the left (16px)
+   Icon   .btn--icon    Info (blue) / Danger (grey → red) · --sm 24px / --md 40px
+                        on mobile the touch area grows to 44px without changing the look
+
+   <button class="btn btn--primary"><span class="btn__label">Continuar</span><svg class="icon">…</svg></button>
+   <button class="btn btn--ghost btn--attention"><svg class="icon">…plus…</svg><span class="btn__label">Añadir gasto</span></button>
+   <button class="btn btn--icon btn--sm btn--danger" aria-label="Eliminar factura 411"><svg class="icon">…</svg></button>
+   ========================================================================== */
+.btn{
+  --btn-accent:var(--primary);
+  --btn-accent-dark:var(--primary-dark);
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--space-8);
+  min-width:0;
+  padding-block:0;
+  border:none;
+  border-radius:var(--radius-none);
+  background:none;
+  cursor:pointer;
+  white-space:nowrap;
+  text-decoration:none;
+  transition:filter var(--motion-fast),background-color var(--motion-fast),color var(--motion-fast);
+}
+.btn .icon{flex-shrink:0;fill:currentColor}
+.btn__label{min-width:0;overflow:hidden;text-overflow:ellipsis}   /* one line, cut with "…" */
+
+/* ── Colour (big and ghost) ── */
+.btn--primary{--btn-accent:var(--primary);--btn-accent-dark:var(--primary-dark)}
+.btn--attention{--btn-accent:var(--attention);--btn-accent-dark:var(--attention-dark)}
+
+/* ── Big · 48px (default type) ── */
+.btn:not(.btn--ghost):not(.btn--icon){
+  height:var(--btn-h-lg);
+  width:max-content;                /* grows with the label… */
+  min-width:var(--btn-min-w);
+  max-width:var(--btn-max-w);       /* …up to 296px, then the label is cut with … */
+  padding-inline:var(--btn-pad-lg);
+  font-family:var(--font-sans);
+  font-size:var(--text-16);
+  font-weight:var(--weight-regular);
+  background:var(--btn-accent);
+  color:var(--white);
+}
+.btn:not(.btn--ghost):not(.btn--icon) .icon{width:var(--icon-md);height:var(--icon-md)}
+.btn:not(.btn--ghost):not(.btn--icon):has(.icon){justify-content:space-between;gap:var(--space-16)}  /* text left, icon right */
+.btn:not(.btn--ghost):not(.btn--icon):is(:hover,.is-hover){filter:var(--btn-hover)}
+.btn:not(.btn--ghost):not(.btn--icon):is(:active,.is-active){filter:none;background:var(--btn-accent-dark)}
+.btn:not(.btn--ghost):not(.btn--icon):is(:disabled,[aria-disabled="true"]){background:var(--fill);color:var(--text-muted)}
+@media (max-width:1023px){
+  .btn:not(.btn--ghost):not(.btn--icon){width:100%;min-width:0;max-width:none}
+}
+
+/* ── Ghost · 24px ── */
+.btn--ghost{
+  height:var(--btn-h-sm);
+  width:max-content;
+  max-width:100%;
+  padding-inline:var(--btn-pad-sm);
+  font-family:var(--font-mono);
+  font-size:var(--text-12);
+  font-weight:var(--weight-regular);
+  text-transform:uppercase;
+  letter-spacing:var(--ls-caps);
+  color:var(--btn-accent);
+}
+.btn--ghost .icon{width:var(--icon-sm);height:var(--icon-sm)}
+.btn--ghost:is(:hover,.is-hover){background:var(--btn-accent);color:var(--white)}
+.btn--ghost:is(:active,.is-active){background:var(--btn-accent-dark);color:var(--white)}
+.btn--ghost:is(:disabled,[aria-disabled="true"]){background:none;color:var(--disabled)}
+.btn--flush{margin-inline:calc(-1 * var(--btn-pad-sm))}   /* layout helper: the text lines up with the container edge */
+
+/* ── Icon · square, --sm 24px / --md 40px ── */
+.btn--icon{
+  width:var(--btn-h-sm);
+  height:var(--btn-h-sm);
+  padding:0;
+}
+.btn--icon .icon{width:var(--icon-sm);height:var(--icon-sm)}
+.btn--icon.btn--md{width:var(--btn-h-md);height:var(--btn-h-md)}
+.btn--icon.btn--md .icon{width:var(--icon-md);height:var(--icon-md)}
+/* Info: always blue */
+.btn--info{color:var(--primary)}
+.btn--info:is(:hover,.is-hover){background:var(--primary-tint)}
+.btn--info:is(:active,.is-active){background:var(--primary-tint);color:var(--primary-dark)}
+/* Danger: grey → soft red background on hover → red icon when pressed (delete, close) */
+.btn--danger{color:var(--text-muted)}
+.btn--danger:is(:hover,.is-hover){background:var(--error-tint)}
+.btn--danger:is(:active,.is-active){background:var(--error-tint);color:var(--error)}
+.btn--icon:is(:disabled,[aria-disabled="true"]){background:none;color:var(--disabled)}
+/* Danger big button (red): the confirm action of a danger alert (future: Eliminar año…) */
+.btn--danger:not(.btn--icon):not(.btn--ghost){--btn-accent:var(--error);--btn-accent-dark:var(--error-dark)}
+/* Mobile: 44px touch area around the icon button, invisible */
+@media (max-width:1023px){
+  .btn--icon::after{content:'';position:absolute;top:50%;left:50%;width:var(--btn-touch);height:var(--btn-touch);transform:translate(-50%,-50%)}
+}
+
+/* ── Disabled (all types) ── */
+.btn:is(:disabled,[aria-disabled="true"]){cursor:not-allowed;filter:none !important}
+
+/* ── Focus: shown as a static state in the docs (.is-focus); real focus uses the global ring ── */
+.btn.is-focus{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset);box-shadow:0 0 0 var(--border-thin) var(--black)}
+
+/* ==========================================================================
+   Floating button  ·  .fab
+   Round button that floats over the page and opens a panel (the assistants).
+   Styles: --outline (white, blue ring, blue icon) · --filled (blue, white icon)
+   States: default · hover · pressed · focus · open ([aria-expanded="true"]: orange ring) · disabled
+
+   <button class="fab fab--outline" aria-label="Asistente inteligente" aria-haspopup="dialog" aria-expanded="false">…icon…</button>
+   ========================================================================== */
+.fab{
+  position:relative;
+  display:inline-grid;
+  place-items:center;
+  flex-shrink:0;
+  width:var(--fab-size);
+  height:var(--fab-size);
+  padding:0;
+  border:none;
+  border-radius:var(--radius-round);
+  cursor:pointer;
+  transition:background-color var(--motion-fast),box-shadow var(--motion-fast);
+}
+.fab svg{display:block;width:100%;height:100%}
+.fab--outline{background:var(--surface);color:var(--primary);box-shadow:inset 0 0 0 var(--fab-ring) var(--primary)}
+.fab--outline:is(:hover,.is-hover){background:var(--primary-tint)}
+.fab--outline:is(:active,.is-active){background:var(--primary-tint);color:var(--primary-dark);box-shadow:inset 0 0 0 var(--fab-ring) var(--primary-dark)}
+.fab--filled{background:var(--primary);color:var(--white)}
+.fab--filled:is(:hover,.is-hover){background:var(--primary-dark)}
+.fab--filled:is(:active,.is-active){background:var(--primary-dark);box-shadow:inset 0 0 0 var(--fab-ring) var(--primary)}
+/* Open: the panel it controls is showing */
+.fab[aria-expanded="true"]{box-shadow:0 0 0 var(--border-thick) var(--surface),0 0 0 calc(var(--border-thick) + var(--fab-ring)) var(--attention)}
+.fab--outline[aria-expanded="true"]{box-shadow:inset 0 0 0 var(--fab-ring) var(--primary),0 0 0 var(--border-thick) var(--surface),0 0 0 calc(var(--border-thick) + var(--fab-ring)) var(--attention)}
+.fab:is(:disabled,[aria-disabled="true"]){background:var(--fill);color:var(--disabled);box-shadow:none;cursor:not-allowed}
+.fab.is-focus{outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset)}
+
+/* Mobile dock: the floating buttons grouped in a translucent panel at the bottom right */
+.fab-dock{display:inline-flex;flex-direction:column;gap:var(--space-24);padding:var(--space-12);border:var(--border-thin) solid var(--fill);border-radius:var(--radius-md);background:var(--fab-dock-bg)}
+.fab-dock .fab{box-shadow:var(--shadow-sm)}
+.fab-dock .fab--outline{box-shadow:inset 0 0 0 var(--fab-ring) var(--primary),var(--shadow-sm)}

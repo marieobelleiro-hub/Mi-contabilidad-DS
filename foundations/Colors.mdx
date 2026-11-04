@@ -1,0 +1,127 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
+
+<Meta title="App/Foundations/Colors" />
+
+export const HEX = {
+  white: '#FFFFFF', black: '#000000', 'gray-50': '#F4F4F4', 'gray-100': '#E9E9E9', 'gray-600': '#666666',
+  'blue-dark': '#0043CE', blue: '#0F62FE', 'blue-light': '#78A9FF', 'blue-tint': '#EEF4FF',
+  'orange-dark': '#8F3505', orange: '#B64407', 'orange-light': '#F5A06A', 'orange-tint': '#FDF3EC',
+  'red-dark': '#A2191F', red: '#DA1E28', 'red-tint': '#FFF1F1', green: '#84FF00', 'gray-200': '#D0D0D0',
+};
+export const lum = (hex) => {
+  const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+};
+export const ratio = (a, b) => { const [x, y] = [lum(HEX[a]), lum(HEX[b])].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+export const td = { padding: '10px 16px 10px 0', borderBottom: '1px solid var(--line)', verticalAlign: 'middle', fontSize: 14 };
+export const Badge = ({ r }) => {
+  const [txt, bg, fg] = r >= 4.5 ? ['AA', '#F0FFE0', '#000'] : r >= 3 ? ['Large text only', '#FDF3EC', '#B64407'] : ['Fail', '#FFF1F1', '#A2191F'];
+  return <span style={{ display: 'inline-block', padding: '2px 8px', background: bg, color: fg, fontFamily: 'var(--font-mono)', fontSize: 12, textTransform: 'uppercase', letterSpacing: 'var(--ls-caps)', whiteSpace: 'nowrap' }}>{txt}</span>;
+};
+export const Pair = ({ fg, bg, use }) => {
+  const r = ratio(fg, bg);
+  return (
+    <tr>
+      <td style={td}><span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 72, height: 40, background: HEX[bg], color: HEX[fg], fontSize: 20, boxShadow: 'inset 0 0 0 1px var(--line)' }}>Aa</span></td>
+      <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 12 }}><b>--{fg}</b><br /><span style={{ color: 'var(--text-muted)' }}>on --{bg}</span></td>
+      <td style={{ ...td, fontWeight: 500, whiteSpace: 'nowrap' }}>{r.toFixed(1)} : 1</td>
+      <td style={td}><Badge r={r} /></td>
+      <td style={{ ...td, paddingRight: 0, color: 'var(--text-muted)' }}>{use}</td>
+    </tr>
+  );
+};
+
+# Colors
+
+The **palette** holds every raw colour, grouped by its role. Components use the **role tokens** (actions, data, surfaces, text…), which point to the palette. Never write a hex value in a component.
+
+## Palette
+
+<ColorPalette>
+  <ColorItem title="Green · Brand" subtitle="--green · --green-tint" colors={{ green: '#84FF00', 'green-tint': '#F0FFE0' }} />
+  <ColorItem title="Blue · Primary" subtitle="--blue-dark · --blue · --blue-light · --blue-tint" colors={{ 'blue-dark': '#0043CE', blue: '#0F62FE', 'blue-light': '#78A9FF', 'blue-tint': '#EEF4FF' }} />
+  <ColorItem title="Orange · Attention" subtitle="--orange-dark · --orange · --orange-light · --orange-tint · --orange-line" colors={{ 'orange-dark': '#8F3505', orange: '#B64407', 'orange-light': '#F5A06A', 'orange-tint': '#FDF3EC', 'orange-line': '#F3D2BE' }} />
+  <ColorItem title="Red · Error" subtitle="--red-dark · --red · --red-tint" colors={{ 'red-dark': '#A2191F', red: '#DA1E28', 'red-tint': '#FFF1F1' }} />
+  <ColorItem title="Yellow · Focus" subtitle="--yellow · keyboard navigation only" colors={{ yellow: '#FFD600' }} />
+  <ColorItem title="Neutrals" subtitle="--white · --gray-50 · --gray-100 · --gray-150 · --gray-200 · --gray-250 · --gray-600 · --black" colors={{ white: '#FFFFFF', 'gray-50': '#F4F4F4', 'gray-100': '#E9E9E9', 'gray-150': '#DEDEDE', 'gray-200': '#D0D0D0', 'gray-250': '#C6C6C6', 'gray-600': '#666666', black: '#000000' }} />
+</ColorPalette>
+
+Blue and orange have the same steps:
+
+| Step | When to use |
+|---|---|
+| **dark** | Pressed states · coloured text on the tint background |
+| **base** | Buttons, links, accents, headings in colour |
+| **light** | Text or icons **on dark backgrounds only** (toast, chart tooltip) |
+| **tint** | Backgrounds: banners, tooltips, result bars, tinted fields |
+
+## Actions
+
+| Token | Points to | Use |
+|---|---|---|
+| `--primary` (+ `-dark` `-light` `-tint`) | blue | The main action of the screen · links · active states · Facturación and IRPF sections |
+| `--attention` (+ `-dark` `-light` `-tint` `-line`) | orange | An action that **must not be skipped** (Guardar: if you leave, changes are lost) · pending things · Gastos and IVA sections |
+
+Components take the same two names: `btn--primary` / `btn--attention`, `tab--attention`, `card--attention`, `list--attention`, `table--attention`, `field--attention`…
+
+## Data
+
+| Token | Points to | Use |
+|---|---|---|
+| `--income` · `--income-light` | blue | Ingresos: chart line, tooltip swatch |
+| `--expense` · `--expense-light` | orange | Gastos, IVA, costs: chart line, tooltip swatch |
+
+Actions and data point to the same hues today. Keeping them apart means the Guardar button could change colour without changing every expense in the charts. The charts use them through `--chart-1` (income) and `--chart-2` (expense).
+
+## Surfaces, text & lines
+
+Named by **where they are used**, so the name tells you which one to pick.
+
+| Token | Points to | Use |
+|---|---|---|
+| `--canvas` | `--gray-50` | Page background behind the cards · empty table rows · bar tracks |
+| `--surface` | `--white` | Cards, dialogs, inputs |
+| `--fill` | `--gray-100` | Tabs, chips, textareas |
+| `--line` | `--gray-100` | Dividers between rows |
+| `--fill-hover` | `--gray-150` | Hover on `--fill` |
+| `--fill-selected` | `--gray-200` | Selected neutral tab (period selector) |
+| `--disabled` | `--gray-200` | Disabled buttons and controls — never readable text |
+| `--line-strong` | `--gray-250` | Form-field borders |
+| `--text-muted` | `--gray-600` | Grey text: dates, legends, captions, table headers |
+| `--text` | `--black` | Main text, headings |
+
+## Brand & states
+
+| Token | Points to | Use |
+|---|---|---|
+| `--brand` · `--brand-text` | green · black | Identity: active year, page title band, brand chip. **Not** for "success". |
+| `--positive-tint` | green tint | Result bar in your favour (a compensar) |
+| `--error` · `--error-dark` · `--error-tint` | red | Error banners and messages |
+| `--focus` | yellow | Focus ring for keyboard navigation, always with a 1px black halo |
+
+## Contrast
+
+Normal text needs **4.5 : 1** (WCAG AA). Large text (24px, or 18px bold) and icons need 3 : 1.
+
+<table style={{ width: '100%', borderCollapse: 'collapse' }}>
+  <tbody>
+    <Pair fg="black" bg="white" use="Main text" />
+    <Pair fg="gray-600" bg="white" use="Grey text on cards" />
+    <Pair fg="gray-600" bg="gray-50" use="Grey text on the page background" />
+    <Pair fg="blue-dark" bg="blue-tint" use="Blue text on the blue tint (banners, tooltips)" />
+    <Pair fg="blue" bg="white" use="Blue text, links, ghost buttons" />
+    <Pair fg="white" bg="blue" use="Label of a primary button, selected tab" />
+    <Pair fg="blue-light" bg="black" use="Blue on dark: toast action, chart tooltip" />
+    <Pair fg="orange" bg="white" use="Orange text, ghost buttons" />
+    <Pair fg="orange" bg="orange-tint" use="Orange text on the orange tint (warning banner, result bar, form fields)" />
+    <Pair fg="orange" bg="gray-50" use="Orange text on the page background" />
+    <Pair fg="orange" bg="gray-100" use="Orange text on a grey fill" />
+    <Pair fg="white" bg="orange" use="Label of an attention button, selected tab" />
+    <Pair fg="orange-light" bg="black" use="Orange on dark: chart tooltip" />
+    <Pair fg="red-dark" bg="red-tint" use="Error text on the error banner" />
+    <Pair fg="black" bg="green" use="Text on the brand colour" />
+    <Pair fg="gray-200" bg="white" use="Disabled only — never readable text" />
+  </tbody>
+</table>
+
+**One orange for everything.** `--orange` #B64407 passes AA as text on every light background of the app: white (5.5 : 1), the orange tint and the grey page (5.0 : 1), the grey fill (4.5 : 1). White text on it passes too (5.5 : 1). No exceptions: there is no "darker orange for text"; `--orange-dark` #8F3505 is only the pressed state of the orange buttons.

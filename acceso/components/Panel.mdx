@@ -1,0 +1,42 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './panel.stories.js';
+
+<Meta of={Stories} />
+
+# Panel
+
+<span className="review-chip">Under review</span>
+
+The window of Acceso fácil: a **header** (title, language switch, full screen, close) and a **body** where the steps, the answer and the footer links follow one another. Choose a **Screen** to see the real paths of the app.
+
+<Canvas of={Stories.Playground} />
+<Controls of={Stories.Playground} />
+
+## Anatomy
+
+| Part | Class | Content |
+|---|---|---|
+| Panel | `af-panel` | `--af-canvas` dark grey · white text · 1px `--af-panel-line` · `--af-panel-shadow` |
+| Header | `af-panel__head` | `--af-header-h` 48px · `--af-header-bg` blue · drag handle on desktop |
+| Title | `af-panel__title` | Accessibility icon 24px + H2 · Mono 12 / 700 caps |
+| Language | **Switch / toggle** (main system) | Esp / Eng · track `--af-switch-track` |
+| Header buttons | `af-head-btn` | 40px (44px on mobile) · white `maximize` / `minimize`, `close` · hover `--af-header-hover` |
+| Body | `af-panel__body` | padding 20 / 24 (16 on mobile) · Sans 16 · scrolls |
+| Greeting | `af-panel__hello` | "Hola, esta ventana quiere hacerte la tarea más fácil." |
+| Then | Steps · Answer · Footer | see their pages |
+
+## Modes
+
+| Mode | When | Size and place |
+|---|---|---|
+| **Floating** | Desktop, default | From the sidebar (+24px) to 48px from the right edge, 48px from the bottom · drag by the header, resize from the corner |
+| **Full screen** | Header button (`af-panel--full`) | The whole window |
+| **Bottom sheet** | Mobile (below 1024px) | Full width, `--af-sheet-h` 75% of the screen, from the bottom |
+
+<Canvas of={Stories.Mobile} sourceState="none" />
+
+## Accessibility
+
+- `role="dialog" aria-modal="false"`, named by its title; its own `lang`.
+- **Esc** closes it; the focus goes back to its floating button.
+- The full screen button says its state with `aria-pressed` and changes its name.

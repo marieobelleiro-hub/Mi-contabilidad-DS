@@ -1,0 +1,22 @@
+{
+  "name": "mi-contabilidad-ds",
+  "version": "0.1.0",
+  "description": "Mi Contabilidad design system: tokens, foundations and components",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o storybook-static",
+    "build": "node scripts/lint.mjs && node scripts/build.mjs",
+    "inline": "npm run build && node scripts/inline.mjs",
+    "lint": "node scripts/lint.mjs"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.6.2",
+    "@storybook/addon-docs": "^10.6.2",
+    "@storybook/html-vite": "^10.6.2",
+    "remark-gfm": "^4.0.1",
+    "storybook": "^10.6.2",
+    "vite": "^8.3.4"
+  }
+}

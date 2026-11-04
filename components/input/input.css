@@ -1,0 +1,117 @@
+/* ==========================================================================
+   Input  ·  .field  +  .input  ·  .check  ·  .switch
+   One field style for text, number, date, select and textarea.
+
+   Field:    .field (label above) · .field--inline (label left: Clientes, Cálculo del salario)
+             __label · __hint · __error
+   Input:    .input (on <input>, <select>, <textarea>) · --sm (24px, tax forms) · --num (mono, right: only with --sm)
+   Accent:   .field--primary / --attention (or on any ancestor) — focus border, tint, checks
+   Option:   .field--tinted / .form--tinted (accent tint background — only the mobile forms Nueva factura / Nuevo gasto)
+             .input--filled (grey box — the Notas textareas of the tax forms)
+   States:   hover · focus (shown in the docs with .is-hover / .is-focus) · [aria-invalid="true"] · :disabled
+
+   <div class="field">
+     <label class="field__label" for="f1">Cliente</label>
+     <input class="input" id="f1" aria-describedby="f1-hint">
+     <p class="field__hint" id="f1-hint">Nombre o razón social</p>
+   </div>
+
+   ========================================================================== */
+.field{
+  --field-accent:var(--primary);
+  --field-tint:var(--primary-tint);
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-8);
+  min-width:0;
+}
+.field--primary,.form--primary{--field-accent:var(--primary);--field-tint:var(--primary-tint)}
+.field--attention,.form--attention{--field-accent:var(--attention);--field-tint:var(--attention-tint)}
+.form--attention .field{--field-accent:var(--attention);--field-tint:var(--attention-tint)}
+.field--inline{flex-direction:row;flex-wrap:wrap;align-items:center;gap:var(--space-8) var(--space-12)}
+.field--inline .input{flex:1 1 var(--input-w-sm);width:auto;max-width:var(--input-inline-max-w)}
+.field--inline .field__hint,.field--inline .field__error{flex-basis:100%}
+
+.field__label{
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  color:var(--text);
+}
+.field__label .is-optional{color:var(--text-muted)}
+.field__hint,
+.field__error{
+  margin:0;
+  font-family:var(--font-sans);
+  font-size:var(--text-12);
+  line-height:var(--leading-normal);
+}
+.field__hint{color:var(--text-muted)}
+.field__error{color:var(--error)}
+.field__error:empty,.field__hint:empty{display:none}
+
+/* Live total of a form (Nuevo gasto: "TOTAL GASTO: 54,99 €") */
+.field__total{
+  margin:calc(-1 * var(--space-4)) 0 0;
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  font-weight:var(--weight-bold);
+  text-transform:uppercase;
+  color:var(--field-accent, var(--primary));
+}
+
+/* ── Input ── */
+.input{
+  width:100%;
+  min-width:0;
+  height:var(--input-h);
+  margin:0;
+  padding:0 var(--input-pad-x);
+  border:var(--border-thin) solid var(--line-strong);
+  border-radius:var(--radius-none);
+  background:var(--surface);
+  font-family:var(--font-sans);
+  font-size:var(--text-14);
+  color:var(--text);
+  -webkit-appearance:none;
+  appearance:none;
+  transition:border-color var(--motion-fast),box-shadow var(--motion-fast);
+}
+.input::placeholder{color:var(--text-muted)}
+.input:is(:hover,.is-hover){border-color:var(--text-muted)}
+.field--tinted .input,.form--tinted .input{background-color:var(--field-tint)}
+.input--filled{background-color:var(--fill);border-color:var(--line)}   /* grey box: the Notas of the tax forms */
+
+/* Focus: accent border (field cue) + the global yellow ring (keyboard cue) */
+.input:is(:focus,.is-focus){border-color:var(--field-accent, var(--primary));box-shadow:0 0 0 var(--border-thin) var(--field-accent, var(--primary))}
+.input:focus:not(:focus-visible){outline:none}
+.input:is(:focus-visible,.is-focus){outline:var(--border-thick) solid var(--focus);outline-offset:var(--focus-offset)}
+
+.input[aria-invalid="true"]{border-color:var(--error);box-shadow:0 0 0 var(--border-thin) var(--error)}
+.input:disabled{background:var(--canvas);border-color:var(--disabled);color:var(--disabled);cursor:not-allowed}
+
+/* Sizes & types */
+.input--sm{height:var(--input-h-sm);padding:0 var(--space-8);font-size:var(--text-12)}
+.input--num{font-family:var(--font-mono);text-align:right;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.input--num::-webkit-outer-spin-button,.input--num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.input--w-sm{width:var(--input-w-sm);flex:none}
+
+/* Select: chevron drawn in currentColor-free SVG */
+select.input{
+  padding-right:var(--space-40);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%23000' stroke-width='1.3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right var(--input-pad-x) center;
+  cursor:pointer;
+}
+select.input--sm{padding-right:var(--space-24);background-position:right var(--space-4) center}
+
+/* Textarea */
+textarea.input{height:auto;min-height:var(--textarea-min-h);padding:var(--space-8) var(--input-pad-x);line-height:var(--leading-normal);resize:vertical}
+
+/* ── Checkbox & radio ── */
+/* ── Mobile: 16px text so iOS does not zoom into the field ── */
+@media (max-width:1023px){
+  .field__label,.input:not(.input--sm){font-size:var(--text-16)}
+  .field__hint,.field__error{font-size:var(--text-14)}
+}

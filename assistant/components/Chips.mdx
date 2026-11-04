@@ -1,0 +1,41 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './chips.stories.js';
+
+<Meta of={Stories} />
+
+# Suggestion chips
+
+<span className="review-chip">Under review</span>
+
+**Next steps** the assistant offers under a reply: a related question, a definition, an action. Clicking one is the same as typing it. They are **buttons**, not the static chips of the main system.
+
+<Canvas of={Stories.Playground} />
+<Controls of={Stories.Playground} />
+
+## States
+
+<Canvas of={Stories.States} sourceState="none" />
+
+| | Default | Hover | Focus | Disabled |
+|---|---|---|---|---|
+| **Suggestion** | white, 1px blue border, blue text | `--ai-chip-hover` light blue | yellow ring + black halo | grey border and text (an old reply: its chips no longer work) |
+| **Main step** (`ai-chip--primary`) | filled blue, white text | a bit lighter | yellow ring + black halo | — |
+
+## In a reply
+
+<Canvas of={Stories.InUse} sourceState="none" />
+
+## Spec
+
+| | Value |
+|---|---|
+| Height | min `--ai-chip-h` 32px (target 24×24 met) |
+| Padding | 4 / 12 |
+| Text | Body · 14 · blue · wraps if it's long (no "…") |
+| Radius | 0 |
+| Gap | 8px between chips · 12px above the group |
+
+## Accessibility
+
+- Real `<button>`s: Tab reaches them, Enter or Space activates them.
+- Only **one main step** per reply, so it's clear which action is expected.

@@ -1,0 +1,57 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  /* Storybook interface: IBM Plex everywhere */
+  body, button, input { font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; }
+
+  /* ── Dark sidebar, with the colours of our palette ──
+     #525252 = the Acceso fácil panel (--af-canvas) · #FFFFFF text and folders (7.8:1) · #84FF00 brand band (--brand)
+     icons: #F8C4A0 pages (intros, docs) · #78A9FF component groups and stories (--blue-light)
+     #666666 hover (--gray-600) · #0F62FE selected (--blue, white text 5.0:1) */
+  #storybook-sidebar-region { background: #525252 !important; color: #FFFFFF; border-right: 0 !important; }
+  #storybook-sidebar-region .sidebar-header,
+  #storybook-sidebar-region .sidebar-header * { color: #FFFFFF !important; }
+  #storybook-sidebar-region .sidebar-header button:hover { background: #666666 !important; }
+
+  /* search */
+  #storybook-sidebar-region .search-field { background: #666666 !important; border: 1px solid #FFFFFF !important; border-radius: 0 !important; box-shadow: none !important; color: #FFFFFF !important; }
+  #storybook-sidebar-region .search-field * { color: #FFFFFF !important; }
+  #storybook-sidebar-region #storybook-explorer-searchfield { color: #FFFFFF !important; background: transparent !important; }
+  #storybook-sidebar-region #storybook-explorer-searchfield::placeholder { color: #FFFFFF !important; opacity: 1; }
+  #storybook-sidebar-region .search-field:focus-within { outline: 2px solid #FFD600 !important; outline-offset: 2px; }
+
+  /* tree: roots (APP, CHATBOT…), groups, pages */
+  #storybook-explorer-tree .sidebar-subheading,
+  #storybook-explorer-tree .sidebar-subheading button { color: #FFFFFF !important; }
+  #storybook-explorer-tree .sidebar-item,
+  #storybook-explorer-tree .sidebar-item a,
+  #storybook-explorer-tree .sidebar-item button { color: #FFFFFF !important; background: transparent; border-radius: 0 !important; }
+  #storybook-explorer-tree .sidebar-item svg,
+  #storybook-explorer-tree .sidebar-subheading svg { color: #FFFFFF !important; }
+  #storybook-explorer-tree .sidebar-item:hover,
+  #storybook-explorer-tree .sidebar-item a:hover,
+  #storybook-explorer-tree .sidebar-item button:hover { background: #666666 !important; }
+  #storybook-explorer-tree .sidebar-item[data-selected="true"],
+  #storybook-explorer-tree .sidebar-item[data-selected="true"] a,
+  #storybook-explorer-tree .sidebar-item[data-selected="true"] button { background: #0F62FE !important; color: #FFFFFF !important; }
+  #storybook-explorer-tree .sidebar-item button { box-shadow: none !important; }   /* the “…” menu: no light glow */
+  #storybook-sidebar-region, #storybook-sidebar-region * { scrollbar-color: #666666 #525252; }
+  #storybook-sidebar-region a:focus-visible, #storybook-sidebar-region button:focus-visible { outline: 2px solid #FFD600 !important; outline-offset: -2px; box-shadow: none !important; }
+
+  /* brand band, title, root names */
+  #storybook-sidebar-region { border-top: 40px solid #84FF00 !important; box-sizing: border-box; }
+  #storybook-sidebar-region .sidebar-header a:not([href^="#"]) { font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif !important; font-size: 24px !important; font-weight: 400 !important; line-height: 32px !important; white-space: nowrap; }
+  #storybook-explorer-tree .sidebar-subheading button { font-size: 12px !important; }
+
+  /* type icons (the direct icon of each row; the expand chevron is nested deeper and stays white) */
+  #storybook-explorer-tree .sidebar-item[data-nodetype="document"] > a > div > svg { color: #F8C4A0 !important; }
+  #storybook-explorer-tree .sidebar-item[data-nodetype="story"] > a > div > svg { color: #78A9FF !important; }
+  #storybook-explorer-tree .sidebar-item[data-nodetype="group"] > button > div > svg { color: #FFFFFF !important; }
+  /* component group: our own icon (a book with a bookmark), drawn with a mask in #78A9FF */
+  #storybook-explorer-tree .sidebar-item[data-nodetype="component"] > button > div > svg { color: #78A9FF !important; background-color: #78A9FF; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2014%2016%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20fill%3D%22%23000%22%20d%3D%22M%2012.5%201%20C%2012.632812%201%2012.757812%201.050781%2012.855469%201.144531%20C%2012.949219%201.242188%2013%201.367188%2013%201.5%20L%2013%2014.5%20C%2013%2014.632812%2012.949219%2014.757812%2012.855469%2014.855469%20C%2012.757812%2014.949219%2012.632812%2015%2012.5%2015%20L%204.207031%2015%20C%204.074219%2015%203.945312%2014.945312%203.855469%2014.855469%20L%201.144531%2012.144531%20C%201.054688%2012.054688%201%2011.925781%201%2011.792969%20L%201%201.5%20C%201%201.367188%201.050781%201.242188%201.144531%201.144531%20C%201.242188%201.050781%201.367188%201%201.5%201%20Z%20M%209.300781%202%20L%209.300781%208.050781%20L%209.292969%208.152344%20C%209.273438%208.25%209.226562%208.34375%209.15625%208.421875%20C%209.066406%208.519531%208.941406%208.582031%208.808594%208.59375%20L%208.8125%208.597656%20C%208.808594%208.597656%208.804688%208.597656%208.800781%208.597656%20C%208.726562%208.605469%208.652344%208.597656%208.582031%208.578125%20C%208.511719%208.554688%208.449219%208.515625%208.390625%208.46875%20L%207%207.273438%20L%205.609375%208.46875%20L%205.605469%208.464844%20C%205.550781%208.515625%205.484375%208.554688%205.414062%208.578125%20C%205.34375%208.601562%205.265625%208.605469%205.191406%208.59375%20L%205.191406%208.597656%20C%205.1875%208.597656%205.183594%208.59375%205.179688%208.59375%20C%205.050781%208.578125%204.929688%208.515625%204.839844%208.417969%20C%204.75%208.316406%204.699219%208.183594%204.699219%208.050781%20L%204.699219%202%20L%202%202%20L%202%2011.5%20L%204%2011.5%20C%204.132812%2011.5%204.257812%2011.550781%204.355469%2011.644531%20C%204.449219%2011.742188%204.5%2011.867188%204.5%2012%20L%204.5%2014%20L%2012%2014%20L%2012%202%20Z%20M%205.800781%206.855469%20L%206.636719%206.136719%20C%206.691406%206.089844%206.753906%206.050781%206.824219%206.027344%20C%206.894531%206.003906%206.96875%205.996094%207.046875%206%20C%207.050781%206%207.054688%206%207.058594%206%20L%207.058594%206.003906%20C%207.171875%206.015625%207.273438%206.058594%207.359375%206.132812%20L%208.199219%206.855469%20L%208.199219%202%20L%205.800781%202%20Z%20M%205.800781%206.855469%20%22/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2014%2016%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20fill%3D%22%23000%22%20d%3D%22M%2012.5%201%20C%2012.632812%201%2012.757812%201.050781%2012.855469%201.144531%20C%2012.949219%201.242188%2013%201.367188%2013%201.5%20L%2013%2014.5%20C%2013%2014.632812%2012.949219%2014.757812%2012.855469%2014.855469%20C%2012.757812%2014.949219%2012.632812%2015%2012.5%2015%20L%204.207031%2015%20C%204.074219%2015%203.945312%2014.945312%203.855469%2014.855469%20L%201.144531%2012.144531%20C%201.054688%2012.054688%201%2011.925781%201%2011.792969%20L%201%201.5%20C%201%201.367188%201.050781%201.242188%201.144531%201.144531%20C%201.242188%201.050781%201.367188%201%201.5%201%20Z%20M%209.300781%202%20L%209.300781%208.050781%20L%209.292969%208.152344%20C%209.273438%208.25%209.226562%208.34375%209.15625%208.421875%20C%209.066406%208.519531%208.941406%208.582031%208.808594%208.59375%20L%208.8125%208.597656%20C%208.808594%208.597656%208.804688%208.597656%208.800781%208.597656%20C%208.726562%208.605469%208.652344%208.597656%208.582031%208.578125%20C%208.511719%208.554688%208.449219%208.515625%208.390625%208.46875%20L%207%207.273438%20L%205.609375%208.46875%20L%205.605469%208.464844%20C%205.550781%208.515625%205.484375%208.554688%205.414062%208.578125%20C%205.34375%208.601562%205.265625%208.605469%205.191406%208.59375%20L%205.191406%208.597656%20C%205.1875%208.597656%205.183594%208.59375%205.179688%208.59375%20C%205.050781%208.578125%204.929688%208.515625%204.839844%208.417969%20C%204.75%208.316406%204.699219%208.183594%204.699219%208.050781%20L%204.699219%202%20L%202%202%20L%202%2011.5%20L%204%2011.5%20C%204.132812%2011.5%204.257812%2011.550781%204.355469%2011.644531%20C%204.449219%2011.742188%204.5%2011.867188%204.5%2012%20L%204.5%2014%20L%2012%2014%20L%2012%202%20Z%20M%205.800781%206.855469%20L%206.636719%206.136719%20C%206.691406%206.089844%206.753906%206.050781%206.824219%206.027344%20C%206.894531%206.003906%206.96875%205.996094%207.046875%206%20C%207.050781%206%207.054688%206%207.058594%206%20L%207.058594%206.003906%20C%207.171875%206.015625%207.273438%206.058594%207.359375%206.132812%20L%208.199219%206.855469%20L%208.199219%202%20L%205.800781%202%20Z%20M%205.800781%206.855469%20%22/%3E%3C/svg%3E") center / contain no-repeat; }
+  #storybook-explorer-tree .sidebar-item[data-nodetype="component"] > button > div > svg > * { display: none; }
+  /* Sidebar: "Under review" under the name of the two sub-systems */
+  #chatbot, #accessibility-assistant{position:relative;margin-bottom:22px}
+  #chatbot::after, #accessibility-assistant::after{content:'Under review';position:absolute;left:20px;top:100%;padding:0 6px;border-radius:2px;background:#FDF3EC;color:#B64407;font:700 10px/16px 'IBM Plex Mono',monospace;letter-spacing:.088em;text-transform:uppercase;pointer-events:none}
+</style>

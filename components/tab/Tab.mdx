@@ -1,0 +1,167 @@
+import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
+import * as TabStories from './tab.stories.js';
+import { YEAR_INFO } from './tab.stories.js';
+import { Source as CssSource } from '@storybook/addon-docs/blocks';
+import { cssSnippet } from '../../foundations/css-snippet.js';
+import alsoCss0 from '../card/card.css?raw';
+import ownCss from './tab.css?raw';
+
+<Meta of={TabStories} />
+
+# Tab
+
+One grey pill, used for the **sidebar navigation**, the **period tabs**, the **view toggle** and, on mobile, the **selectors** that open a menu. The **year tab** is its own component, combined into the **year strip**.
+
+### Sidebar navigation
+
+<Canvas of={TabStories.SidebarNav} />
+
+### Period tabs
+
+<Canvas of={TabStories.PeriodTabs} />
+
+### View toggle
+
+<Canvas of={TabStories.ViewToggle} />
+
+### Section selector (mobile)
+
+<Canvas of={TabStories.Selector} />
+
+### Period selector (mobile)
+
+<Canvas of={TabStories.PeriodSelector} />
+
+### Year strip
+
+<Canvas of={TabStories.YearStrip} />
+
+## When to use
+
+| Use | Role | Example |
+|---|---|---|
+| **Navigation**: goes to another section | `<a aria-current="page">` inside `<nav>` | Dashboard · Facturación · Gastos · IVA · IRPF |
+| **Tabs**: switch the content shown on the same page | `<button role="tab" aria-selected>` inside `role="tablist"` | Resumen anual · 1T · 2T · 3T · 4T |
+| **Toggle**: choose between 2 views | same as tabs | Por cat. IRPF / Por % IVA |
+| **Selector** (mobile): the current choice, opens a menu | `<button aria-expanded>` + a list | Section · Period |
+
+## Colour code
+
+The active tab takes the colour of what the section is about:
+
+| Section | Is about | Colour | Active style | Class (code) |
+|---|---|---|---|---|
+| Dashboard | the whole app | **green**, black text | filled | `tab--brand` |
+| Facturación | **income** | **blue**, white text | filled | `tab--primary` |
+| IRPF | **income** (tax on what you earn) | **blue** | outline | `tab--primary tab--outline` |
+| Gastos | **expenses** | **orange**, white text | filled | `tab--attention` |
+| IVA | **payments to be made** | **orange** | outline | `tab--attention tab--outline` |
+| Period selector | neutral | **grey**, black text | filled | `tab--neutral` |
+
+The outline marks the tax sections (IVA, IRPF), so they look different from the sections where you enter data.
+
+## Playground
+
+One tab with all its properties.
+
+<Canvas of={TabStories.Playground} />
+<Controls of={TabStories.Playground} />
+
+## States
+
+<Canvas of={TabStories.States} sourceState="none" />
+
+## Spec
+
+| | Value |
+|---|---|
+| Height | `--tab-h` 24px (meets the 24×24 target) |
+| Padding (left/right) | `--space-8` · top/bottom 0 |
+| Width | auto (fits the label) · `tab--fixed` = `--tab-w` 160px · fluid inside `tab-list--fluid` (mobile) |
+| Type | Mono 12 / regular · uppercase · `--ls-caps` · **bold when selected** |
+| Default | `--fill` + `--text` |
+| Hover | `--fill-hover` |
+| Selected · filled | accent fill + accent text (white, or black on green and grey) |
+| Selected · outline | white + 2px **inset** accent border + accent text: the size never changes |
+| Disabled | `--fill` + `--disabled` text |
+| Focus | yellow `--focus` ring + black halo |
+| Gap between tabs | `--space-2` · vertical nav `--space-20` |
+| Radius | 0 |
+
+On mobile the view toggle shares the row equally (`tab-list--fluid`):
+
+<Canvas of={TabStories.Mobile} sourceState="none" />
+
+## Selectors (mobile)
+
+On mobile there is no sidebar and no period tabs. A **selector** shows the current choice; tapping it opens the list.
+
+| | Value |
+|---|---|
+| Classes | `tab tab--menu` + accent + `is-active` · the menu is `tab-menu__list` inside `tab-menu` |
+| Section selector | the section's colour code (above) |
+| Period selector | `tab--neutral` |
+| Icon | `chevron-down` 16px, 12px after the label, turns 180° when open |
+| Menu | `--surface` + `--shadow-md`, `--menu-gap` (4px) under the selector, items are tabs in a column |
+| Keyboard | Enter / Space opens · ↑ ↓ move · Esc closes and returns to the selector · a click outside closes |
+| Screen readers | `aria-expanded` + `aria-controls`, `aria-label="Sección: Facturación. Cambiar sección"`, the current item has `aria-current="page"` |
+
+## Year tab
+
+The **component** is one year tab: the year in **Display · Light** (24px / 300) with a 12px bar under it. Always **green**.
+
+<Canvas of={TabStories.YearTab} />
+<Controls of={TabStories.YearTab} />
+
+### States
+
+<Canvas of={TabStories.YearStates} sourceState="none" />
+
+| State | Year | Bar | When |
+|---|---|---|---|
+| **Selected** | `--text` | `--brand` | The year shown on screen. Hover: no change |
+| **Unselected** | `--text` | `--disabled` | Any other active year · **hover**: `--brand`, like selected |
+| **Disabled** | `--disabled` | `--fill` | A future year: not clickable, not in the Tab order |
+| **Focus** | — | — | Yellow ring + black halo (keyboard) |
+
+| Property | Kind | Values | Default |
+|---|---|---|---|
+| State | Variant | Selected · Unselected · Disabled | Unselected |
+| Interaction | Variant | Default · Hover · Focus | Default |
+| Year | Text | | "2025" |
+
+## Year strip
+
+A **composition** (molecule) of year tabs in a row: `year-strip` with `role="tablist"`, 16px gap, the tabs share the width equally.
+
+| Rule | |
+|---|---|
+| How many | **6 years** |
+| Order | Newest on the **left**, oldest on the right |
+| Current year | Read from the **device's clock**: on 1 January the new year becomes active by itself |
+| Active years | The current year and the years before it: **selected** or **unselected** |
+| Future years | **Disabled** until their year starts |
+| Selection | **Exactly one** year is selected, always (by default the current year) |
+| As the years pass | The strip starts at 2025; once the current year passes the 6th year, it moves forward and the oldest year leaves |
+
+Today ({YEAR_INFO.now}) the strip shows {YEAR_INFO.years[0]} → {YEAR_INFO.years[5]}: **{YEAR_INFO.active.length} active** ({YEAR_INFO.active.join(', ')}), the rest disabled. In the **Selected year** control only the active years can be chosen; you can also click a year in the preview.
+
+## Accessibility
+
+- Use real elements: `<a>` for navigation, `<button role="tab">` for tabs — never a `<div tabindex="0">`.
+- The selected state is set with `aria-selected="true"` (tabs) or `aria-current="page"` (navigation), so screen readers announce it. The CSS reads those attributes directly.
+- Only the selected tab is in the Tab order; ← → move between tabs.
+- The bold weight on the selected tab adds a second cue besides colour.
+
+## CSS
+
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Tab uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Card).
+
+In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
+
+<details>
+<summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
+
+<CssSource language="html" dark code={cssSnippet('Tab', ownCss, { also: [['Card', alsoCss0]] })} />
+
+</details>

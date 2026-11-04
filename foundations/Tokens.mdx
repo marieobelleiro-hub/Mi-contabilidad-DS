@@ -1,0 +1,56 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TokenStories from './tokens.stories.js';
+import { TOTAL, TIER_COUNTS } from './token-docs.js';
+
+<Meta of={TokenStories} />
+
+# Tokens
+
+Design tokens are the **named values** of the design system: every colour, size, space, line, shadow and duration. Components never use a raw value (`#0F62FE`, `16px`); they use a token (`var(--primary)`, `var(--space-16)`). Change a token and every component that uses it changes with it, in the app, in Storybook and, later, in Figma.
+
+There are **{TOTAL} tokens**. This page is the complete reference, read live from `tokens/tokens.css`. The pages before it (Colors, Typography, Spacing, Icons) explain **when** to use each one.
+
+## Three tiers
+
+A value travels from the palette to a component through up to three tiers. Each tier points to the one before it.
+
+<Canvas of={TokenStories.Tiers} sourceState="none" />
+
+| Tier | What it is | Example | Who uses it | Count |
+|---|---|---|---|---|
+| **Primitive** | Raw values: the colour palette and the scales (type, space, radius, border, shadow, icon, motion, layer) | `--blue` · `--space-16` · `--text-14` | Palette: **only** the semantic tokens. Scales: components directly | {TIER_COUNTS.primitive} |
+| **Semantic** | What a value is **for**, not what it looks like | `--primary` · `--text-muted` · `--canvas` · `--income` | Components and screens | {TIER_COUNTS.semantic} |
+| **Component** | A value that belongs to one component | `--btn-h-lg` · `--card-pad-x` · `--chart-1` | That component only | {TIER_COUNTS.component} |
+
+Why tiers: if the brand blue changes one day, only `--blue` changes. If buttons should use another colour, only `--primary` changes. Nothing in the components has to be touched.
+
+## Naming
+
+| Pattern | Examples | Read it as |
+|---|---|---|
+| `--{colour}` · `--{colour}-{step}` | `--blue` · `--blue-dark` · `--gray-600` | Palette (primitive) |
+| `--{role}` · `--{role}-{variant}` | `--primary` · `--primary-tint` · `--text-muted` · `--fill-hover` | Colour role (semantic) |
+| `--{scale}-{value}` | `--space-8` = 8px · `--text-14` = 14px | The number **is** the value |
+| `--{scale}-{size}` | `--radius-md` · `--shadow-sm` · `--icon-md` · `--motion-fast` | Steps of a scale: sm · md · lg, fast · slow |
+| `--{component}-{property}-{size}` | `--btn-h-lg` · `--card-pad-x` · `--input-w-sm` | `h` height · `w` width · `pad` padding · `x`/`y` horizontal/vertical |
+
+Colour variants always mean the same thing: **`-dark`** for text and pressed states, **`-light`** only on dark backgrounds, **`-tint`** for soft backgrounds.
+
+## How to use them
+
+| Where | How | Example |
+|---|---|---|
+| **CSS** | `var(--name)` | `color: var(--primary);` |
+| **JSON** (AI, Figma, other platforms) | `dist/tokens.json`, W3C Design Tokens format. Each token has its value, type, description and CSS name; references stay references | `color.action.primary` → `{color.palette.blue.blue}` |
+| **Figma** (next) | Variables with the same names, one collection per tier | Primitive / Semantic / Component |
+
+- **Do** use the semantic token: `var(--text-muted)`, `var(--primary)`.
+- **Don't** use the palette in a component: `var(--gray-600)`, `var(--blue)`. Exception: `--white` / `--black` for text on a coloured background.
+- **Don't** write raw values: `npm run lint` fails on any colour, size, weight, line height, duration or z-index that isn't a token.
+- **Need a value that doesn't exist?** Add a token to `tokens/tokens.css` (with a comment that says what it's for) instead of writing the number.
+
+## All tokens
+
+**Search** by name, value or use (`primary`, `8px`, `#0F62FE`, `btn`), or filter by **tier**. Click a token name to **copy** its `var()`. The grey chips are the tokens it points to: click one to jump to it.
+
+<Canvas of={TokenStories.AllTokens} sourceState="none" />
