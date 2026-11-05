@@ -2,8 +2,9 @@
 // Three types (Big, Ghost, Icon). Each has its own Playground with the properties agreed for it.
 import { icon } from '../../icons/icons.js';
 
-/* Icons each type can swap to (only the ones in use) */
-export const BIG_ICONS = ['arrow-right', 'save'];
+/* Icons each type can swap to */
+export const BIG_ICONS = ['arrow-right', 'save', 'check', 'download', 'trash', 'plus', 'chevron-down'];
+export const GHOST_ICONS = ['plus', 'arrow-right', 'save', 'check', 'download', 'trash', 'chevron-down'];
 export const ICON_BUTTON_ICONS = { info: ['info'], danger: ['trash', 'close', 'close-filled'] };
 const STATES = ['default', 'hover', 'pressed', 'focus', 'disabled'];
 const stateAttrs = (state) => ({
@@ -11,16 +12,18 @@ const stateAttrs = (state) => ({
   dis: state === 'disabled' ? ' disabled' : '',
 });
 
-/** Big button · 48px. Icon on the right (text left, icon right); without icon the text is centred. */
-export const bigHTML = ({ colour = 'primary', label = 'Continuar', showIcon = true, icon: name = 'arrow-right', state = 'default' } = {}) => {
+/** Big button · 48px. Icon on the right (text left, icon right) or on the left (icon + text, centred, e.g. ✓ Guardado); without icon the text is centred. */
+export const bigHTML = ({ colour = 'primary', label = 'Continuar', showIcon = true, iconPosition = 'right', icon: name = 'arrow-right', state = 'default' } = {}) => {
   const { cls, dis } = stateAttrs(state);
-  return `<button type="button" class="btn btn--${colour}${cls}"${dis}><span class="btn__label">${label}</span>${showIcon ? icon(name, { size: 'md' }) : ''}</button>`;
+  const ico = showIcon ? icon(name, { size: 'md' }) : '';
+  const lbl = `<span class="btn__label">${label}</span>`;
+  return `<button type="button" class="btn btn--${colour}${cls}"${dis}>${iconPosition === 'left' ? ico + lbl : lbl + ico}</button>`;
 };
 
-/** Ghost button · 24px. Optional plus icon on the left; the text is always there. */
-export const ghostHTML = ({ colour = 'primary', label = 'Añadir factura', showIcon = true, state = 'default', flush = false } = {}) => {
+/** Ghost button · 24px. Optional icon on the left (plus by default); the text is always there. */
+export const ghostHTML = ({ colour = 'primary', label = 'Añadir factura', showIcon = true, icon: name = 'plus', state = 'default', flush = false } = {}) => {
   const { cls, dis } = stateAttrs(state);
-  return `<button type="button" class="btn btn--ghost btn--${colour}${flush ? ' btn--flush' : ''}${cls}"${dis}>${showIcon ? icon('plus') : ''}<span class="btn__label">${label}</span></button>`;
+  return `<button type="button" class="btn btn--ghost btn--${colour}${flush ? ' btn--flush' : ''}${cls}"${dis}>${showIcon ? icon(name) : ''}<span class="btn__label">${label}</span></button>`;
 };
 
 /** Icon button · Info (blue) or Danger (grey → red). The label is for screen readers only. */
@@ -38,7 +41,7 @@ const STATE_CONTROL = { control: 'select', options: STATES, description: 'Shown 
 export default {
   title: 'App/Components/Button',
   tags: ['!autodocs'],   // documented in Button.mdx
-  excludeStories: ['bigHTML', 'ghostHTML', 'iconButtonHTML', 'fabHTML', 'BIG_ICONS', 'ICON_BUTTON_ICONS', 'FAB_ICONS'],
+  excludeStories: ['bigHTML', 'ghostHTML', 'iconButtonHTML', 'fabHTML', 'BIG_ICONS', 'GHOST_ICONS', 'ICON_BUTTON_ICONS', 'FAB_ICONS'],
   parameters: { layout: 'centered' },
 };
 
@@ -48,12 +51,13 @@ export const Big = {
   render: (args) => bigHTML(args),
   argTypes: {
     colour: { name: 'Type', control: { type: 'inline-radio', labels: { primary: 'Primary (blue)', attention: 'Attention (orange)' } }, options: ['primary', 'attention'], table: { category: 'Variant' } },
-    showIcon: { name: 'Icon', control: 'boolean', description: 'Visible: text left, icon right · Hidden: text centred', table: { category: 'Boolean' } },
+    showIcon: { name: 'Icon', control: 'boolean', description: 'Hidden: text centred', table: { category: 'Boolean' } },
+    iconPosition: { name: 'Icon position', control: { type: 'inline-radio', labels: { right: 'Right (text left, icon right)', left: 'Left (icon + text, centred)' } }, options: ['right', 'left'], if: { arg: 'showIcon' }, table: { category: 'Variant' } },
     icon: { name: 'Icon choice', control: 'select', options: BIG_ICONS, if: { arg: 'showIcon' }, table: { category: 'Icon swap' } },
     label: { name: 'Label', control: 'text', description: 'Short. Too long → cut with "…"', table: { category: 'Text' } },
     state: { name: 'State', ...STATE_CONTROL, table: { category: 'Variant' } },
   },
-  args: { colour: 'primary', showIcon: true, icon: 'arrow-right', label: 'Continuar', state: 'default' },
+  args: { colour: 'primary', showIcon: true, iconPosition: 'right', icon: 'arrow-right', label: 'Continuar', state: 'default' },
 };
 
 export const Ghost = {
@@ -61,12 +65,13 @@ export const Ghost = {
   render: (args) => ghostHTML(args),
   argTypes: {
     colour: { name: 'Type', control: { type: 'inline-radio', labels: { primary: 'Primary (blue)', attention: 'Attention (orange)' } }, options: ['primary', 'attention'], table: { category: 'Variant' } },
-    showIcon: { name: 'Icon', control: 'boolean', description: 'Plus icon on the left', table: { category: 'Boolean' } },
+    showIcon: { name: 'Icon', control: 'boolean', description: 'Icon on the left', table: { category: 'Boolean' } },
+    icon: { name: 'Icon choice', control: 'select', options: GHOST_ICONS, if: { arg: 'showIcon' }, table: { category: 'Icon swap' } },
     label: { name: 'Label', control: 'text', description: 'Always present. Too long → cut with "…"', table: { category: 'Text' } },
     state: { name: 'State', ...STATE_CONTROL, table: { category: 'Variant' } },
     flush: { table: { disable: true } },
   },
-  args: { colour: 'primary', showIcon: true, label: 'Añadir factura', state: 'default' },
+  args: { colour: 'primary', showIcon: true, icon: 'plus', label: 'Añadir factura', state: 'default' },
 };
 
 export const Icon = {

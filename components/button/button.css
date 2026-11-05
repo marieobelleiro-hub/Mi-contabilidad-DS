@@ -2,9 +2,9 @@
    Button  ·  .btn
    Three types, each with the same five states: default · hover · pressed · focus · disabled.
 
-   Big (default type)   48px · Primary / Attention · optional icon on the right (24px)
+   Big (default type)   48px · Primary / Attention · optional icon (24px) on the right or on the left
                         width 160–296px on desktop, full width on mobile · label cut with "…"
-   Ghost  .btn--ghost   24px · Primary / Attention · optional plus icon on the left (16px)
+   Ghost  .btn--ghost   24px · Primary / Attention · optional icon on the left (16px, plus by default)
    Icon   .btn--icon    Info (blue) / Danger (grey → red) · --sm 24px / --md 40px
                         on mobile the touch area grows to 44px without changing the look
 
@@ -51,7 +51,8 @@
   color:var(--white);
 }
 .btn:not(.btn--ghost):not(.btn--icon) .icon{width:var(--icon-md);height:var(--icon-md)}
-.btn:not(.btn--ghost):not(.btn--icon):has(.icon){justify-content:space-between;gap:var(--space-16)}  /* text left, icon right */
+.btn:not(.btn--ghost):not(.btn--icon):has(> .btn__label + .icon){justify-content:space-between;gap:var(--space-16)}  /* icon right: text left, icon right */
+.btn:not(.btn--ghost):not(.btn--icon):has(> .icon + .btn__label){gap:var(--space-8)}                                  /* icon left: icon + text, centred (✓ Guardado) */
 .btn:not(.btn--ghost):not(.btn--icon):is(:hover,.is-hover){filter:var(--btn-hover)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:active,.is-active){filter:none;background:var(--btn-accent-dark)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:disabled,[aria-disabled="true"]){background:var(--fill);color:var(--text-muted)}
