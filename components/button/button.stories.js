@@ -1,5 +1,6 @@
 // Button stories — HTML + Vite
 // Three types (Big, Ghost, Icon). Each has its own Playground with the properties agreed for it.
+import { figma } from '../../.storybook/figma.js';
 import { icon } from '../../icons/icons.js';
 
 /* Icons each type can swap to */
@@ -199,3 +200,15 @@ export const FloatingInContext = {
     <div class="fab-dock">${fabHTML({})}${fabHTML({ style: 'filled', icon: 'accessibility' })}</div>
   </div>`,
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+Big.parameters = { ...Big.parameters, design: figma('25:179') };
+Ghost.parameters = { ...Ghost.parameters, design: figma('25:240') };
+Icon.parameters = { ...Icon.parameters, design: figma('25:271') };
+States.parameters = { ...States.parameters, design: figma('8:169') };
+LongLabel.parameters = { ...LongLabel.parameters, design: figma('25:179') };
+InContext.parameters = { ...InContext.parameters, design: figma('8:169') };
+Mobile.parameters = { ...Mobile.parameters, design: figma('8:169') };
+Floating.parameters = { ...Floating.parameters, design: figma('25:332') };
+FloatingStates.parameters = { ...FloatingStates.parameters, design: figma('25:332') };
+FloatingInContext.parameters = { ...FloatingInContext.parameters, design: figma('25:332') };

@@ -2,6 +2,7 @@
 // The five tables of the app: Facturación · Gastos · Últimas facturas · Resumen anual · Tax forms (Modelo 303 / 130),
 // each with its variants, desktop / mobile and states.
 // Data: components/table/table-data.js (the demo app, 2026).
+import { figma } from '../../.storybook/figma.js';
 import { icon } from '../../icons/icons.js';
 import { inFrame, frameArgs, mobileFrame, reportHeight } from '../../foundations/mobile-frame.js';
 import { INVOICES, EXPENSES, CATEGORIES, QUARTERS, SUMMARY, fmt } from './table-data.js';
@@ -355,3 +356,10 @@ export const TaxForms = {
 
 /* For the Showcase */
 export const showcaseTables = () => `${factDesktop({ table: 'esp', state: 'editable' })}<div style="height:var(--space-16)"></div>${taxFormHTML({ tax: 'iva', result: 'pay', compensacion: true })}<div style="height:var(--space-16)"></div>${sumDesktop({ tax: 'iva' })}`;
+
+/* ── Design tab: the matching component in the Figma library ── */
+Facturacion.parameters = { ...Facturacion.parameters, design: figma('42:1211') };
+Gastos.parameters = { ...Gastos.parameters, design: figma('44:4590') };
+LastInvoices.parameters = { ...LastInvoices.parameters, design: figma('47:3545') };
+Summary.parameters = { ...Summary.parameters, design: figma('47:3360') };
+TaxForms.parameters = { ...TaxForms.parameters, design: figma('48:3367') };

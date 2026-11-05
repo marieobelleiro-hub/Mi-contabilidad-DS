@@ -10,6 +10,7 @@ const config = {
       options: { mdxPluginOptions: { mdxCompileOptions: { remarkPlugins: [remarkGfm] } } }, // Markdown tables
     },
     '@storybook/addon-a11y',
+    '@storybook/addon-designs',   // the Design tab: the matching Figma component, live
   ],
   framework: { name: '@storybook/html-vite', options: {} },
   features: { actions: false, interactions: false,   // panels we don't use (no click logging, no interaction tests)

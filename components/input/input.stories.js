@@ -1,6 +1,7 @@
 // Input stories — HTML + Vite
 // One story per type of input, each with its controls. Every label, value and message is a real one from the app.
 // Checkbox / radio / switch → Selectors · cells inside tables → Tables.
+import { figma } from '../../.storybook/figma.js';
 import './input-docs.css';
 import { dialogHTML } from '../dialog/dialog.stories.js';
 import { entryForm, wireEntryForm, CAT_OPTS, IVA } from './entry-form.js';
@@ -56,7 +57,7 @@ const T = (category) => ({ table: { category } });
 const COMMON = {
   tinted: { name: 'Tinted', control: 'boolean', description: 'Tint background: only in the mobile forms', ...T('Style') },
   accent: { name: 'Colour', control: { type: 'inline-radio', labels: { primary: 'Blue (Facturación, IRPF)', attention: 'Orange (Gastos, IVA)' } }, options: ['primary', 'attention'], if: { arg: 'tinted' }, ...T('Style') },
-  state: { name: 'State', control: { type: 'inline-radio', labels: { default: 'Default', hover: 'Hover', focus: 'Focus', disabled: 'Disabled' } }, options: ['default', 'hover', 'focus', 'disabled'], ...T('Style') },
+  state: { name: 'State', control: { type: 'inline-radio', labels: { default: 'Default', hover: 'Hover', disabled: 'Disabled', focus: 'Focus' } }, options: ['default', 'hover', 'disabled', 'focus'], ...T('Style') },
   label: { name: 'Label', control: 'text', ...T('Content') },
   required: { name: 'Required', control: { type: 'inline-radio', labels: { required: 'Required', optional: 'Optional' } }, options: ['required', 'optional'], description: 'Optional adds "(opcional)" in grey next to the label', ...T('Content') },
   value: { name: 'Text in the field', control: 'text', description: 'Delete it to see the empty field', ...T('Content') },
@@ -228,10 +229,10 @@ export const States = {
   render: () => fig([
     cell('Empty', pick('concepto', { value: '' })),
     cell('Hover', pick('concepto', { value: '', state: 'hover' })),
-    cell('Focus', pick('concepto', { value: '', state: 'focus' })),
     cell('Filled', pick('concepto')),
     cell('Error', pick('concepto', { value: '', error: REQ })),
     cell('Disabled + hint', pick('iva', { value: '0 %', disabled: true, hint: FIELDS.iva.hint })),
+    cell('Focus', pick('concepto', { value: '', state: 'focus' })),
   ]),
 };
 
@@ -246,3 +247,14 @@ export const Colour = {
     cell('Orange · tinted', pick('proveedor', { accent: 'attention', tinted: true, state: 'focus' })),
   ], 4),
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+Text.parameters = { ...Text.parameters, design: figma('37:162') };
+Amount.parameters = { ...Amount.parameters, design: figma('36:163') };
+Date_.parameters = { ...Date_.parameters, design: figma('37:162') };
+Dropdown.parameters = { ...Dropdown.parameters, design: figma('37:343') };
+Description.parameters = { ...Description.parameters, design: figma('36:142') };
+MobileForms.parameters = { ...MobileForms.parameters, design: figma('66:281') };
+Anatomy.parameters = { ...Anatomy.parameters, design: figma('38:22') };
+States.parameters = { ...States.parameters, design: figma('37:162') };
+Colour.parameters = { ...Colour.parameters, design: figma('37:162') };

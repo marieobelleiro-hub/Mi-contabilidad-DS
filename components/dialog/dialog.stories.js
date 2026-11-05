@@ -1,5 +1,6 @@
 // Dialog stories — HTML + Vite (native <dialog>)
 // Every dialog here is a real one from the app: Demo (online) and Local (the version you edit and save on your computer).
+import { figma } from '../../.storybook/figma.js';
 import { icon } from '../../icons/icons.js';
 import { switchHTML } from '../selectors/selectors.stories.js';
 import { inFrame, frameArgs, mobileFrame, frameRoot } from '../../foundations/mobile-frame.js';
@@ -243,3 +244,11 @@ export const SaveCopy = {
   tags: ['!dev'],
   render: () => staticBox(saveCopy()),
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+Playground.parameters = { ...Playground.parameters, design: figma('65:142') };
+AppDialogs.parameters = { ...AppDialogs.parameters, design: figma('66:24') };
+Welcome.parameters = { ...Welcome.parameters, design: figma('66:34') };
+Alert.parameters = { ...Alert.parameters, design: figma('66:89') };
+Auth.parameters = { ...Auth.parameters, design: figma('66:141') };
+SaveCopy.parameters = { ...SaveCopy.parameters, design: figma('66:191') };

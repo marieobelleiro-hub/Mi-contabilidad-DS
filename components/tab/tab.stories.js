@@ -1,4 +1,5 @@
 // Tab stories — HTML + Vite
+import { figma } from '../../.storybook/figma.js';
 import { icon } from '../../icons/icons.js';
 
 /** Single tab markup. role "tab" → <button role="tab" aria-selected>, role "nav" → <a aria-current="page"> */
@@ -284,3 +285,16 @@ export const PeriodSelector = {
   argTypes: { ...NO_TAB_ARGS, period: { name: 'Current period', control: 'select', options: PERIODS } },
   args: { period: PERIODS[0] },
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+Playground.parameters = { ...Playground.parameters, design: figma('23:109') };
+PeriodTabs.parameters = { ...PeriodTabs.parameters, design: figma('23:121') };
+ViewToggle.parameters = { ...ViewToggle.parameters, design: figma('20:135') };
+SidebarNav.parameters = { ...SidebarNav.parameters, design: figma('23:110') };
+States.parameters = { ...States.parameters, design: figma('23:109') };
+Mobile.parameters = { ...Mobile.parameters, design: figma('20:135') };
+YearTab.parameters = { ...YearTab.parameters, design: figma('24:56') };
+YearStrip.parameters = { ...YearStrip.parameters, design: figma('24:57') };
+YearStates.parameters = { ...YearStates.parameters, design: figma('24:56') };
+Selector.parameters = { ...Selector.parameters, design: figma('23:110') };
+PeriodSelector.parameters = { ...PeriodSelector.parameters, design: figma('23:121') };

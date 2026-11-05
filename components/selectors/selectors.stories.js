@@ -1,5 +1,6 @@
 // Selectors stories — HTML + Vite
 // Small controls that show or change a state: checkbox & radio, status dot, switch (toggle), and the static chips.
+import { figma } from '../../.storybook/figma.js';
 
 /* ── Builders (also used by the Showcase and other stories) ── */
 const STATUS_LABEL = { paid: 'Cobrada', pending: 'Pendiente' };
@@ -161,3 +162,12 @@ export const InContext = {
     </section>
   </div>`),
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+Checkbox.parameters = { ...Checkbox.parameters, design: figma('26:85') };
+Status.parameters = { ...Status.parameters, design: figma('27:65') };
+Switch.parameters = { ...Switch.parameters, design: figma('27:34') };
+Chip.parameters = { ...Chip.parameters, design: figma('27:70') };
+States.parameters = { ...States.parameters, design: figma('26:3') };
+StatusOverview.parameters = { ...StatusOverview.parameters, design: figma('27:41') };
+InContext.parameters = { ...InContext.parameters, design: figma('26:3') };

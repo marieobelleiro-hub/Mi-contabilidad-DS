@@ -1,5 +1,6 @@
 // Banner, Tooltip & Toast stories — HTML + Vite
 const ON_CANVAS = { globals: { backgrounds: { value: 'canvas' } } };
+import { figma } from '../../.storybook/figma.js';
 import { icon } from '../../icons/icons.js';
 import { inFrame, frameArgs, mobileFrame, desktopFrame, reportHeight, frameRoot } from '../../foundations/mobile-frame.js';
 const INFO_ICON = icon('info');
@@ -175,3 +176,11 @@ export const Toast = {
     return a.view === 'mobile' ? mobileFrame(id, a, { height: 420 }) : desktopFrame(id, a, { height: 420 });
   },
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+Banner.parameters = { ...Banner.parameters, design: figma('61:90') };
+BannersFuture.parameters = { ...BannersFuture.parameters, design: figma('61:90') };
+BannerInContext.parameters = { ...BannerInContext.parameters, design: figma('61:118') };
+Tooltip.parameters = { ...Tooltip.parameters, design: figma('61:91') };
+ChartTooltip.parameters = { ...ChartTooltip.parameters, design: figma('61:94') };
+Toast.parameters = { ...Toast.parameters, design: figma('61:106') };

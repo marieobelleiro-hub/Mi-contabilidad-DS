@@ -13,6 +13,7 @@ You are building screens for **Mi Contabilidad**, an accounting app for freelanc
 | Icons | `icons/icons.js` · `dist/icons/<name>.svg` · sprite `dist/mi-contabilidad-ds-icons.svg` |
 | Charts | `components/chart/chart.js` (`lineChart`, `barChart`) |
 | Human documentation | Storybook (`npm run storybook`) |
+| Design (Figma library) | "Mi Contabilidad DS" — every story links to its component in the Design tab (`.storybook/figma.js`, `figma('node-id')` at the end of each stories file) |
 
 ## Rules (always)
 

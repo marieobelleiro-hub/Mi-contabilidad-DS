@@ -1,4 +1,5 @@
 // Chart stories — HTML + Vite
+import { figma } from '../../.storybook/figma.js';
 import { lineChart, barChart } from './chart.js';
 import { barListHTML } from '../list/list.stories.js';
 
@@ -78,3 +79,10 @@ export const Mobile = {
     series: [{ name: 'Ingresos', color: 'var(--chart-1)', values: ING }, { name: 'Gastos', color: 'var(--chart-2)', values: GAS }],
   }, '100%'),
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+Line.parameters = { ...Line.parameters, design: figma('56:31') };
+Bars.parameters = { ...Bars.parameters, design: figma('56:88') };
+Distribution.parameters = { ...Distribution.parameters, design: figma('56:3283') };
+Dashboard.parameters = { ...Dashboard.parameters, design: figma('56:3087') };
+Mobile.parameters = { ...Mobile.parameters, design: figma('56:31') };

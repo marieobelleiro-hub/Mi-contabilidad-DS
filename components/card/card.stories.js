@@ -1,4 +1,5 @@
 // Card stories — HTML + Vite
+import { figma } from '../../.storybook/figma.js';
 import { icon } from '../../icons/icons.js';
 import { inFrame, mobileFrame, reportHeight } from '../../foundations/mobile-frame.js';
 const INFO = `<button type="button" class="btn btn--icon btn--sm btn--info" aria-label="Más información">${icon('info')}</button>`;
@@ -144,3 +145,12 @@ export const Salario = {
     </div>
   </section>`),
 };
+
+/* ── Design tab: the matching component in the Figma library ── */
+KpiCard.parameters = { ...KpiCard.parameters, design: figma('32:369') };
+KpiStates.parameters = { ...KpiStates.parameters, design: figma('32:369') };
+Dashboard.parameters = { ...Dashboard.parameters, design: figma('33:33') };
+Facturacion.parameters = { ...Facturacion.parameters, design: figma('32:369') };
+Gastos.parameters = { ...Gastos.parameters, design: figma('32:369') };
+IrpfPeriods.parameters = { ...IrpfPeriods.parameters, design: figma('33:72') };
+Salario.parameters = { ...Salario.parameters, design: figma('51:76') };
