@@ -210,7 +210,6 @@
   --textarea-min-h:88px;          /* textarea, about 4 lines */
   --check-size:20px;              /* checkbox / radio in forms */
   --check-size-sm:16px;           /* checkbox in table rows */
-  --disabled-opacity:0.4;         /* a disabled status dot */
   --switch-w:48px;                /* switch track width */
   --switch-h:24px;                /* switch track height */
 

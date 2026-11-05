@@ -212,7 +212,6 @@
   --textarea-min-h:88px;          /* textarea, about 4 lines */
   --check-size:20px;              /* checkbox / radio in forms */
   --check-size-sm:16px;           /* checkbox in table rows */
-  --disabled-opacity:0.4;         /* a disabled status dot */
   --switch-w:48px;                /* switch track width */
   --switch-h:24px;                /* switch track height */
 
@@ -295,9 +294,9 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;margin:0;padding:0;line-
    Button  ·  .btn
    Three types, each with the same five states: default · hover · pressed · focus · disabled.
 
-   Big (default type)   48px · Primary / Attention · optional icon on the right (24px)
+   Big (default type)   48px · Primary / Attention · optional icon (24px) on the left and/or on the right, each its own
                         width 160–296px on desktop, full width on mobile · label cut with "…"
-   Ghost  .btn--ghost   24px · Primary / Attention · optional plus icon on the left (16px)
+   Ghost  .btn--ghost   24px · Primary / Attention · optional icon on the left (16px, plus by default)
    Icon   .btn--icon    Info (blue) / Danger (grey → red) · --sm 24px / --md 40px
                         on mobile the touch area grows to 44px without changing the look
 
@@ -344,7 +343,10 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;margin:0;padding:0;line-
   color:var(--white);
 }
 .btn:not(.btn--ghost):not(.btn--icon) .icon{width:var(--icon-md);height:var(--icon-md)}
-.btn:not(.btn--ghost):not(.btn--icon):has(.icon){justify-content:space-between;gap:var(--space-16)}  /* text left, icon right */
+/* With icons: left icon + text start on the left, 8px apart; the right icon sits at the far right (at least 16px from the text). Without icons: centred. */
+.btn:not(.btn--ghost):not(.btn--icon):has(.icon){justify-content:flex-start;gap:var(--space-8)}
+.btn:not(.btn--ghost):not(.btn--icon) .btn__label + .icon{margin-inline-start:auto}
+.btn:not(.btn--ghost):not(.btn--icon) .btn__label:has(+ .icon){margin-inline-end:var(--space-8)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:hover,.is-hover){filter:var(--btn-hover)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:active,.is-active){filter:none;background:var(--btn-accent-dark)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:disabled,[aria-disabled="true"]){background:var(--fill);color:var(--text-muted)}
@@ -714,7 +716,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;margin:0;padding:0;line-
    Status dot  ·  .status
    Shows whether an invoice is paid. Colour is never the only cue:
    always pair it with a visible label or an aria-label / title.
-   States: --paid (green) · --pending (orange) · --none (grey)
+   Two states only: --paid (green, Cobrada) · --pending (orange, Pendiente)
    Every dot has a 1px ring, so the light green dot reaches 3:1 contrast
 
    <span class="status status--paid" role="img" aria-label="Cobrada"></span>
@@ -728,12 +730,10 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;margin:0;padding:0;line-
   width:var(--dot-size);
   height:var(--dot-size);
   border-radius:var(--radius-round);
-  background:var(--disabled);
   box-shadow:0 0 0 var(--border-thin) var(--text-muted);   /* ring: every dot stays visible (3:1) whatever its colour */
 }
 .status--paid{background:var(--brand)}
 .status--pending{background:var(--attention)}
-.status--none{background:var(--disabled)}
 
 /* Dot + text (legends, mobile rows) */
 .status-label{
@@ -759,8 +759,6 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;margin:0;padding:0;line-
   cursor:pointer;
 }
 .status-btn:is(:hover,.is-hover){background:var(--fill)}
-.status-btn:is(:disabled,[aria-disabled="true"]){cursor:default;background:none}
-.status-btn:is(:disabled,[aria-disabled="true"]) .status{opacity:var(--disabled-opacity)}
 
 /* ── components/card/card.css ── */
 /* ==========================================================================

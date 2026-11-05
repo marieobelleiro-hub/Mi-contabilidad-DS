@@ -136,7 +136,7 @@
    Status dot  ·  .status
    Shows whether an invoice is paid. Colour is never the only cue:
    always pair it with a visible label or an aria-label / title.
-   States: --paid (green) · --pending (orange) · --none (grey)
+   Two states only: --paid (green, Cobrada) · --pending (orange, Pendiente)
    Every dot has a 1px ring, so the light green dot reaches 3:1 contrast
 
    <span class="status status--paid" role="img" aria-label="Cobrada"></span>
@@ -150,12 +150,10 @@
   width:var(--dot-size);
   height:var(--dot-size);
   border-radius:var(--radius-round);
-  background:var(--disabled);
   box-shadow:0 0 0 var(--border-thin) var(--text-muted);   /* ring: every dot stays visible (3:1) whatever its colour */
 }
 .status--paid{background:var(--brand)}
 .status--pending{background:var(--attention)}
-.status--none{background:var(--disabled)}
 
 /* Dot + text (legends, mobile rows) */
 .status-label{
@@ -181,5 +179,3 @@
   cursor:pointer;
 }
 .status-btn:is(:hover,.is-hover){background:var(--fill)}
-.status-btn:is(:disabled,[aria-disabled="true"]){cursor:default;background:none}
-.status-btn:is(:disabled,[aria-disabled="true"]) .status{opacity:var(--disabled-opacity)}

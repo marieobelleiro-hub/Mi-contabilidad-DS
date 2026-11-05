@@ -9,7 +9,7 @@ import ownCss from './button.css?raw';
 
 # Button
 
-Four types: **Big** for the main action of a screen or dialog, **Ghost** for actions next to content, **Icon** for compact actions, and **Floating** for the round buttons that float over the page. They all share the same states: default, hover, pressed, focus and disabled (floating buttons add **open**).
+Four types: **Big** for the main action of a screen or dialog, **Ghost** for actions next to content, **Icon** for compact actions, and **Floating** for the round buttons that float over the page. They all share the same states: default, hover, pressed, disabled and focus (floating buttons add **open**).
 
 Each type below has a Playground: change its properties and the button and its code update.
 
@@ -53,21 +53,21 @@ The same properties will be used in the Figma library.
 | | Icon right | Boolean | Visible · Hidden | Visible |
 | | Icon right choice | Icon swap | same list | `save` |
 | | Label | Text | short, one line | "Guardado" |
-| | State | Variant | Default · Hover · Pressed · Focus · Disabled | Default |
+| | State | Variant | Default · Hover · Pressed · Disabled · Focus | Default |
 | **Ghost** | Type | Variant | Primary (blue) · Attention (orange) | Primary |
 | | Icon | Boolean | Visible (left) · Hidden | Visible |
 | | Icon choice | Icon swap | `plus` · `arrow-right` · `save` · `check` · `download` · `trash` · `chevron-down` | `plus` |
 | | Label | Text | always present, one line | "Añadir factura" |
-| | State | Variant | Default · Hover · Pressed · Focus · Disabled | Default |
+| | State | Variant | Default · Hover · Pressed · Disabled · Focus | Default |
 | **Icon** | Style | Variant | Info (blue) · Danger (grey → red) | Info |
 | | Icon choice | Icon swap | Info: `info` · Danger: `trash` · `close` · `close-filled` | `info` |
 | | Size | Variant | sm 24 · md 40 | sm |
 | | Label | Text · invisible | read by screen readers only (`aria-label`) | "Más información" |
-| | State | Variant | Default · Hover · Pressed · Focus · Disabled | Default |
+| | State | Variant | Default · Hover · Pressed · Disabled · Focus | Default |
 | **Floating** | Type | Variant | Outline (white, blue ring) · Filled (blue) | Outline |
 | | Icon choice | Icon swap | `assistant` · `accessibility` | `assistant` |
 | | Label | Text · invisible | read by screen readers only (`aria-label`) | "Asistente inteligente" |
-| | State | Variant | Default · Hover · Pressed · Focus · Open · Disabled | Default |
+| | State | Variant | Default · Hover · Pressed · Open · Disabled · Focus | Default |
 
 Icon and floating buttons have no visible text, but they always have a **Label for screen readers**: invisible on screen, read aloud as the button's name (`aria-label`). Write what the button does, as precisely as possible ("Eliminar factura 411", not just "Eliminar"). Left empty, it falls back to the default for the icon ("Más información", "Eliminar", "Cerrar").
 
@@ -75,19 +75,19 @@ Icon and floating buttons have no visible text, but they always have a **Label f
 
 <Canvas of={ButtonStories.States} sourceState="none" />
 
-| | Default | Hover | Pressed | Focus | Disabled |
+| | Default | Hover | Pressed | Disabled | Focus |
 |---|---|---|---|---|---|
-| **Big** | colour fill, white text | a bit lighter (`--btn-hover`) | `-dark` fill | yellow ring + black halo | `--fill` + `--text-muted` |
-| **Ghost** | coloured text | colour fill, white text | `-dark` fill, white text | yellow ring + black halo | `--disabled` text |
-| **Icon · info** | `--primary` icon | `--primary-tint` background | tint + `--primary-dark` icon | yellow ring + black halo | `--disabled` icon |
-| **Icon · danger** | `--text-muted` icon | `--error-tint` background | tint + `--error` icon | yellow ring + black halo | `--disabled` icon |
+| **Big** | colour fill, white text | a bit lighter (`--btn-hover`) | `-dark` fill | `--fill` + `--text-muted` | yellow ring + black halo |
+| **Ghost** | coloured text | colour fill, white text | `-dark` fill, white text | `--disabled` text | yellow ring + black halo |
+| **Icon · info** | `--primary` icon | `--primary-tint` background | tint + `--primary-dark` icon | `--disabled` icon | yellow ring + black halo |
+| **Icon · danger** | `--text-muted` icon | `--error-tint` background | tint + `--error` icon | `--disabled` icon | yellow ring + black halo |
 
 <Canvas of={ButtonStories.FloatingStates} sourceState="none" />
 
-| | Default | Hover | Pressed | Focus | Open | Disabled |
+| | Default | Hover | Pressed | Open | Disabled | Focus |
 |---|---|---|---|---|---|---|
-| **Floating · outline** | white, 3px `--primary` ring, blue icon | `--primary-tint` | tint + `--primary-dark` ring and icon | yellow ring | 2px white gap + 3px `--attention` ring | `--fill` + `--disabled` icon |
-| **Floating · filled** | `--primary`, white icon | `--primary-dark` | dark + inner blue ring | yellow ring | 2px white gap + 3px `--attention` ring | `--fill` + `--disabled` icon |
+| **Floating · outline** | white, 3px `--primary` ring, blue icon | `--primary-tint` | tint + `--primary-dark` ring and icon | 2px white gap + 3px `--attention` ring | `--fill` + `--disabled` icon | yellow ring |
+| **Floating · filled** | `--primary`, white icon | `--primary-dark` | dark + inner blue ring | 2px white gap + 3px `--attention` ring | `--fill` + `--disabled` icon | yellow ring |
 
 Hover lightens the colour on purpose, so the change of state is clearly visible. The default state is the one that meets WCAG AA (white on `--primary` 5.0 : 1, on `--attention` 4.5 : 1).
 

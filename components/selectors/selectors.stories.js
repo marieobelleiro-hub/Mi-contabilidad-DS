@@ -2,7 +2,7 @@
 // Small controls that show or change a state: checkbox & radio, status dot, switch (toggle), and the static chips.
 
 /* ── Builders (also used by the Showcase and other stories) ── */
-const STATUS_LABEL = { paid: 'Cobrada', pending: 'Pendiente', none: 'Sin estado' };
+const STATUS_LABEL = { paid: 'Cobrada', pending: 'Pendiente' };
 const stateCls = (state) => ({ hover: ' is-hover', focus: ' is-focus' }[state] || '');
 
 export const checkHTML = ({ type = 'primary', kind = 'checkbox', size = 'md', label = 'Incluir en el 303', showLabel = true, checked = true, state = 'default', name = 'r' } = {}) => {
@@ -13,7 +13,7 @@ export const checkHTML = ({ type = 'primary', kind = 'checkbox', size = 'md', la
 export const statusHTML = ({ state = 'paid', mode = 'dot', interaction = 'default' } = {}) => {
   const dot = (hidden) => `<span class="status status--${state}"${hidden ? ' aria-hidden="true"' : ` role="img" aria-label="${STATUS_LABEL[state]}"`}></span>`;
   if (mode === 'label') return `<span class="status-label">${dot(true)}${STATUS_LABEL[state]}</span>`;
-  if (mode === 'button') return `<button type="button" class="status-btn${stateCls(interaction)}" aria-label="${STATUS_LABEL[state]}. Pulsa para cambiar"${interaction === 'disabled' ? ' disabled' : ''}>${dot(true)}</button>`;
+  if (mode === 'button') return `<button type="button" class="status-btn${stateCls(interaction)}" aria-label="${STATUS_LABEL[state]}. Pulsa para cambiar">${dot(true)}</button>`;
   return dot(false);
 };
 
@@ -60,7 +60,7 @@ export const Checkbox = {
     type: TYPE,
     kind: { name: 'Kind', control: 'inline-radio', options: ['checkbox', 'radio'], table: { category: 'Variant' } },
     size: { name: 'Size', control: { type: 'inline-radio', labels: { md: 'md 20 (forms)', sm: 'sm 16 (table rows)' } }, options: ['md', 'sm'], table: { category: 'Variant' } },
-    state: STATE(['default', 'focus', 'disabled']),
+    state: STATE(['default', 'disabled', 'focus']),
     checked: { name: 'Checked', control: 'boolean', table: { category: 'Boolean' } },
     showLabel: { name: 'Label', control: 'boolean', description: 'Hidden: the text stays for screen readers', table: { category: 'Boolean' } },
     label: { name: 'Label text', control: 'text', table: { category: 'Text' } },
@@ -85,11 +85,11 @@ export const Switch = {
   name: 'Switch / toggle',
   render: (args) => live(switchHTML(args)),
   argTypes: {
-    state: STATE(['default', 'focus', 'disabled']),
+    state: STATE(['default', 'disabled', 'focus']),
     checked: { name: 'On', control: 'boolean', table: { category: 'Boolean' } },
     showLabels: { name: 'Labels', control: 'boolean', description: 'Hidden: the switch keeps its aria-label', table: { category: 'Boolean' } },
-    off: { name: 'Off text', control: 'text', if: { arg: 'showLabels' }, table: { category: 'Text' } },
-    on: { name: 'On text', control: 'text', if: { arg: 'showLabels' }, table: { category: 'Text' } },
+    on: { name: 'Right text (ON)', control: 'text', description: 'Any word: Eng, Anual, Sí…', if: { arg: 'showLabels' }, table: { category: 'Text' } },
+    off: { name: 'Left text (OFF)', control: 'text', description: 'Any word: Esp, Mensual, No…', if: { arg: 'showLabels' }, table: { category: 'Text' } },
     label: { name: 'Accessible name', control: 'text', description: 'What the switch turns on, for screen readers', table: { category: 'Text' } },
   },
   args: { state: 'default', checked: false, showLabels: true, off: 'Esp', on: 'Eng', label: 'English' },
@@ -115,11 +115,11 @@ export const States = {
   name: 'States',
   tags: ['!dev'],
   parameters: { layout: 'padded', controls: { disable: true } },
-  render: () => Object.assign(live(`${grid(['deselected', 'selected', 'focus', 'disabled'], [
+  render: () => Object.assign(live(`${grid(['selected', 'deselected', 'disabled', 'focus'], [
     ['Checkbox · md', (s) => checkHTML({ checked: s !== 'deselected', state: s === 'focus' || s === 'disabled' ? s : 'default', showLabel: false })],
     ['Checkbox · sm', (s) => checkHTML({ checked: s !== 'deselected', state: s === 'focus' || s === 'disabled' ? s : 'default', size: 'sm', showLabel: false, type: 'attention' })],
     ['Radio', (s) => checkHTML({ kind: 'radio', checked: s !== 'deselected', state: s === 'focus' || s === 'disabled' ? s : 'default', showLabel: false, name: `st-${s}` })],
-  ])}<div style="height:var(--space-16)"></div>${grid(['off', 'on', 'focus', 'disabled'], [
+  ])}<div style="height:var(--space-16)"></div>${grid(['on', 'off', 'disabled', 'focus'], [
     ['Switch / toggle', (s) => switchHTML({ checked: s !== 'off', state: s === 'focus' || s === 'disabled' ? s : 'default' })],
   ], 170)}<div style="height:var(--space-16)"></div>${grid(['default', 'hover', 'focus'], [
     ['Status · Cobrada', (s) => statusHTML({ mode: 'button', interaction: s, state: 'paid' })],

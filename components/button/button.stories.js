@@ -6,7 +6,7 @@ import { icon } from '../../icons/icons.js';
 export const BIG_ICONS = ['arrow-right', 'save', 'check', 'download', 'trash', 'plus', 'chevron-down'];
 export const GHOST_ICONS = ['plus', 'arrow-right', 'save', 'check', 'download', 'trash', 'chevron-down'];
 export const ICON_BUTTON_ICONS = { info: ['info'], danger: ['trash', 'close', 'close-filled'] };
-const STATES = ['default', 'hover', 'pressed', 'focus', 'disabled'];
+const STATES = ['default', 'hover', 'pressed', 'disabled', 'focus'];
 const stateAttrs = (state) => ({
   cls: { hover: ' is-hover', pressed: ' is-active', focus: ' is-focus' }[state] || '',
   dis: state === 'disabled' ? ' disabled' : '',
@@ -160,7 +160,7 @@ export const FAB_ICONS = {
   accessibility: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="32" cy="32" r="25" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="19.5" r="3.6" fill="currentColor"/><path d="M20 25.5c4 1.2 8 1.8 12 1.8s8-.6 12-1.8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M32 27.5v9M32 36.5l-5 10M32 36.5l5 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 const FAB_LABELS = { assistant: 'Asistente inteligente', accessibility: 'Acceso fácil: asistente accesible' };
-const FAB_STATES = ['default', 'hover', 'pressed', 'focus', 'open', 'disabled'];
+const FAB_STATES = ['default', 'hover', 'pressed', 'open', 'disabled', 'focus'];
 /** Floating button · 40px circle that opens a panel. */
 export const fabHTML = ({ style = 'outline', icon: name = 'assistant', state = 'default', label } = {}) => {
   const cls = { hover: ' is-hover', pressed: ' is-active', focus: ' is-focus' }[state] || '';
