@@ -1,4 +1,4 @@
-// Real data: the demo app, year 2026 (exported from app_DEMO.html). Used by the Data table stories.
+// Real data: the demo app, year 2026 (exported from app_DEMO.html). Used by the Tables stories.
 // Invoices: [type 'esp'|'ext', num, fecha, cliente, concepto, base, iva %, retención 15 %, cobrada, quarter]
 // Expenses: [category id, num, fecha, proveedor, concepto, base, iva %, en 303, quarter, objeto]
 export const YEAR = 2026;

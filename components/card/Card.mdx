@@ -1,6 +1,5 @@
 import { Meta, Canvas, Controls, Source } from '@storybook/addon-docs/blocks';
 import * as CardStories from './card.stories.js';
-import * as ListStories from '../list/list.stories.js';
 import { Source as CssSource } from '@storybook/addon-docs/blocks';
 import { cssSnippet } from '../../foundations/css-snippet.js';
 import alsoCss0 from '../button/button.css?raw';
@@ -106,32 +105,7 @@ The subtitle is always black. Never colour both the label and the amount.
 
 For lists, tables, charts and tax forms: a **header** (title + actions), a **body** and an optional **footer**. Containers are **fully responsive**: one component for desktop and mobile; on mobile the padding goes down to 20px and wide content (tables) scrolls sideways.
 
-<Canvas of={CardStories.Panel} sourceState="none" />
-
-### Tax form
-
-The **Modelo 303** (IVA) and **Modelo 130** (IRPF) quarter forms. Same structure for both; only the colour changes: **orange** for IVA, **blue** for IRPF. The deadline is always orange.
-
-<Canvas of={CardStories.TaxForm} />
-<Controls of={CardStories.TaxForm} />
-
-**Anatomy:** the card has no outer padding (`card--sectioned`). The header and each block pad themselves and are separated by hairlines. Everything inside comes from other components:
-
-| Part | Example | Built with |
-|---|---|---|
-| Header | MODELO 303 · 3T · JUL–SEP 2026 | `card__header` + `card__title card__title--caps` |
-| Deadline | Plazo: 20 de octubre | `card__due` (Sans 14, always orange) |
-| Block | Ingresos con IVA · España | `card__section` + `card__section-title` (Mono 12 caps, section colour) |
-| Box row | `c.01` Base imponible · 9.622,45 € | **Row** `row--kv` (see Parts · rows) + **Chip** `chip--code` |
-| Highlighted amount | IVA repercutido 2.020,71 € | `row__value--accent` (section colour, 500) |
-| Secondary amount | Retenciones acumuladas 1.443,37 € | `row__value--muted` |
-| Subtotal | IVA repercutido − IVA soportado | **Result** `result--sm` (see Parts · rows) |
-| Compensation | ☑ Aplicar compensación · 151,80 | **Checkbox** `check` + **Input** `input--sm input--num` |
-| Result | A ingresar este trimestre · 1.778,23 € | **Result** `result--pay`, full width (see Parts · rows) |
-| Payment | Importe ingresado en Hacienda | `row--kv` + **Input** `input--sm input--num` |
-| Notes | Notas del trimestre | **Input** `textarea.input` |
-
-The colour is set once on the card: `card--attention field--attention` (IVA) or `card--primary field--primary` (IRPF), plus `list--attention` / `list--primary` on the rows. Section titles, highlighted amounts and the focus colour of the fields follow it.
+What goes inside lives on its own page: the tables, the Últimas facturas list and the tax forms (Modelo 303 · 130) are in <a href="./?path=/docs/app-components-tables--tables" target="_top">Tables</a>; the charts and the Distribución del gasto bars are in <a href="./?path=/docs/app-components-chart--chart" target="_top">Chart</a>.
 
 | Part | Class | Content |
 |---|---|---|
@@ -139,7 +113,7 @@ The colour is set once on the card: `card--attention field--attention` (IVA) or 
 | Title | `card__title` (`--caps`, `--accent`) | Title · Sans 16 / 400 |
 | Body | `card__body` (`--scroll` for wide tables) | List, table, chart… |
 | Footer | `card__footer` | Totals on the left · action on the right |
-| Section | `card__section` + `card__section-title` | Form block with an H3 (Label style: Mono 12 caps, accent colour) |
+| Sectioned | `card--sectioned` + `card__section` + `card__section-title` | No outer padding, blocks separated by hairlines, each with an H3 (Mono 12 caps, section colour) · `card__due` deadline · used by the tax forms |
 
 ### Cálculo del salario
 
@@ -152,30 +126,6 @@ The setting of Facturación that decides which invoices count for the monthly sa
 |---|---|---|
 | Explanation | `card__text` | Sans 12 · `--text` · linked to the field with `aria-describedby` |
 | Field | `field field--primary field--inline` | label and box on one line, 12px apart · the box grows up to `--input-inline-max-w` 520px · they wrap on narrow screens |
-
-## Parts · rows
-
-The lines inside the cards. They're never used on their own, so they're documented here, with the cards they belong to. Change a row once and every card, tax form and mobile table that uses it follows.
-
-| Row | Class | Used in |
-|---|---|---|
-| **Record** | `row` in `list` (`__lead` number · `__title` name · `__meta` date, hidden on mobile · `__value` amount · `__trail` status dot) | Últimas facturas (dashboard) |
-| **Label → value** | `row row--kv` in a `<dl class="list">` (`__label` with an optional `chip--code` · `__value`, `--accent` section colour, `--muted` grey) | Tax forms · Taxes on mobile · the small amounts of Input |
-| **Bar** | `row row--bar` (`__label` · decorative `__bar` · `__value` %) · one colour, the section's | Distribución del gasto (dashboard) |
-| **Result** | `result` · `--pay` (orange tint) · `--credit` (green tint) · `--none` (grey) · `--sm` subtotal · `--footer` annual total | Tax forms · Taxes |
-
-<Canvas of={ListStories.Records} sourceState="none" />
-<Canvas of={ListStories.KeyValue} sourceState="none" />
-<Canvas of={ListStories.Bars} sourceState="none" />
-<Canvas of={ListStories.Results} sourceState="none" />
-<Canvas of={ListStories.Footers} sourceState="none" />
-
-| | Value |
-|---|---|
-| Row padding | `--row-pad-regular` 12px (forms) · `list--compact` `--row-pad-compact` 8px (dashboard) |
-| Divider | 1px `--line` between rows, none after the last |
-| Text | 14px (forms) · `list--sm` 12px (dashboard) · 14px on mobile |
-| Result | label Sans 16 · amount Sans 24 / 500 · min height `--result-min-h` 56px · `role="status"`: the new amount is announced · the label always says the state in words |
 
 ## Markup
 
@@ -196,21 +146,6 @@ The lines inside the cards. They're never used on their own, so they're document
 <!-- KPI card · IRPF periods -->
 <div class="card card--kpi card--primary is-selected" aria-current="true">…</div>
 <div class="card card--kpi card--primary is-disabled" aria-disabled="true">…</div>
-
-<!-- Tax form (IVA): no outer padding, blocks separated by lines -->
-<section class="card card--sectioned card--attention field--attention" aria-labelledby="f303">
-  <div class="card__header">
-    <h2 class="card__title card__title--caps" id="f303">Modelo 303 · 3T · Jul–Sep 2026</h2>
-    <p class="card__due">Plazo: 20 de octubre</p>
-  </div>
-  <div class="card__section">
-    <h3 class="card__section-title">Ingresos con IVA · España</h3>
-    <dl class="list list--attention">
-      <div class="row row--kv"><dt class="row__label"><span class="chip chip--code">c.01</span>Base imponible</dt><dd class="row__value">9.622,45 €</dd></div>
-    </dl>
-  </div>
-  <div class="result result--pay" role="status"><p class="result__label">A ingresar este trimestre</p><p class="result__value">1.778,23 €</p></div>
-</section>
 
 <!-- Container card -->
 <section class="card" aria-labelledby="t1">

@@ -1,5 +1,6 @@
 // Chart stories — HTML + Vite
 import { lineChart, barChart } from './chart.js';
+import { barListHTML } from '../list/list.stories.js';
 
 const ON_CANVAS = { globals: { backgrounds: { value: 'canvas' } } };
 // Real data: the demo app, year 2026, on 4 November 2026 (the months up to today)
@@ -25,6 +26,7 @@ const inCard = (title, draw, cfg, width = '540px') => {
 export default {
   title: 'App/Components/Chart',
   tags: ['!autodocs'],   // documented in Chart.mdx
+  excludeStories: ['distributionHTML'],
   parameters: { layout: 'padded', controls: { disable: true } },
   ...ON_CANVAS,
 };
@@ -45,6 +47,17 @@ export const Bars = {
   }),
 };
 
+/** Horizontal bars: the share of each IRPF category in the year's expenses (base). One colour, the section's (Gastos: orange). */
+export const distributionHTML = () => `<section class="card card--attention" style="width:540px;max-width:100%" aria-labelledby="dg-t">
+    <div class="card__header"><h2 class="card__title" id="dg-t">Distribución del gasto</h2><span class="card__sub">Anual</span></div>
+    ${barListHTML()}
+  </section>`;
+
+export const Distribution = {
+  name: 'Horizontal bars · Distribución del gasto',
+  render: () => distributionHTML(),
+};
+
 export const Dashboard = {
   name: 'In context · Dashboard row',
   render: () => {
@@ -52,6 +65,7 @@ export const Dashboard = {
     grid.className = 'card-grid card-grid--2';
     grid.style.maxWidth = '1108px';
     grid.append(Line.render(), Bars.render());
+    const d = document.createElement('div'); d.innerHTML = distributionHTML(); grid.append(d.firstElementChild);
     return grid;
   },
 };

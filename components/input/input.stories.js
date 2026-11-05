@@ -1,6 +1,6 @@
 // Input stories — HTML + Vite
 // One story per type of input, each with its controls. Every label, value and message is a real one from the app.
-// Checkbox / radio / switch → Selectors · cells inside tables → Data table.
+// Checkbox / radio / switch → Selectors · cells inside tables → Tables.
 import './input-docs.css';
 import { dialogHTML } from '../dialog/dialog.stories.js';
 import { entryForm, wireEntryForm, CAT_OPTS, IVA } from './entry-form.js';

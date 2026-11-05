@@ -5,8 +5,8 @@ import { version } from '../package.json';
 import { bigHTML, ghostHTML, iconButtonHTML, fabHTML } from '../components/button/button.stories.js';
 import { tabHTML, YearStrip } from '../components/tab/tab.stories.js';
 import { chipHTML, statusHTML, checkHTML, switchHTML } from '../components/selectors/selectors.stories.js';
-import { kpiCardHTML, Panel as CardPanel, TaxForm as CardTaxForm } from '../components/card/card.stories.js';
-import { recordListHTML, kvListHTML, barListHTML, resultHTML } from '../components/list/list.stories.js';
+import { kpiCardHTML } from '../components/card/card.stories.js';
+import { distributionHTML } from '../components/chart/chart.stories.js';
 import { showcaseTables } from '../components/table/table.stories.js';
 import { fieldHTML, FIELDS } from '../components/input/input.stories.js';
 import { bannerHTML } from '../components/feedback/feedback.stories.js';
@@ -30,13 +30,12 @@ const COMPONENTS = [
   ['button', 'Button', 'app-components-button--button', 'Big, ghost, icon and floating · their states'],
   ['tab', 'Tab', 'app-components-tab--tab', 'Navigation, period tabs, view toggle, year tab'],
   ['selectors', 'Selectors', 'app-components-selectors--selectors', 'Checkbox & radio, status dot, switch / toggle, chips'],
-  ['list', 'Rows (card parts)', 'app-components-card--card', 'Record, label → value, bar and result rows, inside the cards'],
   ['card', 'Card', 'app-components-card--card', 'The white block: KPI card and container card'],
   ['input', 'Input', 'app-components-input--input', 'Fields, select, textarea'],
-  ['table', 'Data table', 'app-components-data-table--table', 'Invoices, expenses and annual summaries'],
+  ['table', 'Tables', 'app-components-tables--tables', 'Facturación, Gastos, Últimas facturas, Resumen anual, tax forms'],
   ['feedback', 'Banner, tooltip & toast', 'app-components-banner-tooltip-toast--feedback', 'Messages and pop-ups'],
   ['dialog', 'Dialog', 'app-components-dialog--dialog', 'Welcome, alerts and forms'],
-  ['chart', 'Chart', 'app-components-chart--chart', 'Line and bar charts'],
+  ['chart', 'Chart', 'app-components-chart--chart', 'Line, bar and horizontal bar charts'],
 ];
 
 const section = (id, title, docsId, lead, body, canvas = false) => `
@@ -116,17 +115,6 @@ const C = {
       ${kpiCardHTML({ label: 'Total facturado', amount: '50.790,36 €', amountColor: 'primary', sub: 'Base imponible' })}
       ${kpiCardHTML({ label: 'Pendiente de cobro', amount: '7.406,63 €', amountColor: 'attention', sub: '2 facturas' })}
       ${kpiCardHTML({ label: 'IRPF acumulado (3T)', amount: '3.508,86 €', amountColor: 'primary', showSub: false, state: 'selected' })}
-    </div>
-    <div class="sc__grid sc__grid--2" style="margin-top:var(--space-16)">${CardPanel.render()}${CardTaxForm.render({ tax: 'iva' })}</div>`,
-  list: `<div class="sc__grid sc__grid--3">
-      <div>${recordListHTML({ rows: [['411', 'University', '30/09/2026', '4.826,00 €', 'pending'], ['409', 'Main client', '15/09/2026', '3.892,45 €', 'paid'], ['410', 'University', '15/09/2026', '1.950,60 €', 'paid']] })}</div>
-      <div>${kvListHTML({ rows: [['c.01', 'Base imponible', '9.622,45 €'], ['c.03', 'IVA repercutido 21%', '2.020,71 €', 'accent']] })}</div>
-      <div>${barListHTML({ rows: [['Seguridad Social', 52], ['Arrendamiento', 19], ['Servicios exteriores', 18], ['Luz/Tel', 4]] })}</div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:var(--space-8);margin-top:var(--space-24)">
-      ${resultHTML({ state: 'pay', value: '1.778,23 €', live: false })}
-      ${resultHTML({ state: 'credit', value: '151,80 €', live: false })}
-      ${resultHTML({ state: 'none', value: '0,00 €', live: false })}
     </div>`,
   table: showcaseTables(),
   input: `<div class="sc__grid sc__grid--3">
@@ -148,6 +136,7 @@ const C = {
   chart: `<div class="sc__grid sc__grid--2">
       <section class="card"><div class="card__header"><h4 class="card__title">Comparativa Ingresos · Gastos</h4></div>${slot('line')}</section>
       <section class="card"><div class="card__header"><h4 class="card__title">Comparativa salario neto</h4></div>${slot('bar')}</section>
+      ${distributionHTML().replace(/<h2 class="card__title"/, '<h4 class="card__title"').replace('</h2>', '</h4>')}
     </div>`,
 };
 const CANVAS = ['card', 'table', 'chart'];

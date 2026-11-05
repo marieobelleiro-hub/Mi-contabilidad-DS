@@ -5,15 +5,15 @@ import { cssSnippet } from '../../foundations/css-snippet.js';
 import alsoCss0 from '../card/card.css?raw';
 import alsoCss1 from '../feedback/feedback.css?raw';
 import alsoCss2 from '../table/table.css?raw';
+import alsoCss3 from '../list/list.css?raw';
 import ownCss from './chart.css?raw';
 
 <Meta of={ChartStories} />
 
 # Chart
 
-The two dashboard charts: **Ingresos vs Gastos** (line) and **salario neto, this year vs last year** (bars).
-They're drawn in SVG by `chart.js`, using tokens for every colour and size.
-The **expense distribution** isn't a chart: it uses the **bar rows** (Card › Parts · rows).
+The three dashboard charts: **Ingresos vs Gastos** (line), **salario neto, this year vs last year** (bars) and **Distribución del gasto** (horizontal bars).
+The first two are drawn in SVG by `chart.js`, using tokens for every colour and size; the horizontal bars are plain HTML and CSS.
 
 <Canvas of={ChartStories.Dashboard} />
 
@@ -52,6 +52,23 @@ Move the pointer over a chart, or Tab into it and use **← →**: one tooltip s
 <Canvas of={ChartStories.Line} />
 <Canvas of={ChartStories.Bars} />
 
+## Horizontal bars · Distribución del gasto
+
+The share of each IRPF category in the year's expenses (base imponible), from the biggest to the smallest. All ten categories are always listed, even at 0%. The card is `card--attention` (Gastos), with "Anual" as its subtitle.
+
+<Canvas of={ChartStories.Distribution} />
+
+| | Value |
+|---|---|
+| Markup | `<dl class="list list--sm list--bars list--attention">` · one `row row--bar` per category |
+| Label | `row__label` · Sans 12 · `--row-bar-label-w` 136px · cut with … |
+| Bar | `row__bar` · `--row-bar-h` 12px · `--radius-sm` · track `--canvas` · fill in the section colour (`--list-accent`) · decorative (`aria-hidden`) |
+| Value | `row__value` · the % in words, right-aligned, `--row-bar-value-w` 40px |
+| Rows | 4px padding · no dividers |
+| Colour | **one** colour, the section's: no shade scales, no colour per category |
+
+The percentage is written next to every bar, so the bar itself is only decoration: screen readers read "Seguridad Social, 52%".
+
 ## Mobile
 
 <Canvas of={ChartStories.Mobile} />
@@ -82,7 +99,7 @@ Move the pointer over a chart, or Tab into it and use **← →**: one tooltip s
 
 ## CSS
 
-The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Chart uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Card, Banner, tooltip & toast, Data table).
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the component shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Chart uses**, the base styles (focus ring), the icon class and the component's own styles, plus the styles of the other components that appear in its examples (Card, Banner, tooltip & toast, Tables, List row).
 
 Charts are drawn by a script: add `components/chart/chart.js` (or `dist/mi-contabilidad-ds.js`) and call `lineChart(el, config)` / `barChart(el, config)`.
 
@@ -91,6 +108,6 @@ In the app you don't paste it: the whole design system is loaded once with `mi-c
 <details>
 <summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
 
-<CssSource language="html" dark code={cssSnippet('Chart', ownCss, { also: [['Card', alsoCss0], ['Banner, tooltip & toast', alsoCss1], ['Data table', alsoCss2]] })} />
+<CssSource language="html" dark code={cssSnippet('Chart', ownCss, { also: [['Card', alsoCss0], ['Banner, tooltip & toast', alsoCss1], ['Tables', alsoCss2], ['List row', alsoCss3]] })} />
 
 </details>

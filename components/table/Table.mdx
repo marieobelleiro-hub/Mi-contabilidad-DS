@@ -9,11 +9,21 @@ import alsoCss3 from '../result/result.css?raw';
 import alsoCss4 from '../selectors/selectors.css?raw';
 import ownCss from './table.css?raw';
 
-<Meta of={TableStories} />
+<Meta of={TableStories} name="Tables" />
 
-# Data table
+# Tables
 
-The three tables of the app: **Facturación**, **Gastos** and **Taxes** (the annual summaries of IVA and IRPF). A table always sits inside a **Card**, with "+ Añadir" and its totals in the card footer. Every example uses the real data of the demo (2026).
+The five tables of the app, each inside a **Card**. Every example uses the real data of the demo (2026).
+
+| Table | Where | What you do |
+|---|---|---|
+| [Facturación](#facturación) | Facturación, a quarter or Resumen anual | type, change the status, delete, "+ Añadir" |
+| [Gastos](#gastos) | Gastos, a quarter or Resumen anual | type, tick the 303, delete, "+ Añadir" |
+| [Últimas facturas](#últimas-facturas) | Dashboard | change the status only |
+| [Resumen anual](#resumen-anual) | IVA and IRPF, Resumen anual tab | read only |
+| [Tax forms](#tax-forms) | IVA (Modelo 303) and IRPF (Modelo 130), a quarter | the result is calculated: you type only the compensation, the payment and the notes |
+
+The data tables (Facturación and Gastos) have two controls:
 
 | Control | Values |
 |---|---|
@@ -62,16 +72,70 @@ The same expenses in two lists: **Por cat. IRPF** (one table per category of the
 - Footer: Base · IVA · Total (Seguridad Social: Total). Empty: "Ningún gasto registrado".
 - Each category title has its ⓘ with the rules of that category.
 
-## Taxes
+## Últimas facturas
 
-The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarters, read only: **IVA** (towards the Modelo 390) and **IRPF** (towards the Modelo 100). A quarter that hasn't been declared yet is grey ("—"). On mobile it becomes **one block per quarter**. The annual total under it is the <a href="./?path=/docs/app-components-card--card" target="_top">Card › Parts · rows</a> (annual footer).
+The dashboard list: the **six newest invoices** (nacionales and exentas together), newest first. Number · client · date · base · status. Nothing is typed here: only the status dot works (Cobrada ↔ Pendiente), and the ⓘ explains that changing it updates every total. The card is half the dashboard width (540px). On mobile the date is hidden.
+
+<Canvas of={TableStories.LastInvoices} sourceState="none" />
+<Controls of={TableStories.LastInvoices} />
+
+| Part | Class | Style |
+|---|---|---|
+| List | `<ul class="list list--sm list--compact">` | Sans 12 (14 on mobile) · 8px row padding · 1px `--line` between rows |
+| Row | `row` | `row__lead` number (500) · `row__title` client · `row__meta` date (`--text-muted`, hidden on mobile) · `row__value row__value--strong` amount · `row__trail` status dot (`status-btn`) |
+| Empty | `row` with `row__title row__value--muted` | "Sin facturas" |
+
+## Resumen anual
+
+The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarters, read only: **IVA** (towards the Modelo 390) and **IRPF** (towards the Modelo 100). A quarter that hasn't been declared yet is grey ("—"). On mobile it becomes **one block per quarter**. The annual total under it is a `result result--footer` in the section colour.
 
 <Canvas of={TableStories.Summary} sourceState="none" />
 <Controls of={TableStories.Summary} />
 
+## Tax forms
+
+The quarter forms: **Modelo 303** (IVA, orange) and **Modelo 130** (IRPF, blue). Same structure for both; only the colour and the boxes change. The deadline is always orange. Everything is calculated from the tables except three things you type: the compensation (IVA only), the payment and the notes.
+
+<Canvas of={TableStories.TaxForms} sourceState="none" />
+<Controls of={TableStories.TaxForms} />
+
+| Result | IVA · Modelo 303 | IRPF · Modelo 130 |
+|---|---|---|
+| **A ingresar** (`result--pay`, orange tint) | 3T: 1.778,23 € (with the compensation) · 1.930,03 € (without) | 3T: 2.683,99 € |
+| **A compensar** (`result--credit`, green tint) | "A compensar próximo trimestre": IVA soportado bigger than IVA repercutido. Example: 1T, if its IVA expenses had been ticked for the 303 → 79,91 € | **No compensation block in IRPF.** The result is simply **negative** ("Sin pago fraccionado este trimestre", −433,73 €) and it's compensated in the annual return (Modelo 100). Example: 4T, if no more invoices arrive and the three RETA quotas are paid |
+| **Sin actividad** (`result--none`, grey) | "Sin actividad con IVA": 2T (only foreign invoices, no 303 expenses) → 0,00 € | "Sin pago fraccionado este trimestre": 4T so far (3T paid, nothing new yet) → 0,00 € |
+
+- **Compensación** (IVA only): the IVA a compensar of earlier quarters (151,80 € in the demo), with "Aplicar compensación". Applying it **changes the result**: it is subtracted from it (Sin actividad + 151,80 € → A compensar 151,80 €).
+- **Registrar pago realizado** (Importe ingresado en Hacienda) only appears when there's something to pay.
+- In the 1T and 4T examples the demo has no such quarter: the figures are built from its real records, as noted.
+
+**Anatomy:** the card has no outer padding (`card--sectioned`). The header and each block pad themselves and are separated by hairlines.
+
+| Part | Example | Built with |
+|---|---|---|
+| Header | MODELO 303 · 3T · JUL–SEP 2026 | `card__header` + `card__title card__title--caps` |
+| Deadline | Plazo: 20 de octubre | `card__due` (Sans 14, always orange) |
+| Block | Ingresos con IVA · España | `card__section` + `card__section-title` (Mono 12 caps, section colour) |
+| Box row | `c.01` Base imponible · 9.622,45 € | `row row--kv` in a `<dl class="list">` + **Chip** `chip--code` |
+| Highlighted amount | IVA repercutido 2.020,71 € | `row__value--accent` (section colour, 500) |
+| Secondary amount | Retenciones acumuladas 1.443,37 € | `row__value--muted` |
+| Subtotal | IVA repercutido − IVA soportado | `result result--sm` |
+| Compensation | ☑ Aplicar compensación · 151,80 | **Checkbox** `check` + **Input** `input--sm input--num` (IVA only) |
+| Result | A ingresar este trimestre · 1.778,23 € | `result` `--pay` / `--credit` / `--none`, full width · `role="status"` |
+| Payment | Importe ingresado en Hacienda | `row--kv` + **Input** `input--sm input--num` (only when paying) |
+| Notes | Notas del trimestre | **Input** `textarea.input input--filled` |
+
+The colour is set once on the card: `card--attention field--attention` (IVA) or `card--primary field--primary` (IRPF), plus `list--attention` / `list--primary` on the rows.
+
+| Result | Value |
+|---|---|
+| Label | Sans 16 · always says the state in words |
+| Amount | Sans 24 / 500 · a negative amount uses a real minus sign (−) |
+| Size | min height `--result-min-h` 56px · `--sm` subtotal · `--footer` annual total (Resumen anual) |
+
 ## Spec
 
-| | Data table | Summary |
+| | Data table | Resumen anual |
 |---|---|---|
 | Text | Sans 12 | Sans 14 |
 | Header | Sans 12 / 400 · `--text-muted` · left (numbers right) | Mono 12 / 700 caps · section colour · right · quarter not declared yet `--text-muted` / 400 |
@@ -94,7 +158,7 @@ The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarte
 | Rows | `record__rows` > `record__row` | label `--text-muted` · value right · `record__row--total` 500, with the status dot |
 | Totals | `table-totals table-totals--stack` | one per line, Sans 14 |
 | "303" | `records__303` | above the checkbox column |
-| Quarter blocks (summary) | `card--sectioned` + `card__section` + row `row--kv` (Card › Parts) | quarter not declared: "Sin resultado hasta que termine el plazo de declaración" |
+| Quarter blocks (summary) | `card--sectioned` + `card__section` + row `row--kv` (as in the tax forms) | quarter not declared: "Sin resultado hasta que termine el plazo de declaración" |
 
 ## Markup
 
@@ -147,16 +211,17 @@ The annual summaries (the Resumen anual tab of IVA and IRPF): concepts × quarte
 - Headers use `<th scope="col">`; the status and delete columns get hidden text (`sr-only`). Summary rows use `<th scope="row">`, so each amount is read with its concept and its quarter.
 - The status dot is a `<button>` that says the status and what pressing does; in read only it's an image with the status in words. The delete and 303 controls name the row they act on.
 - On mobile each record is a list item, and its figures a `<dl>`: each value is read with its label.
+- Tax forms: every box is a `<dt>`/`<dd>` pair (code, label, amount); the result has `role="status"`, so a new result is announced, and its label says the state in words, not only the colour. The compensation amount has an `aria-label`; the payment and the notes have a `<label for>`.
 
 ## CSS
 
-The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the tables shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Data table uses**, the base styles (focus ring), the icon class and the table styles, plus the other components in the examples (Button, Card, List row, Selectors).
+The HTML in the **Code** tab only works together with this CSS. Copy both to get exactly the tables shown here (in a prototype, CodePen, a test page…). It contains the fonts, **only the tokens Tables uses**, the base styles (focus ring), the icon class and the table styles, plus the other components in the examples (Button, Card, List row, Selectors).
 
 In the app you don't paste it: the whole design system is loaded once with `mi-contabilidad-ds.css`.
 
 <details>
 <summary><b>Show the CSS</b> (then use the <b>Copy</b> button of the code block)</summary>
 
-<CssSource language="html" dark code={cssSnippet('Data table', ownCss, { also: [['Button', alsoCss0], ['Card', alsoCss1], ['List row', alsoCss2 + '\n' + alsoCss3], ['Selectors', alsoCss4]] })} />
+<CssSource language="html" dark code={cssSnippet('Tables', ownCss, { also: [['Button', alsoCss0], ['Card', alsoCss1], ['List row', alsoCss2 + '\n' + alsoCss3], ['Selectors', alsoCss4]] })} />
 
 </details>
