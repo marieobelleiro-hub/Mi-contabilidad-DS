@@ -48,10 +48,11 @@ The same properties will be used in the Figma library.
 | Type | Property | Kind | Values | Default |
 |---|---|---|---|---|
 | **Big** | Type | Variant | Primary (blue) · Attention (orange) | Primary |
-| | Icon | Boolean | Visible · Hidden (text centred) | Visible |
-| | Icon position | Variant | Right (text left, icon right) · Left (icon + text, centred: ✓ Guardado) | Right |
-| | Icon choice | Icon swap | `arrow-right` · `save` · `check` · `download` · `trash` · `plus` · `chevron-down` | `arrow-right` |
-| | Label | Text | short, one line | "Continuar" |
+| | Icon left | Boolean | Visible · Hidden | Visible |
+| | Icon left choice | Icon swap | `arrow-right` · `save` · `check` · `download` · `trash` · `plus` · `chevron-down` | `check` |
+| | Icon right | Boolean | Visible · Hidden | Visible |
+| | Icon right choice | Icon swap | same list | `save` |
+| | Label | Text | short, one line | "Guardado" |
 | | State | Variant | Default · Hover · Pressed · Focus · Disabled | Default |
 | **Ghost** | Type | Variant | Primary (blue) · Attention (orange) | Primary |
 | | Icon | Boolean | Visible (left) · Hidden | Visible |
@@ -98,7 +99,7 @@ Hover lightens the colour on purpose, so the change of state is clearly visible.
 | Width | `--btn-min-w` 160 – `--btn-max-w` 296px · full width on mobile | fits the text | = height |
 | Padding (sides) | `--btn-pad-lg` 24px | `--btn-pad-sm` 8px | 0, icon centred |
 | Type | Sans 16 / regular | Mono 12 / regular · uppercase · `--ls-caps` | — |
-| Icon | 24px · right: text left, icon right, 16px gap · left: icon + text centred, 8px gap | 16px, left · 8px gap | sm 16px · md 24px |
+| Icon | 24px, left and/or right, each its own (✓ Guardado 💾) · with icons everything starts on the left: left icon, 8px, text · the right icon sits at the far right, at least 16px from the text · no icons: text centred | 16px, left · 8px gap | sm 16px · md 24px |
 | Long label | one line, cut with "…" | one line, cut with "…" | — |
 | Touch area on mobile | 48px | 24px (meets the 24px minimum) | `--btn-touch` 44px, invisible |
 | Radius | 0 | 0 | 0 |

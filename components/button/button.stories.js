@@ -12,12 +12,11 @@ const stateAttrs = (state) => ({
   dis: state === 'disabled' ? ' disabled' : '',
 });
 
-/** Big button · 48px. Icon on the right (text left, icon right) or on the left (icon + text, centred, e.g. ✓ Guardado); without icon the text is centred. */
-export const bigHTML = ({ colour = 'primary', label = 'Continuar', showIcon = true, iconPosition = 'right', icon: name = 'arrow-right', state = 'default' } = {}) => {
+/** Big button · 48px. Optional icon on the left and/or on the right, each with its own icon (✓ Guardado 💾).
+    With icons: everything starts on the left (8px after the left icon), the right icon sits at the far right. Without icons: text centred. */
+export const bigHTML = ({ colour = 'primary', label = 'Continuar', showIconLeft = false, iconLeft = 'check', showIcon = true, icon: name = 'arrow-right', state = 'default' } = {}) => {
   const { cls, dis } = stateAttrs(state);
-  const ico = showIcon ? icon(name, { size: 'md' }) : '';
-  const lbl = `<span class="btn__label">${label}</span>`;
-  return `<button type="button" class="btn btn--${colour}${cls}"${dis}>${iconPosition === 'left' ? ico + lbl : lbl + ico}</button>`;
+  return `<button type="button" class="btn btn--${colour}${cls}"${dis}>${showIconLeft ? icon(iconLeft, { size: 'md' }) : ''}<span class="btn__label">${label}</span>${showIcon ? icon(name, { size: 'md' }) : ''}</button>`;
 };
 
 /** Ghost button · 24px. Optional icon on the left (plus by default); the text is always there. */
@@ -51,13 +50,14 @@ export const Big = {
   render: (args) => bigHTML(args),
   argTypes: {
     colour: { name: 'Type', control: { type: 'inline-radio', labels: { primary: 'Primary (blue)', attention: 'Attention (orange)' } }, options: ['primary', 'attention'], table: { category: 'Variant' } },
-    showIcon: { name: 'Icon', control: 'boolean', description: 'Hidden: text centred', table: { category: 'Boolean' } },
-    iconPosition: { name: 'Icon position', control: { type: 'inline-radio', labels: { right: 'Right (text left, icon right)', left: 'Left (icon + text, centred)' } }, options: ['right', 'left'], if: { arg: 'showIcon' }, table: { category: 'Variant' } },
-    icon: { name: 'Icon choice', control: 'select', options: BIG_ICONS, if: { arg: 'showIcon' }, table: { category: 'Icon swap' } },
+    showIconLeft: { name: 'Icon left', control: 'boolean', table: { category: 'Boolean' } },
+    iconLeft: { name: 'Icon left choice', control: 'select', options: BIG_ICONS, if: { arg: 'showIconLeft' }, table: { category: 'Icon swap' } },
+    showIcon: { name: 'Icon right', control: 'boolean', table: { category: 'Boolean' } },
+    icon: { name: 'Icon right choice', control: 'select', options: BIG_ICONS, if: { arg: 'showIcon' }, table: { category: 'Icon swap' } },
     label: { name: 'Label', control: 'text', description: 'Short. Too long → cut with "…"', table: { category: 'Text' } },
     state: { name: 'State', ...STATE_CONTROL, table: { category: 'Variant' } },
   },
-  args: { colour: 'primary', showIcon: true, iconPosition: 'right', icon: 'arrow-right', label: 'Continuar', state: 'default' },
+  args: { colour: 'primary', showIconLeft: true, iconLeft: 'check', showIcon: true, icon: 'save', label: 'Guardado', state: 'default' },
 };
 
 export const Ghost = {
@@ -65,7 +65,7 @@ export const Ghost = {
   render: (args) => ghostHTML(args),
   argTypes: {
     colour: { name: 'Type', control: { type: 'inline-radio', labels: { primary: 'Primary (blue)', attention: 'Attention (orange)' } }, options: ['primary', 'attention'], table: { category: 'Variant' } },
-    showIcon: { name: 'Icon', control: 'boolean', description: 'Icon on the left', table: { category: 'Boolean' } },
+    showIcon: { name: 'Icon', control: 'boolean', table: { category: 'Boolean' } },
     icon: { name: 'Icon choice', control: 'select', options: GHOST_ICONS, if: { arg: 'showIcon' }, table: { category: 'Icon swap' } },
     label: { name: 'Label', control: 'text', description: 'Always present. Too long → cut with "…"', table: { category: 'Text' } },
     state: { name: 'State', ...STATE_CONTROL, table: { category: 'Variant' } },

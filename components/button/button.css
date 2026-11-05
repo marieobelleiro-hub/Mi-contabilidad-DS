@@ -2,7 +2,7 @@
    Button  ·  .btn
    Three types, each with the same five states: default · hover · pressed · focus · disabled.
 
-   Big (default type)   48px · Primary / Attention · optional icon (24px) on the right or on the left
+   Big (default type)   48px · Primary / Attention · optional icon (24px) on the left and/or on the right, each its own
                         width 160–296px on desktop, full width on mobile · label cut with "…"
    Ghost  .btn--ghost   24px · Primary / Attention · optional icon on the left (16px, plus by default)
    Icon   .btn--icon    Info (blue) / Danger (grey → red) · --sm 24px / --md 40px
@@ -51,8 +51,10 @@
   color:var(--white);
 }
 .btn:not(.btn--ghost):not(.btn--icon) .icon{width:var(--icon-md);height:var(--icon-md)}
-.btn:not(.btn--ghost):not(.btn--icon):has(> .btn__label + .icon){justify-content:space-between;gap:var(--space-16)}  /* icon right: text left, icon right */
-.btn:not(.btn--ghost):not(.btn--icon):has(> .icon + .btn__label){gap:var(--space-8)}                                  /* icon left: icon + text, centred (✓ Guardado) */
+/* With icons: left icon + text start on the left, 8px apart; the right icon sits at the far right (at least 16px from the text). Without icons: centred. */
+.btn:not(.btn--ghost):not(.btn--icon):has(.icon){justify-content:flex-start;gap:var(--space-8)}
+.btn:not(.btn--ghost):not(.btn--icon) .btn__label + .icon{margin-inline-start:auto}
+.btn:not(.btn--ghost):not(.btn--icon) .btn__label:has(+ .icon){margin-inline-end:var(--space-8)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:hover,.is-hover){filter:var(--btn-hover)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:active,.is-active){filter:none;background:var(--btn-accent-dark)}
 .btn:not(.btn--ghost):not(.btn--icon):is(:disabled,[aria-disabled="true"]){background:var(--fill);color:var(--text-muted)}

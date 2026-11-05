@@ -129,8 +129,8 @@ export const States = {
   parameters: { layout: 'padded', controls: { disable: true } },
   render: () => {
     const head = 'font-family:var(--font-mono);font-size:var(--text-10);text-transform:uppercase;letter-spacing:var(--ls-caps);color:var(--text-muted)';
-    const cols = ['default', 'hover', 'selected', 'focus', 'disabled'];
-    const one = (accent, outline, s) => `<div class="tab-list" role="tablist" aria-label="${accent} ${s}">${tabHTML({ label: 'Facturación', accent, outline, active: s === 'selected', disabled: s === 'disabled' }).replace('class="tab ', `class="tab${s === 'hover' ? ' is-hover' : s === 'focus' ? ' is-focus' : ''} `)}</div>`;
+    const cols = ['active', 'default', 'hover', 'disabled', 'focus'];
+    const one = (accent, outline, s) => `<div class="tab-list" role="tablist" aria-label="${accent} ${s}">${tabHTML({ label: 'Facturación', accent, outline, active: s === 'active', disabled: s === 'disabled' }).replace('class="tab ', `class="tab${s === 'hover' ? ' is-hover' : s === 'focus' ? ' is-focus' : ''} `)}</div>`;
     const rows = [['Dashboard (green)', 'brand', false], ['Facturación (blue)', 'primary', false], ['Gastos (orange)', 'attention', false], ['IRPF (blue · outline)', 'primary', true], ['IVA (orange · outline)', 'attention', true]];
     return `<div class="card" style="display:grid;grid-template-columns:160px repeat(5,minmax(120px,1fr));gap:var(--space-12) var(--space-16);align-items:center;max-width:960px">
       <span></span>${cols.map((c) => `<span style="${head};text-align:center">${c}</span>`).join('')}
@@ -218,7 +218,7 @@ export const YearStates = {
   parameters: { layout: 'padded', controls: { disable: true } },
   render: () => {
     const head = 'font-family:var(--font-mono);font-size:var(--text-10);text-transform:uppercase;letter-spacing:var(--ls-caps);color:var(--text-muted)';
-    const cells = [['Selected', 'selected', 'default'], ['Unselected', 'unselected', 'default'], ['Unselected · hover', 'unselected', 'hover'], ['Focus', 'unselected', 'focus'], ['Disabled', 'disabled', 'default']];
+    const cells = [['Selected', 'selected', 'default'], ['Unselected', 'unselected', 'default'], ['Unselected · hover', 'unselected', 'hover'], ['Disabled', 'disabled', 'default'], ['Focus', 'unselected', 'focus']];
     return `<div class="card" style="display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:var(--space-12) var(--space-24);align-items:end;max-width:900px">
       ${cells.map(([n]) => `<span style="${head}">${n}</span>`).join('')}
       ${cells.map(([n, st, i], k) => `<div class="year-strip" role="tablist" aria-label="${n}">${yearTabHTML({ year: 2026 - k, state: st, interaction: i })}</div>`).join('')}
